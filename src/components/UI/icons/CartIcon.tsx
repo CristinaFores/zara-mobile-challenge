@@ -1,10 +1,10 @@
 interface CartIconProps {
-  width?: number
-  height?: number
-  className?: string
-  mode?: 'full' | 'empty'
-  fill?: string
-  'aria-hidden'?: boolean | 'true' | 'false'
+  readonly width?: number
+  readonly height?: number
+  readonly className?: string
+  readonly mode?: 'full' | 'empty'
+  readonly fill?: string
+  readonly 'aria-hidden'?: boolean | 'true' | 'false'
 }
 
 const ICON_PATHS: Record<NonNullable<CartIconProps['mode']>, string> = {

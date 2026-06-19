@@ -1,13 +1,13 @@
 import styles from './EmptyState.module.scss'
 
 interface EmptyStateProps {
-  message?: string
+  readonly message?: string
 }
 
 export function EmptyState({ message = 'No results found.' }: EmptyStateProps) {
   return (
-    <div className={styles.empty} role="status">
+    <output className={styles.empty}>
       <p className={styles.empty__message}>{message}</p>
-    </div>
+    </output>
   )
 }

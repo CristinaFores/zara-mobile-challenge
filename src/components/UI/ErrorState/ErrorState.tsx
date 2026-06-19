@@ -1,8 +1,8 @@
 import styles from './ErrorState.module.scss'
 
 interface ErrorStateProps {
-  message?: string
-  onRetry?: () => void
+  readonly message?: string
+  readonly onRetry?: () => void
 }
 
 export function ErrorState({ message = 'Something went wrong.', onRetry }: ErrorStateProps) {
