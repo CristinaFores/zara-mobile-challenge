@@ -43,13 +43,15 @@
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "lint-staged": "^17.0.7",
+    "msw": "^2.14.6",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.8.4",
     "sass": "^1.101.0",
     "stylelint": "^17.13.0",
     "stylelint-declaration-strict-value": "^1.11.1",
     "typescript": "^5.7.0",
-    "typescript-eslint": "^8.46.0"
+    "typescript-eslint": "^8.46.0",
+    "undici": "^6.27.0"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
