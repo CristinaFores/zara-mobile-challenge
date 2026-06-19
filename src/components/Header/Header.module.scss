@@ -1,0 +1,68 @@
+@use '@/scss/_variables' as *;
+@use '@/scss/_mixins' as *;
+
+// scaleX instead of width — composited (GPU), no reflow, no CLS
+@keyframes loadingBar {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  80% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background-color: var(--color-bg-primary);
+
+  &__loadingBar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background-color: var(--color-text-primary);
+    transform-origin: left center;
+    animation: loadingBar 1.2s ease-out forwards;
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 1.75rem 1rem;
+
+    @include breakpoint(tablet) {
+      padding-inline: 2.5rem;
+    }
+
+    @include breakpoint(desktop) {
+      padding: 2.5rem 6.25rem;
+    }
+  }
+
+  &__cart {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5625rem;
+  }
+
+  &__badge {
+    font-weight: var(--font-weight-thin);
+    font-size: var(--font-size-md);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
