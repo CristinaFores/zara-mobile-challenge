@@ -14,6 +14,7 @@ export default defineConfig([
     'coverage/**',
     'next-env.d.ts',
     'jest.config.js',
+    'jest.polyfills.js',
   ]),
 
   js.configs.recommended,
