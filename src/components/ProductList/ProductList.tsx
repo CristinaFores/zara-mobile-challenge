@@ -8,12 +8,14 @@ interface ProductListProps {
   readonly phones: readonly Phone[]
 }
 
+const PRIORITY_COUNT = 6
+
 export function ProductList({ phones }: ProductListProps) {
   return (
-    <ul className={styles.grid} aria-label="Phones catalog">
-      {phones.map((phone) => (
-        <li key={phone.id} className={styles.grid__item}>
-          <ProductCard {...phone} />
+    <ul className={styles['product-list']} aria-label="Phones catalog">
+      {phones.map((phone, index) => (
+        <li key={phone.id} className={styles['product-list__item']}>
+          <ProductCard {...phone} priority={index < PRIORITY_COUNT} />
         </li>
       ))}
     </ul>

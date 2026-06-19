@@ -1,29 +1,38 @@
 @use '@/scss/_mixins' as *;
 
-// Figma breakpoints extraídos:
-// Mobile  (<393px): 1 columna, padding 16px, gap 0 (bordes compartidos)
-// Tablet  (834px):  2 columnas, padding 40px
-// Desktop (1920px): 5 columnas, padding 100px
+@keyframes gridFadeIn {
+  from {
+    opacity: 0;
+  }
 
-.grid {
-  list-style: none;
-  margin: 0;
-  padding: 0 1rem; // mobile: 16px
+  to {
+    opacity: 1;
+  }
+}
+
+.product-list {
   display: grid;
-  grid-template-columns: 1fr; // mobile: 1 columna
+  grid-template-columns: 1fr;
   gap: 0;
+  border-top: 1px solid var(--color-text-primary);
+  border-left: 1px solid var(--color-text-primary);
+  // delay matches the header loading bar duration so the grid fades in as the bar finishes
+  animation: gridFadeIn 0.6s ease 0.9s both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 1;
+  }
 
   @include breakpoint(tablet) {
-    padding: 0 2.5rem; // 40px
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(377px, 1fr));
   }
 
   @include breakpoint(desktop) {
-    padding: 0 6.25rem; // 100px
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(344px, 1fr));
   }
 
   &__item {
-    display: contents; // el <li> no añade caja extra, la card ocupa directo el grid cell
+    display: block;
   }
 }
