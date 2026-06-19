@@ -1,0 +1,12 @@
+{
+  "customSyntax": "postcss-scss",
+  "plugins": ["stylelint-declaration-strict-value"],
+  "rules": {
+    "scale-unlimited/declaration-strict-value": [
+      ["/color/", "font-size", "z-index"],
+      {
+        "ignoreValues": ["inherit", "transparent", "currentColor", "unset", "initial", "none", "0"]
+      }
+    ]
+  }
+}
