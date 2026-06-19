@@ -1,0 +1,129 @@
+// Figma: card 344×344 (desktop/tablet), fill ancho en mobile
+// Hover: fondo negro sube con translateY (composited, sin CLS)
+.card {
+  // display: flex;
+  // flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  // padding: 1.6rem;
+  border-right: 1px solid var(--color-text-primary);
+  border-bottom: 1px solid var(--color-text-primary);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 1 / 1;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-text-primary);
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+    z-index: 0;
+  }
+
+  &:hover::after {
+    transform: translateY(0);
+  }
+
+  &__imageWrapper {
+    //   position: relative;
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
+    //   flex-grow: 1;
+    //   flex-shrink: 1;
+    //   flex-basis: 0;
+    //   z-index: var(--z-card);
+    //   aspect-ratio: 1 / 1;
+    //   padding: 1.6rem;
+    // }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 0px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 100%;
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 312px;
+    height: 257px;
+  }
+
+  &__image {
+    object-fit: contain;
+    object-position: center;
+    mix-blend-mode: multiply;
+    width: 100%;
+  }
+
+  &__info {
+    position: relative;
+    z-index: var(--z-card);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0 1rem 1rem;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  // Figma: Helvetica Neue Light 10px, uppercase, #79736D → #CCC on hover
+  &__brand {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    transition: color 0.4s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Figma: Helvetica Neue Light 12px, uppercase, #000 → #FFF on hover
+  &__name {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    transition: color 0.4s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Figma: Helvetica Neue Light 12px, title-case, right-aligned
+  &__price {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    color: var(--color-text-primary);
+    transition: color 0.4s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    .card__brand {
+      color: var(--color-border);
+    }
+
+    .card__name,
+    .card__price {
+      color: var(--color-bg-primary);
+    }
+  }
+}

@@ -1,7 +1,12 @@
-export default function HomePage() {
+import { ProductList } from '@/components/ProductList/ProductList'
+import { getPhones } from '@/services/phones.service'
+
+export default async function HomePage() {
+  const phones = await getPhones()
+
   return (
     <main>
-      <h1>Zara Mobile Catalog</h1>
+      <ProductList phones={phones} />
     </main>
   )
 }

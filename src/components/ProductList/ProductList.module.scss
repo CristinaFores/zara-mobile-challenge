@@ -1,0 +1,29 @@
+@use '@/scss/_mixins' as *;
+
+// Figma breakpoints extraídos:
+// Mobile  (<393px): 1 columna, padding 16px, gap 0 (bordes compartidos)
+// Tablet  (834px):  2 columnas, padding 40px
+// Desktop (1920px): 5 columnas, padding 100px
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0 1rem; // mobile: 16px
+  display: grid;
+  grid-template-columns: 1fr; // mobile: 1 columna
+  gap: 0;
+
+  @include breakpoint(tablet) {
+    padding: 0 2.5rem; // 40px
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include breakpoint(desktop) {
+    padding: 0 6.25rem; // 100px
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  &__item {
+    display: contents; // el <li> no añade caja extra, la card ocupa directo el grid cell
+  }
+}

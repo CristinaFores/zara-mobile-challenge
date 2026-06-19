@@ -10,7 +10,9 @@ import apiClient from './apiClient'
 export async function getPhones(search = ''): Promise<Phone[]> {
   const params = { limit: PHONES_LIMIT, ...(search && { search }) }
   const response = await apiClient.get<Phone[]>(API_ENDPOINTS.PRODUCTS, { params })
-  return response.data
+  // The API occasionally returns duplicate entries — deduplicate by id to keep
+  // React keys unique and avoid rendering the same phone twice.
+  return [...new Map(response.data.map((p) => [p.id, p])).values()]
 }
 
 /** Fetches the full detail of a single phone by its id. */
