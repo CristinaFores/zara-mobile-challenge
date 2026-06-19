@@ -3,11 +3,16 @@ import type { ReactNode } from 'react'
 
 import { Header } from '@/components/Header/Header'
 import { CartProvider } from '@/context/cart/CartContext'
+
 import '@/scss/globals.scss'
+import styles from './layout.module.scss'
 
 export const metadata: Metadata = {
-  title: 'Zara Mobile Catalog',
-  description: 'Browse, search and shop a catalog of mobile phones.',
+  title: {
+    template: '%s | Mobile Catalog',
+    default: 'Mobile Catalog',
+  },
+  description: 'Browse and find the latest smartphones.',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -16,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <CartProvider>
           <Header />
-          {children}
+          <main className={styles.main}>{children}</main>
         </CartProvider>
       </body>
     </html>
