@@ -8,13 +8,13 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "lint:styles": "stylelint \"src/**/*.scss\"",
+    "lint:styles": "stylelint \"src/**/*.scss\" --allow-empty-input",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
+    "test:coverage": "jest --coverage --passWithNoTests",
     "prepare": "husky"
   },
   "dependencies": {
