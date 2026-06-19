@@ -1,0 +1,12 @@
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+
+  &__message {
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+    text-align: center;
+  }
+}
