@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { ProductList } from '@/components/ProductList/ProductList'
+import { PhoneCatalog } from '@/components/PhoneCatalog/PhoneCatalog'
 import { getPhones } from '@/services/phones.service'
 
 export const metadata: Metadata = {
@@ -14,11 +14,7 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const { search = '' } = await searchParams
-  const phones = await getPhones(search)
+  const phones = await getPhones()
 
-  return (
-    <>
-      <ProductList phones={phones} />
-    </>
-  )
+  return <PhoneCatalog phones={phones} initialSearch={search} />
 }

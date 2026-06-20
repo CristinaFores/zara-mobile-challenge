@@ -31,7 +31,7 @@ export function ProductList({
       <ul className={styles['product-list']} ref={listRef} aria-label="Phones catalog">
         {phones?.map((phone, index) => (
           <li
-            key={phone.id}
+            key={phone?.id}
             ref={cardRef ? (el) => cardRef(phone.id, el) : undefined}
             className={styles['product-list__item']}
           >
