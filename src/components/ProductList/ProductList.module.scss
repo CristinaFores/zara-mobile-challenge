@@ -10,14 +10,19 @@
   }
 }
 
+.product-list-wrapper {
+  position: relative;
+  padding: 0.5px;
+}
+
 .product-list {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0;
-  border-top: 1px solid var(--color-text-primary);
-  border-left: 1px solid var(--color-text-primary);
-  // delay matches the header loading bar duration so the grid fades in as the bar finishes
   animation: gridFadeIn 0.6s ease 0.9s both;
+
+  &:empty {
+    display: none;
+  }
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
@@ -34,5 +39,30 @@
 
   &__item {
     display: block;
+    will-change: transform;
+    position: relative;
+    margin-right: -0.5px;
+    margin-bottom: -0.5px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 0.5px solid var(--color-text-primary);
+      z-index: var(--z-negative-2);
+      background-color: transparent;
+    }
+  }
+
+  &__exiting {
+    pointer-events: none;
+    z-index: calc(var(--z-card) + 1);
+    opacity: 1;
+    transition: opacity 500ms ease-out;
+    overflow: hidden;
+
+    &--active {
+      opacity: 0;
+    }
   }
 }
