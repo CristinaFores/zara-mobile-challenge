@@ -1,6 +1,7 @@
 'use client'
 
 import Image, { type ImageLoaderProps } from 'next/image'
+import { memo } from 'react'
 
 import styles from './ProductImage.module.scss'
 
@@ -19,7 +20,11 @@ function sharpLoader({ src, width, quality }: ImageLoaderProps): string {
   return `/api/images?${params.toString()}`
 }
 
-export function ProductImage({ src, alt, priority = false }: ProductImageProps) {
+export const ProductImage = memo(function ProductImage({
+  src,
+  alt,
+  priority = false,
+}: ProductImageProps) {
   return (
     <Image
       loader={sharpLoader}
@@ -29,7 +34,6 @@ export function ProductImage({ src, alt, priority = false }: ProductImageProps) 
       sizes="(max-width: 834px) 100vw, (max-width: 1920px) 50vw, 25vw"
       className={styles.image}
       priority={priority}
-      loading={priority ? undefined : 'lazy'}
     />
   )
-}
+})
