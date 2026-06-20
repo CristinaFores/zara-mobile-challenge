@@ -1,0 +1,53 @@
+@use '@/scss/_mixins' as *;
+
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 0.5px solid var(--color-text-primary);
+    padding-bottom: 0.5rem;
+  }
+
+  &__input {
+    flex: 1;
+    border: none;
+    padding: 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-thin);
+    color: var(--color-text-primary);
+    background: transparent;
+    outline: none;
+
+    &::placeholder {
+      color: var(--color-text-placeholder);
+      font-size: var(--font-size-md);
+    }
+  }
+
+  &__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-primary);
+    padding: 0;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+
+  &__count {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+}
