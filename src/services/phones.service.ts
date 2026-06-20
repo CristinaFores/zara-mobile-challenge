@@ -3,14 +3,14 @@ import type { Phone, PhoneDetail } from '@/types'
 
 import apiClient from './apiClient'
 
-/**
- * Fetches the catalog page (max {@link PHONES_LIMIT} phones).
- * When `search` is provided it is sent as a query param so the API filters server-side.
- */
-export async function getPhones(search = ''): Promise<Phone[]> {
-  const params = { limit: PHONES_LIMIT, ...(search && { search }) }
-  const response = await apiClient.get<Phone[]>(API_ENDPOINTS.PRODUCTS, { params })
-  return response.data
+/** Fetches the catalog page (max {@link PHONES_LIMIT} phones). */
+export async function getPhones(): Promise<Phone[]> {
+  const response = await apiClient.get<Phone[]>(API_ENDPOINTS.PRODUCTS, {
+    params: { limit: PHONES_LIMIT },
+  })
+  // The API occasionally returns duplicate entries — deduplicate by id to keep
+  // React keys unique and avoid rendering the same phone twice.
+  return [...new Map(response.data.map((phone) => [phone.id, phone])).values()]
 }
 
 /** Fetches the full detail of a single phone by its id. */

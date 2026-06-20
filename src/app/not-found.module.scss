@@ -1,0 +1,30 @@
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 50vh;
+  text-align: center;
+
+  &__code {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-thin);
+    line-height: 1;
+    color: var(--color-text-primary);
+  }
+
+  &__message {
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+  }
+
+  &__link {
+    margin-top: 1rem;
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    color: var(--color-text-primary);
+  }
+}

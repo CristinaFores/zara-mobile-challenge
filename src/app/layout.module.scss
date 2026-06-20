@@ -1,0 +1,14 @@
+@use '@/scss/_mixins' as *;
+
+.main {
+  margin: 0 auto;
+  padding-inline: 1rem;
+
+  @include breakpoint(tablet) {
+    padding-inline: 2.5rem;
+  }
+
+  @include breakpoint(desktop) {
+    padding-inline: 6.25rem;
+  }
+}

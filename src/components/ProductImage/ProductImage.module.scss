@@ -1,0 +1,6 @@
+.image {
+  object-fit: contain;
+  object-position: center;
+  mix-blend-mode: multiply;
+  z-index: var(--z-card);
+}

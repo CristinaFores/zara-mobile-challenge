@@ -1,0 +1,13 @@
+@use '@/scss/_mixins' as *;
+
+.phone-catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 4.375rem;
+  padding-top: 2.25rem;
+
+  @include breakpoint(tablet) {
+    gap: 4.0625rem;
+    padding-top: 3.75rem;
+  }
+}

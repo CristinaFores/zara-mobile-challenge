@@ -14,7 +14,7 @@ export const HTTP_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
 } as const
 
-export const PHONES_LIMIT = 20
+export const PHONES_LIMIT = 21
 
 export const SEARCH_DEBOUNCE_MS = 300
 

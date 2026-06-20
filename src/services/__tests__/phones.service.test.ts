@@ -25,40 +25,14 @@ function captureProductsRequest() {
   return captured
 }
 
-describe('Given the user opens the catalog without typing anything in the search box', () => {
-  describe('When getPhones is called with no argument', () => {
-    it('Then it requests /products applying only the 20-item page limit so the full catalog loads', async () => {
+describe('Given the catalog page is loaded', () => {
+  describe('When getPhones is called', () => {
+    it('Then it requests /products with the page limit so the full catalog loads', async () => {
       const captured = captureProductsRequest()
 
       await getPhones()
 
       expect(captured.url?.searchParams.get('limit')).toBe(String(PHONES_LIMIT))
-      expect(captured.url?.searchParams.has('search')).toBe(false)
-    })
-  })
-})
-
-describe('Given the user types a brand name in the search box', () => {
-  describe('When getPhones is called with that search term', () => {
-    it('Then it sends it as a query param so the server filters — the client does not filter locally', async () => {
-      const captured = captureProductsRequest()
-
-      await getPhones('samsung')
-
-      expect(captured.url?.searchParams.get('search')).toBe('samsung')
-      expect(captured.url?.searchParams.get('limit')).toBe(String(PHONES_LIMIT))
-    })
-  })
-})
-
-describe('Given the search box is cleared after a previous search', () => {
-  describe('When getPhones is called with an empty string', () => {
-    it('Then it omits the search param entirely so the API returns the full catalog again', async () => {
-      const captured = captureProductsRequest()
-
-      await getPhones('')
-
-      expect(captured.url?.searchParams.has('search')).toBe(false)
     })
   })
 })
@@ -82,12 +56,12 @@ describe('Given the API responds successfully with a list of phones', () => {
   })
 })
 
-describe('Given the search term matches no phones in the catalog', () => {
+describe('Given the API returns an empty catalog', () => {
   describe('When getPhones resolves', () => {
     it('Then it returns an empty array so the UI can show the empty-state message', async () => {
       server.use(http.get(PRODUCTS_URL, () => HttpResponse.json([])))
 
-      const result = await getPhones('zzz-no-match')
+      const result = await getPhones()
 
       expect(result).toEqual([])
     })

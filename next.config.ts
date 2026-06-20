@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         hostname: 'prueba-tecnica-api-tienda-moviles.onrender.com',
         pathname: '/images/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'prueba-tecnica-api-tienda-moviles.onrender.com',
+        pathname: '/images/**',
+      },
     ],
   },
   sassOptions: {

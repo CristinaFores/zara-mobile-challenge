@@ -1,0 +1,108 @@
+@use '@/scss/_mixins' as *;
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 1 / 1;
+  padding-block: 3.125rem 1rem;
+
+  @include breakpoint(tablet) {
+    padding-block: 3.4375rem 1rem;
+  }
+
+  @include breakpoint(desktop) {
+    padding-block: 3.125rem 1rem;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-text-primary);
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+    z-index: var(--z-base);
+  }
+
+  &:hover::after {
+    transform: translateY(0);
+  }
+
+  &__image-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    z-index: var(--z-card);
+    aspect-ratio: 312 / 256;
+    overflow: hidden;
+  }
+
+  &__info {
+    position: relative;
+    z-index: var(--z-card);
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0 1rem 1rem;
+    padding: 3.4375rem 1rem 0 1rem;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  &__brand {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    transition: color 0.4s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    transition: color 0.4s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__price {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    color: var(--color-text-primary);
+    transition: color 0.4s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    .product-card__brand {
+      color: var(--color-border);
+    }
+
+    .product-card__name,
+    .product-card__price {
+      color: var(--color-bg-primary);
+    }
+  }
+}
