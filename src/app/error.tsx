@@ -7,6 +7,6 @@ interface ErrorProps {
   reset: () => void
 }
 
-export default function Error({ error, reset }: ErrorProps) {
+export default function ErrorBoundary({ error, reset }: ErrorProps) {
   return <ErrorState message={error?.message} onRetry={reset} />
 }
