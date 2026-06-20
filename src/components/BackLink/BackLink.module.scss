@@ -8,6 +8,7 @@
     text-transform: uppercase;
     color: var(--color-text-primary);
     transition: color 0.4s ease;
+    line-height: 1.25rem;
 
     &:hover {
       color: var(--color-text-secondary);
