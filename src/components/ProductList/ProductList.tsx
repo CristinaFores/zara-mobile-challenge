@@ -8,11 +8,11 @@ import styles from './ProductList.module.scss'
 type AnimationPhase = 'idle' | 'animating'
 
 interface ProductListProps {
-  readonly phones: readonly Phone[]
-  readonly exitingCards?: readonly ExitingCard[]
-  readonly animationPhase?: AnimationPhase
-  readonly listRef?: (el: HTMLUListElement | null) => void
-  readonly cardRef?: (id: string, el: HTMLElement | null) => void
+  phones: readonly Phone[]
+  exitingCards?: readonly ExitingCard[]
+  animationPhase?: AnimationPhase
+  listRef?: (el: HTMLUListElement | null) => void
+  cardRef?: (id: string, el: HTMLElement | null) => void
 }
 
 const PRIORITY_IMAGE_COUNT = 6

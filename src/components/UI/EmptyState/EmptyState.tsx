@@ -1,7 +1,7 @@
 import styles from './EmptyState.module.scss'
 
 interface EmptyStateProps {
-  readonly message?: string
+  message?: string
 }
 
 export function EmptyState({ message = 'No results found.' }: EmptyStateProps) {

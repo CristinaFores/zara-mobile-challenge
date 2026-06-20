@@ -8,8 +8,8 @@ import { ProductImage } from '../ProductImage/ProductImage'
 
 import styles from './ProductCard.module.scss'
 
-type ProductCardProps = Readonly<Phone> & {
-  readonly priority?: boolean
+type ProductCardProps = Phone & {
+  priority?: boolean
 }
 
 export const ProductCard = memo(function ProductCard({

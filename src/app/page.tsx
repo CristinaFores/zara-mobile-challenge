@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 interface HomeProps {
-  readonly searchParams: Promise<{ search?: string }>
+  searchParams: Promise<{ search?: string }>
 }
 
 export default async function Home({ searchParams }: HomeProps) {

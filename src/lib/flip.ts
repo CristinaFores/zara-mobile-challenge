@@ -2,8 +2,8 @@ import type { Phone } from '@/types'
 
 /** A card that left the grid, captured with the position it occupied so it can animate out. */
 export interface ExitingCard {
-  readonly phone: Phone
-  readonly rect: DOMRect
+  phone: Phone
+  rect: DOMRect
 }
 
 /** Snapshot of each card's on-screen position, keyed by phone id (the FLIP "First" read). */

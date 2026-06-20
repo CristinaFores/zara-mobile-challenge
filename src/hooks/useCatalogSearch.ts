@@ -23,15 +23,15 @@ function filterPhonesByQuery(phones: readonly Phone[], query: string): Phone[] {
 }
 
 interface UseCatalogSearchOptions {
-  readonly phones: readonly Phone[]
-  readonly initialQuery?: string
+  phones: readonly Phone[]
+  initialQuery?: string
 }
 
 interface CatalogSearchResult {
-  readonly query: string
-  readonly filteredPhones: readonly Phone[]
-  readonly resultCount: number
-  readonly onQueryChange: (value: string) => void
+  query: string
+  filteredPhones: readonly Phone[]
+  resultCount: number
+  onQueryChange: (value: string) => void
 }
 
 export function useCatalogSearch({

@@ -9,8 +9,8 @@ import type { Phone } from '@/types'
 import styles from './PhoneCatalog.module.scss'
 
 interface PhoneCatalogProps {
-  readonly phones: readonly Phone[]
-  readonly initialSearch?: string
+  phones: readonly Phone[]
+  initialSearch?: string
 }
 
 export function PhoneCatalog({ phones, initialSearch = '' }: PhoneCatalogProps) {

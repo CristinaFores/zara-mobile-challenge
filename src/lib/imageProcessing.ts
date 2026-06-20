@@ -40,8 +40,8 @@ export async function fetchRemoteImage(url: string): Promise<Buffer> {
 }
 
 interface NormalizeOptions {
-  readonly width: number
-  readonly quality: number
+  width: number
+  quality: number
 }
 
 /** Trims whitespace, fits the image onto a transparent square and re-encodes it as WebP. */
