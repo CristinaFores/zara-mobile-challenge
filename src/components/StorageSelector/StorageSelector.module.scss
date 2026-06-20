@@ -4,10 +4,9 @@
   gap: 1.25rem;
 
   &__label {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-thin);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--color-text-primary);
   }
 

@@ -1,0 +1,50 @@
+.color-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+  }
+
+  &__swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__swatch {
+    width: 1.5rem;
+    height: 1.5rem;
+    outline: 1px solid var(--color-border);
+    outline-offset: 1px;
+    border-spacing: 1px;
+    cursor: pointer;
+    padding: 0;
+    transition: outline-color 0.2s ease;
+    margin-left: 2px;
+
+    &[data-selected='true'] {
+      outline-color: var(--color-text-primary);
+    }
+
+    &:hover:not([data-selected='true']) {
+      outline-color: var(--color-border);
+    }
+  }
+
+  &__name-wrapper {
+    display: grid;
+    min-height: 1rem;
+  }
+
+  &__selected-name {
+    grid-area: 1 / 1;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-thin);
+    color: var(--color-text-secondary);
+  }
+}
