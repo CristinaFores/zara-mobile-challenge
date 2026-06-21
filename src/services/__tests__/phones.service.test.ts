@@ -1,19 +1,18 @@
 import { http, HttpResponse } from 'msw'
 
 import { apiErrorFixtures, phoneDetailFixture, phoneListFixture } from '@/__mocks__/phones.fixtures'
-import { API_ENDPOINTS, HTTP_STATUS, PHONES_LIMIT } from '@/constants'
+import { API_ENDPOINTS, HTTP_STATUS, PHONES_FETCH_LIMIT } from '@/constants'
 import { server } from '@/test-utils/msw/server'
 
 import { getPhoneById, getPhones } from '../phones.service'
 
-const API = process.env.API_BASE_URL
-const PRODUCTS_URL = `${API}${API_ENDPOINTS.PRODUCTS}`
+const APP = process.env.APP_URL
+const PRODUCTS_URL = `${APP}/api${API_ENDPOINTS.PRODUCTS}`
 
 interface AxiosLikeError extends Error {
   response?: { status: number; data: { message: string } }
 }
 
-/** Registers a one-off handler that captures the incoming request URL. */
 function captureProductsRequest() {
   const captured: { url: URL | null } = { url: null }
   server.use(
@@ -27,12 +26,12 @@ function captureProductsRequest() {
 
 describe('Given the catalog page is loaded', () => {
   describe('When getPhones is called', () => {
-    it('Then it requests /products with the page limit so the full catalog loads', async () => {
+    it('Then it requests /api/products with the page limit so the full catalog loads', async () => {
       const captured = captureProductsRequest()
 
       await getPhones()
 
-      expect(captured.url?.searchParams.get('limit')).toBe(String(PHONES_LIMIT))
+      expect(captured.url?.searchParams.get('limit')).toBe(String(PHONES_FETCH_LIMIT))
     })
   })
 })
@@ -70,7 +69,7 @@ describe('Given the API returns an empty catalog', () => {
 
 describe('Given the user navigates to a valid product detail page', () => {
   describe('When getPhoneById is called with the phone id from the URL', () => {
-    it('Then it requests /products/{id} so the API returns only that phone', async () => {
+    it('Then it requests /api/products/{id} so the route returns only that phone', async () => {
       let requestedPath: string | null = null
       server.use(
         http.get(`${PRODUCTS_URL}/:id`, ({ request, params }) => {
@@ -82,10 +81,10 @@ describe('Given the user navigates to a valid product detail page', () => {
 
       await getPhoneById('SMG-S24U')
 
-      expect(requestedPath).toBe('/products/SMG-S24U')
+      expect(requestedPath).toBe('/api/products/SMG-S24U')
     })
 
-    it('And it returns the full detail object exactly as the API delivers it', async () => {
+    it('And it returns the full detail object exactly as the route delivers it', async () => {
       const result = await getPhoneById('SMG-S24U')
 
       expect(result).toEqual(phoneDetailFixture)
