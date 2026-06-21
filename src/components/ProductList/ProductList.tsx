@@ -8,35 +8,32 @@ import styles from './ProductList.module.scss'
 type AnimationPhase = 'idle' | 'animating'
 
 interface ProductListProps {
-  readonly phones: readonly Phone[]
-  readonly exitingCards?: readonly ExitingCard[]
-  readonly animationPhase?: AnimationPhase
-  readonly listRef?: (el: HTMLUListElement | null) => void
-  readonly cardRef?: (id: string, el: HTMLElement | null) => void
+  phones: Phone[]
+  exitingCards?: ExitingCard[]
+  animationPhase?: AnimationPhase
+  cardRef?: (id: string, el: HTMLElement | null) => void
 }
 
-const PRIORITY_IMAGE_COUNT = 6
+const PRIORITY_IMAGE_COUNT = 10
 
 export function ProductList({
   phones,
   exitingCards = [],
   animationPhase = 'idle',
-  listRef,
   cardRef,
 }: ProductListProps) {
   const isAnimating = animationPhase === 'animating'
 
   return (
     <section className={styles['product-list-wrapper']}>
-      <ul className={styles['product-list']} ref={listRef} aria-label="Phones catalog">
+      <ul className={styles['product-list']} aria-label="Phones catalog">
         {phones?.map((phone, index) => (
-          <li
+          <ProductCard
             key={phone?.id}
-            ref={cardRef ? (el) => cardRef(phone.id, el) : undefined}
-            className={styles['product-list__item']}
-          >
-            <ProductCard {...phone} priority={index < PRIORITY_IMAGE_COUNT} />
-          </li>
+            {...phone}
+            priority={index < PRIORITY_IMAGE_COUNT}
+            cardRef={cardRef ? (el) => cardRef(phone.id, el) : undefined}
+          />
         ))}
       </ul>
 

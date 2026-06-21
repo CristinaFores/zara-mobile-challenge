@@ -1,0 +1,87 @@
+@use '@/scss/_mixins' as *;
+
+$gallery-width: 42.5%;
+$info-max-width: 23.75rem;
+$info-top-offset: 5.5rem;
+$gallery-height: 28.75rem;
+$heading-gap: 0.6875rem;
+
+.product-detail-hero {
+  display: grid;
+  align-items: center;
+  gap: 5rem;
+
+  @include breakpoint(tablet) {
+    grid-template-columns: $gallery-width auto;
+  }
+
+  &__gallery {
+    position: relative;
+    flex-shrink: 0;
+    width: auto;
+    aspect-ratio: 1/1;
+    height: auto;
+    max-width: 200px;
+
+    @include breakpoint(tablet) {
+      width: auto;
+      max-width: none;
+      height: $gallery-height;
+    }
+  }
+
+  &__image {
+    position: absolute;
+    inset: 0;
+  }
+
+  &__selectors {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    @include breakpoint(tablet) {
+      gap: 2.5rem;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+
+    @include breakpoint(tablet) {
+      min-width: $info-max-width;
+      margin-top: auto;
+      align-self: flex-end;
+      justify-self: flex-end;
+      gap: 4rem;
+    }
+  }
+
+  &__heading {
+    display: grid;
+    gap: $heading-gap;
+  }
+
+  &__name {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    line-height: 1.2;
+
+    @include breakpoint(tablet) {
+      font-size: var(--font-size-xl);
+    }
+  }
+
+  &__price {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-thin);
+    grid-area: 2 / 1;
+
+    @include breakpoint(tablet) {
+      font-size: var(--font-size-lg);
+    }
+  }
+}

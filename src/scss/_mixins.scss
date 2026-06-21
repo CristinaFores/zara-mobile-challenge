@@ -7,11 +7,11 @@ $breakpoints: (
 );
 
 @mixin breakpoint($breakpoint) {
-  $value: if(
-    map.has-key($breakpoints, $breakpoint),
-    map.get($breakpoints, $breakpoint),
-    $breakpoint
-  );
+  $value: $breakpoint;
+
+  @if map.has-key($breakpoints, $breakpoint) {
+    $value: map.get($breakpoints, $breakpoint);
+  }
 
   @media (min-width: $value) {
     @content;

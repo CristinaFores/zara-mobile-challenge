@@ -51,6 +51,8 @@ export default defineConfig([
         'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
+      '@typescript-eslint/prefer-readonly': 'off',
+      '@typescript-eslint/prefer-readonly-parameter-types': 'off',
       'import/order': [
         'error',
         {

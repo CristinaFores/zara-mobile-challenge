@@ -7,9 +7,9 @@ import CloseIcon from '@/components/UI/icons/CloseIcon'
 import styles from './SearchBar.module.scss'
 
 interface SearchBarProps {
-  readonly query: string
-  readonly resultCount: number
-  readonly onQueryChange: (value: string) => void
+  query: string
+  resultCount: number
+  onQueryChange: (value: string) => void
 }
 
 export function SearchBar({ query, resultCount, onQueryChange }: SearchBarProps) {

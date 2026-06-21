@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 }
 
 interface HomeProps {
-  readonly searchParams: Promise<{ search?: string }>
+  searchParams: Promise<{ search?: string }>
 }
 
 export default async function Home({ searchParams }: HomeProps) {
   const { search = '' } = await searchParams
-  const phones = await getPhones()
+  const phones = await getPhones(search || undefined)
 
   return <PhoneCatalog phones={phones} initialSearch={search} />
 }

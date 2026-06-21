@@ -53,4 +53,7 @@ next-env.d.ts
 .vscode
 .claude
 .scannerwork
+
+# AI
+AUDIT.md
 AGENTS.md

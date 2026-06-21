@@ -1,0 +1,16 @@
+.specs-table {
+  padding-top: 2rem;
+
+  &__heading {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+  }
+}

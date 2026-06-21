@@ -1,0 +1,48 @@
+@use '@/scss/_mixins' as *;
+
+.storage-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 1.375rem;
+
+  @include breakpoint(desktop) {
+    gap: 1.5rem;
+  }
+
+  &__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+
+    @include breakpoint(desktop) {
+      font-size: var(--font-size-base);
+    }
+  }
+
+  &__options {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__chip {
+    padding: 1rem 1.5rem;
+    min-width: 95px;
+    margin-right: -1px;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+
+    @include breakpoint(desktop) {
+      font-size: var(--font-size-base);
+    }
+
+    &[data-selected='true'] {
+      z-index: var(--z-base);
+      border-color: var(--color-text-primary);
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.back-link {
+  display: flex;
+  align-items: center;
+  height: 2.75rem;
+
+  &__anchor {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    transition: color 0.4s ease;
+    line-height: 1.25rem;
+
+    &:hover {
+      color: var(--color-text-secondary);
+    }
+  }
+}

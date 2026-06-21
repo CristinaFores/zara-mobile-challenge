@@ -8,8 +8,10 @@ import { ProductImage } from '../ProductImage/ProductImage'
 
 import styles from './ProductCard.module.scss'
 
-type ProductCardProps = Readonly<Phone> & {
-  readonly priority?: boolean
+type ProductCardProps = Phone & {
+  className?: string
+  priority?: boolean
+  cardRef?: (element: HTMLElement | null) => void
 }
 
 export const ProductCard = memo(function ProductCard({
@@ -19,23 +21,30 @@ export const ProductCard = memo(function ProductCard({
   basePrice,
   imageUrl,
   priority = false,
+  cardRef,
+  className,
 }: ProductCardProps) {
   return (
-    <Link
-      href={`${ROUTES.PHONE_DETAIL}/${id}`}
-      className={styles['product-card']}
-      aria-label={`${brand} ${name}, ${basePrice} EUR`}
+    <li
+      ref={cardRef ? (element) => cardRef(element) : undefined}
+      className={[styles['product-card'], className].filter(Boolean).join(' ')}
     >
-      <figure className={styles['product-card__image-wrapper']}>
-        <ProductImage src={imageUrl} alt={`${brand} ${name}`} priority={priority} />
-      </figure>
-      <footer className={styles['product-card__info']}>
-        <hgroup className={styles['product-card__details']}>
-          <p className={styles['product-card__brand']}>{brand}</p>
-          <h3 className={styles['product-card__name']}>{name}</h3>
-        </hgroup>
-        <p className={styles['product-card__price']}>{basePrice} EUR</p>
-      </footer>
-    </Link>
+      <Link
+        href={`${ROUTES.PHONE_DETAIL}/${id}`}
+        className={styles['product-card__link']}
+        aria-label={`${brand} ${name}, ${basePrice} EUR`}
+      >
+        <figure className={styles['product-card__image-wrapper']}>
+          <ProductImage src={imageUrl} alt={`${brand} ${name}`} priority={priority} />
+        </figure>
+        <div className={styles['product-card__info']}>
+          <hgroup className={styles['product-card__details']}>
+            <p className={styles['product-card__brand']}>{brand}</p>
+            <h3 className={styles['product-card__name']}>{name}</h3>
+          </hgroup>
+          <p className={styles['product-card__price']}>{basePrice} EUR</p>
+        </div>
+      </Link>
+    </li>
   )
 })
