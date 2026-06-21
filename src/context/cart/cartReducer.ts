@@ -26,25 +26,21 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
     case 'ADD': {
       const { phone, selectedColor, selectedStorage } = action.payload
       const key = buildKey(phone.id, selectedColor.name, selectedStorage.capacity)
-      const existing = state.cartItems.find((item) => item.key === key)
-      const cartItems: CartItem[] = existing
-        ? state.cartItems.map((item) =>
-            item.key === key ? { ...item, quantity: item.quantity + 1 } : item
-          )
-        : [
-            ...state.cartItems,
-            {
-              key,
-              id: phone.id,
-              brand: phone.brand,
-              name: phone.name,
-              imageUrl: selectedColor.imageUrl ?? phone.imageUrl,
-              selectedColor,
-              selectedStorage,
-              price: selectedStorage.price,
-              quantity: 1,
-            },
-          ]
+      if (state.cartItems.some((item) => item.key === key)) return state
+      const cartItems: CartItem[] = [
+        ...state.cartItems,
+        {
+          key,
+          id: phone.id,
+          brand: phone.brand,
+          name: phone.name,
+          imageUrl: selectedColor.imageUrl ?? phone.imageUrl,
+          selectedColor,
+          selectedStorage,
+          price: selectedStorage.price,
+          quantity: 1,
+        },
+      ]
       return { ...state, cartItems }
     }
 

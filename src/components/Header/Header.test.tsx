@@ -79,22 +79,25 @@ describe('Given a Header component', () => {
     })
   })
 
-  describe('Given the Header mounts for the first time', () => {
+  describe('Given the Header mounts for the first time on a non-cart page', () => {
     beforeEach(() => {
       mockCart(0)
       jest.useFakeTimers()
     })
 
     afterEach(() => {
+      act(() => {
+        jest.runOnlyPendingTimers()
+      })
       jest.useRealTimers()
     })
 
-    it('When rendered, Then the loading bar is visible immediately on mount', () => {
+    it('When rendered, Then the animated loading bar is visible immediately', () => {
       const { container } = render(<Header />)
       expect(container.querySelector(`.${styles.header__loadingBar}`)).toBeInTheDocument()
     })
 
-    it('And after the animation completes, the loading bar is removed from the DOM', () => {
+    it('And after 1200ms the loading bar is removed', () => {
       const { container } = render(<Header />)
       act(() => {
         jest.advanceTimersByTime(1200)

@@ -103,7 +103,7 @@ describe('Given the cart is empty', () => {
 
 describe('Given the same phone, color, and storage combination is already in the cart', () => {
   describe('When addToCart is called again with the identical combination', () => {
-    it('Then quantity increments to 2 instead of creating a duplicate entry', async () => {
+    it('Then the second call is a no-op — one item per unique combination', async () => {
       const result = await renderCart()
 
       act(() => {
@@ -112,10 +112,10 @@ describe('Given the same phone, color, and storage combination is already in the
       })
 
       expect(result.current.cartItems).toHaveLength(1)
-      expect(result.current.cartItems[0].quantity).toBe(2)
+      expect(result.current.cartItems[0].quantity).toBe(1)
     })
 
-    it('And the total doubles to reflect the higher quantity', async () => {
+    it('And the total reflects only one unit price', async () => {
       const result = await renderCart()
 
       act(() => {
@@ -123,7 +123,7 @@ describe('Given the same phone, color, and storage combination is already in the
         result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
       })
 
-      expect(result.current.cartTotal).toBe(STORAGE_256.price * 2)
+      expect(result.current.cartTotal).toBe(STORAGE_256.price)
     })
   })
 })

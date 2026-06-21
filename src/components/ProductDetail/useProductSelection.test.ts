@@ -11,7 +11,7 @@ let mockParams: Record<string, string | null> = {}
 
 jest.mock('next/navigation', () => ({
   useSearchParams: () => ({ get: (key: string) => mockParams[key] ?? null, toString: () => '' }),
-  useRouter: () => ({ replace: mockReplace }),
+  useRouter: () => ({ replace: mockReplace, push: jest.fn() }),
   usePathname: () => '/phones/SMG-S24U',
 }))
 

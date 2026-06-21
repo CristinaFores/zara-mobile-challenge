@@ -24,6 +24,7 @@
   z-index: var(--z-sticky);
   background-color: var(--color-bg-primary);
 
+  // Animated bar — appears then fades out (all pages except cart)
   &__loadingBar {
     position: absolute;
     bottom: 0;
@@ -33,6 +34,16 @@
     background-color: var(--color-text-primary);
     transform-origin: left center;
     animation: loadingBar 1.2s ease-out forwards;
+  }
+
+  // Static bar — stays visible permanently (cart page only)
+  &__loadingBar--static {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background-color: var(--color-text-primary);
   }
 
   &__inner {

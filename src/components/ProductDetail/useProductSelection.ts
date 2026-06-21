@@ -3,6 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
+import { ROUTES } from '@/constants'
 import { useCart } from '@/context/cart/CartContext'
 import type { ColorOption, Phone, PhoneDetail, StorageOption } from '@/types'
 
@@ -66,7 +67,8 @@ export function useProductSelection(phone: PhoneDetail): ProductSelection {
       imageUrl: selectedColor.imageUrl,
     }
     addToCart(phoneForCart, selectedColor, selectedStorage)
-  }, [phone, selectedColor, selectedStorage, addToCart])
+    router.push(ROUTES.CART)
+  }, [phone, selectedColor, selectedStorage, addToCart, router])
 
   return {
     selectedColor,
