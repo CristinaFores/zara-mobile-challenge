@@ -27,36 +27,35 @@ describe('Given useCatalogSearch', () => {
   })
 
   describe('When an initial query is provided', () => {
-    it('Then it filters from the first render', () => {
+    it('Then it returns the phones as-is — the server already filtered them before passing the prop', () => {
+      const appleOnly = phoneListFixture.filter((p) => p.brand === 'Apple')
       const { result } = renderHook(() =>
-        useCatalogSearch({ phones: phoneListFixture, initialQuery: 'apple' })
+        useCatalogSearch({ phones: appleOnly, initialQuery: 'apple' })
       )
 
-      expect(result.current.filteredPhones.every((phone) => phone.brand === 'Apple')).toBe(true)
+      expect(result.current.filteredPhones).toEqual(appleOnly)
+      expect(result.current.resultCount).toBe(appleOnly.length)
     })
   })
 
   describe('When the query changes', () => {
-    it('Then it keeps the previous results until the filter debounce elapses', () => {
+    it('Then filteredPhones stays equal to the phones prop — local filtering is server-side now', () => {
       const { result } = renderHook(() => useCatalogSearch({ phones: phoneListFixture }))
 
       act(() => result.current.onQueryChange('samsung'))
-
-      expect(result.current.resultCount).toBe(phoneListFixture.length)
-
       act(() => jest.advanceTimersByTime(450))
 
-      expect(result.current.filteredPhones.every((phone) => phone.brand === 'Samsung')).toBe(true)
+      expect(result.current.filteredPhones).toEqual(phoneListFixture)
+      expect(result.current.resultCount).toBe(phoneListFixture.length)
     })
 
-    it('Then it matches by name case-insensitively', () => {
+    it('Then it pushes the encoded query to the URL after the debounce so the Server Component re-fetches', () => {
       const { result } = renderHook(() => useCatalogSearch({ phones: phoneListFixture }))
 
       act(() => result.current.onQueryChange('PIXEL'))
-      act(() => jest.advanceTimersByTime(450))
+      act(() => jest.advanceTimersByTime(300))
 
-      expect(result.current.filteredPhones).toHaveLength(1)
-      expect(result.current.filteredPhones[0].name).toMatch(/pixel/i)
+      expect(pushMock).toHaveBeenCalledWith('/?search=PIXEL', { scroll: false })
     })
 
     it('Then it pushes the query to the URL after the url debounce', () => {

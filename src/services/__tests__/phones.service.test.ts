@@ -6,8 +6,8 @@ import { server } from '@/test-utils/msw/server'
 
 import { getPhoneById, getPhones } from '../phones.service'
 
-const APP = process.env.APP_URL
-const PRODUCTS_URL = `${APP}/api${API_ENDPOINTS.PRODUCTS}`
+const API_BASE = process.env.API_BASE_URL
+const PRODUCTS_URL = `${API_BASE}${API_ENDPOINTS.PRODUCTS}`
 
 interface AxiosLikeError extends Error {
   response?: { status: number; data: { message: string } }
@@ -81,7 +81,7 @@ describe('Given the user navigates to a valid product detail page', () => {
 
       await getPhoneById('SMG-S24U')
 
-      expect(requestedPath).toBe('/api/products/SMG-S24U')
+      expect(requestedPath).toBe('/products/SMG-S24U')
     })
 
     it('And it returns the full detail object exactly as the route delivers it', async () => {

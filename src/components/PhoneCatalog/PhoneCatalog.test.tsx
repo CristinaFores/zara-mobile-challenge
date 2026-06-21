@@ -30,12 +30,12 @@ describe('Given a PhoneCatalog', () => {
   })
 
   describe('When an initial search is provided', () => {
-    it('Then it pre-filters the list', () => {
-      render(<PhoneCatalog phones={phoneListFixture} initialSearch="apple" />)
+    it('Then it shows the count for the phones the server already filtered — not a local re-filter', () => {
+      const applePhones = phoneListFixture.filter((phone) => phone.brand === 'Apple')
+      render(<PhoneCatalog phones={applePhones} initialSearch="apple" />)
 
-      const appleCount = phoneListFixture.filter((phone) => phone.brand === 'Apple').length
       expect(
-        screen.getByText(`${appleCount} result${appleCount === 1 ? '' : 's'}`)
+        screen.getByText(`${applePhones.length} result${applePhones.length === 1 ? '' : 's'}`)
       ).toBeInTheDocument()
     })
   })
