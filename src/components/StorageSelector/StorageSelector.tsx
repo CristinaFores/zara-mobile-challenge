@@ -11,11 +11,13 @@ interface StorageSelectorProps {
 export function StorageSelector({ options, selected, onSelect }: StorageSelectorProps) {
   return (
     <div className={styles['storage-selector']}>
-      <p className={styles['storage-selector__label']}>Storage ¿How much space do you need?</p>
+      <p id="storage-selector-label" className={styles['storage-selector__label']}>
+        Storage ¿How much space do you need?
+      </p>
       <div
         className={styles['storage-selector__options']}
         role="group"
-        aria-label="Storage options"
+        aria-labelledby="storage-selector-label"
       >
         {options.map((option) => {
           const isSelected = selected?.capacity === option.capacity

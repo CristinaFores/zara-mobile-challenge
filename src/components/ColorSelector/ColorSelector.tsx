@@ -16,8 +16,14 @@ export function ColorSelector({ options, selected, onSelect }: ColorSelectorProp
 
   return (
     <div className={styles['color-selector']}>
-      <p className={styles['color-selector__label']}>Color: Pick your favourite.</p>
-      <div className={styles['color-selector__swatches']} role="group" aria-label="Color options">
+      <p id="color-selector-label" className={styles['color-selector__label']}>
+        Color: Pick your favourite.
+      </p>
+      <div
+        className={styles['color-selector__swatches']}
+        role="group"
+        aria-labelledby="color-selector-label"
+      >
         {options.map((option) => {
           const isSelected = selected?.name === option.name
           return (
