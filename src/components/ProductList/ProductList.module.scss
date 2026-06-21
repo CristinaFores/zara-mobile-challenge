@@ -33,23 +33,6 @@
     grid-template-columns: repeat(auto-fill, minmax(344px, 1fr));
   }
 
-  &__item {
-    display: block;
-    will-change: transform;
-    position: relative;
-    margin-right: -0.5px;
-    margin-bottom: -0.5px;
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border: 0.5px solid var(--color-text-primary);
-      z-index: var(--z-negative-2);
-      background-color: transparent;
-    }
-  }
-
   &__exiting {
     pointer-events: none;
     z-index: calc(var(--z-card) + 1);

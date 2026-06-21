@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-
 import { BackLink } from '@/components/BackLink/BackLink'
 import { SimilarProducts } from '@/components/SimilarProducts/SimilarProducts'
 import { SpecsTable } from '@/components/SpecsTable/SpecsTable'
@@ -35,9 +33,7 @@ export function PhoneDetailView({ phone }: PhoneDetailViewProps) {
     <>
       <BackLink href={ROUTES.HOME} />
       <article className={styles['phone-detail-view']}>
-        <Suspense>
-          <ProductDetailHero phone={phone} />
-        </Suspense>
+        <ProductDetailHero phone={phone} />
         <SpecsTable rows={buildSpecRows(phone)} />
         <SimilarProducts products={phone.similarProducts} />
       </article>

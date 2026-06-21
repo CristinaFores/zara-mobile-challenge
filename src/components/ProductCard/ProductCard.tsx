@@ -11,7 +11,7 @@ import styles from './ProductCard.module.scss'
 type ProductCardProps = Phone & {
   className?: string
   priority?: boolean
-  cardRef?: (element: Element | null) => void
+  cardRef?: (element: HTMLElement | null) => void
 }
 
 export const ProductCard = memo(function ProductCard({
@@ -27,7 +27,7 @@ export const ProductCard = memo(function ProductCard({
   return (
     <li
       ref={cardRef ? (element) => cardRef(element) : undefined}
-      className={`${styles['product-card']} ${className}`}
+      className={[styles['product-card'], className].filter(Boolean).join(' ')}
     >
       <Link
         href={`${ROUTES.PHONE_DETAIL}/${id}`}
@@ -37,13 +37,13 @@ export const ProductCard = memo(function ProductCard({
         <figure className={styles['product-card__image-wrapper']}>
           <ProductImage src={imageUrl} alt={`${brand} ${name}`} priority={priority} />
         </figure>
-        <footer className={styles['product-card__info']}>
+        <div className={styles['product-card__info']}>
           <hgroup className={styles['product-card__details']}>
             <p className={styles['product-card__brand']}>{brand}</p>
             <h3 className={styles['product-card__name']}>{name}</h3>
           </hgroup>
           <p className={styles['product-card__price']}>{basePrice} EUR</p>
-        </footer>
+        </div>
       </Link>
     </li>
   )

@@ -12,7 +12,7 @@ interface BackLinkProps {
 export function BackLink({ href, label = 'Back' }: BackLinkProps) {
   return (
     <nav className={styles['back-link']} aria-label="Breadcrumb">
-      <Link href={href} className={styles['back-link__anchor']} prefetch={true}>
+      <Link href={href} className={styles['back-link__anchor']}>
         <ArrowAngleIcon />
         {label}
       </Link>
