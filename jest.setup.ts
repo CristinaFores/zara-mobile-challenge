@@ -5,6 +5,7 @@ import '@testing-library/jest-dom'
 // intercepted identically in local and CI runs (with or without a local .env).
 process.env.API_BASE_URL = 'https://api.test'
 process.env.API_KEY = 'test-api-key'
+process.env.APP_URL = 'http://localhost:3000'
 
 import { server } from '@/test-utils/msw/server'
 
