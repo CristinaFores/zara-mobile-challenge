@@ -1,0 +1,15 @@
+@use '@/scss/_mixins' as *;
+
+.phone-detail-view {
+  display: flex;
+  flex-direction: column;
+  max-width: 75rem;
+  margin: 0 auto;
+  padding-top: 3.5rem;
+  gap: 5rem;
+
+  @include breakpoint(tablet) {
+    gap: 9.625rem;
+    padding-top: 11.875rem;
+  }
+}

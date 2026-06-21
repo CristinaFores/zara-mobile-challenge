@@ -1,0 +1,30 @@
+.specs-table-row {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 1rem;
+  padding-block: 0.75rem;
+  border-bottom: 0.5px solid var(--color-text-primary);
+
+  &:first-child {
+    border-top: 0.5px solid var(--color-text-primary);
+  }
+
+  @media (min-width: 600px) {
+    grid-template-columns: 12rem 1fr;
+  }
+
+  &__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    align-self: start;
+  }
+
+  &__value {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    color: var(--color-text-primary);
+    line-height: 1.5;
+  }
+}

@@ -19,8 +19,8 @@ const FLIP_TRANSITION_MS = 500
 type AnimationPhase = 'idle' | 'animating'
 
 interface FlipAnimationResult {
-  displayedPhones: readonly Phone[]
-  exitingCards: readonly ExitingCard[]
+  displayedPhones: Phone[]
+  exitingCards: ExitingCard[]
   animationPhase: AnimationPhase
   listRef: (el: HTMLUListElement | null) => void
   cardRef: (id: string, el: HTMLElement | null) => void
