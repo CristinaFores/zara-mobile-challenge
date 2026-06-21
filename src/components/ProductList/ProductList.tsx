@@ -11,8 +11,7 @@ interface ProductListProps {
   phones: Phone[]
   exitingCards?: ExitingCard[]
   animationPhase?: AnimationPhase
-  listRef?: (el: HTMLUListElement | null) => void
-  cardRef?: (id: string, el: Element | null) => void
+  cardRef?: (id: string, el: HTMLElement | null) => void
 }
 
 const PRIORITY_IMAGE_COUNT = 6
@@ -21,14 +20,13 @@ export function ProductList({
   phones,
   exitingCards = [],
   animationPhase = 'idle',
-  listRef,
   cardRef,
 }: ProductListProps) {
   const isAnimating = animationPhase === 'animating'
 
   return (
     <section className={styles['product-list-wrapper']}>
-      <ul className={styles['product-list']} ref={listRef} aria-label="Phones catalog">
+      <ul className={styles['product-list']} aria-label="Phones catalog">
         {phones?.map((phone, index) => (
           <ProductCard
             key={phone?.id}

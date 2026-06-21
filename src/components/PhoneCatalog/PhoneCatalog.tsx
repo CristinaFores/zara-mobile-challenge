@@ -19,7 +19,7 @@ export function PhoneCatalog({ phones, initialSearch = '' }: PhoneCatalogProps) 
     initialQuery: initialSearch,
   })
 
-  const { displayedPhones, exitingCards, animationPhase, listRef, cardRef } =
+  const { displayedPhones, exitingCards, animationPhase, cardRef } =
     useFlipAnimation(filteredPhones)
 
   return (
@@ -29,7 +29,6 @@ export function PhoneCatalog({ phones, initialSearch = '' }: PhoneCatalogProps) 
         phones={displayedPhones}
         exitingCards={exitingCards}
         animationPhase={animationPhase}
-        listRef={listRef}
         cardRef={cardRef}
       />
     </section>

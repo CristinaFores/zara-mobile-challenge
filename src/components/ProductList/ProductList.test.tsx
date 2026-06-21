@@ -5,7 +5,7 @@ import { phoneListFixture } from '@/__mocks__/phones.fixtures'
 import { ProductList } from './ProductList'
 
 jest.mock('../ProductCard/ProductCard', () => ({
-  ProductCard: ({ name }: { name: string }) => <span>{name}</span>,
+  ProductCard: ({ name }: { name: string }) => <li>{name}</li>,
 }))
 
 describe('Given a ProductList', () => {

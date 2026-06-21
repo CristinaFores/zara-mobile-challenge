@@ -9,7 +9,7 @@ jest.mock('next/navigation', () => ({
 }))
 
 jest.mock('../ProductCard/ProductCard', () => ({
-  ProductCard: ({ name }: { name: string }) => <span>{name}</span>,
+  ProductCard: ({ name }: { name: string }) => <li>{name}</li>,
 }))
 
 describe('Given a PhoneCatalog', () => {
