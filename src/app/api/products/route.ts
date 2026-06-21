@@ -6,10 +6,12 @@ import apiClient from '@/services/apiClient'
 import type { Phone } from '@/types'
 
 export async function GET(request: NextRequest) {
-  const limit = Number(request.nextUrl.searchParams.get('limit')) || PHONES_LIMIT
+  const { searchParams } = request.nextUrl
+  const limit = Number(searchParams.get('limit')) || PHONES_LIMIT
+  const search = searchParams.get('search') ?? undefined
   try {
     const response = await apiClient.get<Phone[]>(API_ENDPOINTS.PRODUCTS, {
-      params: { limit },
+      params: { limit, ...(search ? { search } : {}) },
     })
     return NextResponse.json(response.data)
   } catch (error) {

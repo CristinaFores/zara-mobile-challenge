@@ -4,6 +4,7 @@ $gallery-width: 42.5%;
 $info-max-width: 23.75rem;
 $info-top-offset: 5.5rem;
 $gallery-height: 28.75rem;
+$heading-gap: 0.6875rem;
 
 .product-detail-hero {
   display: grid;
@@ -60,7 +61,7 @@ $gallery-height: 28.75rem;
 
   &__heading {
     display: grid;
-    gap: 11px;
+    gap: $heading-gap;
   }
 
   &__name {

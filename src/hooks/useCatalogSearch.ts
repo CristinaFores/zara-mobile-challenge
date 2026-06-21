@@ -1,26 +1,10 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { SEARCH_DEBOUNCE_MS } from '@/constants'
 import type { Phone } from '@/types'
-
-import { useDebounce } from './useDebounce'
-
-const FILTER_DEBOUNCE_MS = 450
-
-function filterPhonesByQuery(phones: readonly Phone[], query: string): Phone[] {
-  const trimmed = query.trim()
-  if (!trimmed) return [...phones]
-
-  const normalizedQuery = trimmed.toLowerCase()
-  return phones.filter(
-    (phone) =>
-      phone.brand.toLowerCase().includes(normalizedQuery) ||
-      phone.name.toLowerCase().includes(normalizedQuery)
-  )
-}
 
 interface UseCatalogSearchOptions {
   phones: Phone[]
@@ -40,16 +24,7 @@ export function useCatalogSearch({
 }: UseCatalogSearchOptions): CatalogSearchResult {
   const router = useRouter()
   const urlDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
   const [query, setQuery] = useState(initialQuery)
-  const debouncedQuery = useDebounce(query, FILTER_DEBOUNCE_MS)
-
-  const filteredPhones = useMemo(
-    () => filterPhonesByQuery(phones, debouncedQuery),
-    [phones, debouncedQuery]
-  )
-
-  const resultCount = filteredPhones.length
 
   const onQueryChange = useCallback(
     (value: string) => {
@@ -63,5 +38,5 @@ export function useCatalogSearch({
     [router]
   )
 
-  return { query, filteredPhones, resultCount, onQueryChange }
+  return { query, filteredPhones: phones, resultCount: phones.length, onQueryChange }
 }

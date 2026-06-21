@@ -27,7 +27,7 @@ export function ProductDetailHero({ phone }: ProductDetailHeroProps) {
       <div className={styles['product-detail-hero__gallery']}>
         {imageSlots.map((slot, index) => (
           <figure
-            key={index}
+            key={`image-slot-${index}`}
             className={styles['product-detail-hero__image']}
             style={{ zIndex: slot.zIndex, opacity: slot.opacity, transition: slot.transition }}
             aria-hidden={slot.opacity === 0}
@@ -42,7 +42,7 @@ export function ProductDetailHero({ phone }: ProductDetailHeroProps) {
           <h1 className={styles['product-detail-hero__name']}>{phone.name}</h1>
           {priceSlots.map((slot, index) => (
             <span
-              key={index}
+              key={`price-slot-${index}`}
               className={styles['product-detail-hero__price']}
               style={{ opacity: slot.isActive ? 1 : 0, transition: 'opacity 0.3s ease' }}
               aria-hidden={!slot.isActive}

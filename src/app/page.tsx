@@ -14,7 +14,7 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const { search = '' } = await searchParams
-  const phones = await getPhones()
+  const phones = await getPhones(search || undefined)
 
   return <PhoneCatalog phones={phones} initialSearch={search} />
 }

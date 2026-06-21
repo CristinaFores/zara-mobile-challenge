@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-const FADE_MS = 450
+import { FILTER_DEBOUNCE_MS } from '@/constants'
 
 export interface ImageSlot {
   url: string
@@ -30,7 +30,7 @@ function slotStyle(
     return {
       zIndex: 2,
       opacity: incomingReady ? 1 : 0,
-      transition: incomingReady ? `opacity ${FADE_MS}ms ease` : 'none',
+      transition: incomingReady ? `opacity ${FILTER_DEBOUNCE_MS}ms ease` : 'none',
     }
   }
   return {
@@ -102,7 +102,7 @@ export function useImageCrossfade(targetUrl: string): [ImageSlot, ImageSlot] {
         imageLoaded: false,
         incomingReady: false,
       }))
-    }, FADE_MS)
+    }, FILTER_DEBOUNCE_MS)
     return () => clearTimeout(id)
   }, [state.incomingReady, state.incoming])
 
