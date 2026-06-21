@@ -1,13 +1,23 @@
+@use '@/scss/_mixins' as *;
+
 .storage-selector {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.375rem;
+
+  @include breakpoint(desktop) {
+    gap: 1.5rem;
+  }
 
   &__label {
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-thin);
     text-transform: uppercase;
     color: var(--color-text-primary);
+
+    @include breakpoint(desktop) {
+      font-size: var(--font-size-base);
+    }
   }
 
   &__options {
@@ -25,6 +35,10 @@
     font-weight: var(--font-weight-thin);
     text-transform: uppercase;
     transition: all 0.2s ease-in-out;
+
+    @include breakpoint(desktop) {
+      font-size: var(--font-size-base);
+    }
 
     &[data-selected='true'] {
       z-index: var(--z-base);

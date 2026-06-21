@@ -23,13 +23,13 @@ function filterPhonesByQuery(phones: readonly Phone[], query: string): Phone[] {
 }
 
 interface UseCatalogSearchOptions {
-  phones: readonly Phone[]
+  phones: Phone[]
   initialQuery?: string
 }
 
 interface CatalogSearchResult {
   query: string
-  filteredPhones: readonly Phone[]
+  filteredPhones: Phone[]
   resultCount: number
   onQueryChange: (value: string) => void
 }

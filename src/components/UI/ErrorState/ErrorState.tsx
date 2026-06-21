@@ -1,3 +1,5 @@
+import { Button } from '@/components/UI/Button/Button'
+
 import styles from './ErrorState.module.scss'
 
 interface ErrorStateProps {
@@ -10,9 +12,9 @@ export function ErrorState({ message = 'Something went wrong.', onRetry }: Error
     <div className={styles.error} role="alert">
       <p className={styles.error__message}>{message}</p>
       {onRetry && (
-        <button className={styles.error__retry} onClick={onRetry}>
+        <Button variant="secondary" onClick={onRetry}>
           Try again
-        </button>
+        </Button>
       )}
     </div>
   )

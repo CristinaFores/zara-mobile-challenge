@@ -9,7 +9,7 @@ import type { Phone } from '@/types'
 import styles from './PhoneCatalog.module.scss'
 
 interface PhoneCatalogProps {
-  phones: readonly Phone[]
+  phones: Phone[]
   initialSearch?: string
 }
 

@@ -8,11 +8,11 @@ import styles from './ProductList.module.scss'
 type AnimationPhase = 'idle' | 'animating'
 
 interface ProductListProps {
-  phones: readonly Phone[]
-  exitingCards?: readonly ExitingCard[]
+  phones: Phone[]
+  exitingCards?: ExitingCard[]
   animationPhase?: AnimationPhase
   listRef?: (el: HTMLUListElement | null) => void
-  cardRef?: (id: string, el: HTMLElement | null) => void
+  cardRef?: (id: string, el: Element | null) => void
 }
 
 const PRIORITY_IMAGE_COUNT = 6
@@ -30,13 +30,12 @@ export function ProductList({
     <section className={styles['product-list-wrapper']}>
       <ul className={styles['product-list']} ref={listRef} aria-label="Phones catalog">
         {phones?.map((phone, index) => (
-          <li
+          <ProductCard
             key={phone?.id}
-            ref={cardRef ? (el) => cardRef(phone.id, el) : undefined}
-            className={styles['product-list__item']}
-          >
-            <ProductCard {...phone} priority={index < PRIORITY_IMAGE_COUNT} />
-          </li>
+            {...phone}
+            priority={index < PRIORITY_IMAGE_COUNT}
+            cardRef={cardRef ? (el) => cardRef(phone.id, el) : undefined}
+          />
         ))}
       </ul>
 
