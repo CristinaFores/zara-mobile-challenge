@@ -14,7 +14,7 @@ interface ProductListProps {
   cardRef?: (id: string, el: HTMLElement | null) => void
 }
 
-const PRIORITY_IMAGE_COUNT = 6
+const PRIORITY_IMAGE_COUNT = 10
 
 export function ProductList({
   phones,
