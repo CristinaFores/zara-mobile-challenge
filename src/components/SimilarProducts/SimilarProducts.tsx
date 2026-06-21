@@ -13,7 +13,7 @@ export function SimilarProducts({ products }: SimilarProductsProps) {
   return (
     <section className={styles['similar-products']} aria-label="Similar items">
       <h2 className={styles['similar-products__heading']}>Similar items</h2>
-      <ul className={styles['similar-products__carousel']} role="list">
+      <ul className={styles['similar-products__carousel']}>
         {products.map((product) => (
           <ProductCard key={product.id} {...product} />
         ))}

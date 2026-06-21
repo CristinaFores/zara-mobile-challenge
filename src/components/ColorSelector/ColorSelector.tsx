@@ -14,16 +14,12 @@ interface ColorSelectorProps {
 export function ColorSelector({ options, selected, onSelect }: ColorSelectorProps) {
   const nameSlots = useTextCrossfade(selected?.name ?? '')
 
+  const [nameSlot0, nameSlot1] = nameSlots
+
   return (
     <div className={styles['color-selector']}>
-      <p id="color-selector-label" className={styles['color-selector__label']}>
-        Color: Pick your favourite.
-      </p>
-      <div
-        className={styles['color-selector__swatches']}
-        role="group"
-        aria-labelledby="color-selector-label"
-      >
+      <fieldset className={styles['color-selector__swatches']}>
+        <legend className={styles['color-selector__label']}>Color: Pick your favourite.</legend>
         {options.map((option) => {
           const isSelected = selected?.name === option.name
           return (
@@ -39,11 +35,11 @@ export function ColorSelector({ options, selected, onSelect }: ColorSelectorProp
             />
           )
         })}
-      </div>
+      </fieldset>
       <div className={styles['color-selector__name-wrapper']} aria-live="polite">
-        {nameSlots.map((slot, index) => (
+        {[nameSlot0, nameSlot1].map((slot, i) => (
           <span
-            key={index}
+            key={i === 0 ? 'name-slot-a' : 'name-slot-b'}
             className={styles['color-selector__selected-name']}
             style={{ opacity: slot.isActive ? 1 : 0, transition: 'opacity 0.3s ease' }}
             aria-hidden={!slot.isActive}

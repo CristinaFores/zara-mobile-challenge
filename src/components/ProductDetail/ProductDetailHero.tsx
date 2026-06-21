@@ -18,16 +18,16 @@ interface ProductDetailHeroProps {
 
 export function ProductDetailHero({ phone }: ProductDetailHeroProps) {
   const selection = useProductSelection(phone)
-  const imageSlots = useImageCrossfade(selection.imageUrl)
-  const priceSlots = useTextCrossfade(selection.priceLabel)
+  const [imageSlot0, imageSlot1] = useImageCrossfade(selection.imageUrl)
+  const [priceSlot0, priceSlot1] = useTextCrossfade(selection.priceLabel)
   const imageAlt = `${phone.brand} ${phone.name}`
 
   return (
     <section className={styles['product-detail-hero']} aria-label={imageAlt}>
       <div className={styles['product-detail-hero__gallery']}>
-        {imageSlots.map((slot, index) => (
+        {[imageSlot0, imageSlot1].map((slot, i) => (
           <figure
-            key={`image-slot-${index}`}
+            key={i === 0 ? 'image-slot-a' : 'image-slot-b'}
             className={styles['product-detail-hero__image']}
             style={{ zIndex: slot.zIndex, opacity: slot.opacity, transition: slot.transition }}
             aria-hidden={slot.opacity === 0}
@@ -40,9 +40,9 @@ export function ProductDetailHero({ phone }: ProductDetailHeroProps) {
       <div className={styles['product-detail-hero__info']}>
         <hgroup className={styles['product-detail-hero__heading']}>
           <h1 className={styles['product-detail-hero__name']}>{phone.name}</h1>
-          {priceSlots.map((slot, index) => (
+          {[priceSlot0, priceSlot1].map((slot, i) => (
             <span
-              key={`price-slot-${index}`}
+              key={i === 0 ? 'price-slot-a' : 'price-slot-b'}
               className={styles['product-detail-hero__price']}
               style={{ opacity: slot.isActive ? 1 : 0, transition: 'opacity 0.3s ease' }}
               aria-hidden={!slot.isActive}

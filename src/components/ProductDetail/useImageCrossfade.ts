@@ -77,13 +77,16 @@ export function useImageCrossfade(targetUrl: string): [ImageSlot, ImageSlot] {
   useEffect(() => {
     if (!state.imageLoaded || state.incoming === null) return
     const slot = state.incoming
+
+    function markReady() {
+      setState((prev) =>
+        prev.incoming === slot && prev.imageLoaded ? { ...prev, incomingReady: true } : prev
+      )
+    }
+
     let raf2 = 0
     const raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => {
-        setState((prev) =>
-          prev.incoming === slot && prev.imageLoaded ? { ...prev, incomingReady: true } : prev
-        )
-      })
+      raf2 = requestAnimationFrame(markReady)
     })
     return () => {
       cancelAnimationFrame(raf1)
