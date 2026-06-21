@@ -56,9 +56,8 @@ export function useCatalogSearch({
       setQuery(value)
       if (urlDebounceRef.current) clearTimeout(urlDebounceRef.current)
       urlDebounceRef.current = setTimeout(() => {
-        const params = new URLSearchParams()
-        if (value) params.set('search', value)
-        router.push(`/?${params.toString()}`, { scroll: false })
+        const url = value ? `/?search=${encodeURIComponent(value)}` : '/'
+        router.push(url, { scroll: false })
       }, SEARCH_DEBOUNCE_MS)
     },
     [router]

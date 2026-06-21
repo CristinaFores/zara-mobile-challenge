@@ -74,7 +74,7 @@ describe('Given useCatalogSearch', () => {
       act(() => result.current.onQueryChange(''))
       act(() => jest.advanceTimersByTime(300))
 
-      expect(pushMock).toHaveBeenCalledWith('/?', { scroll: false })
+      expect(pushMock).toHaveBeenCalledWith('/', { scroll: false })
     })
   })
 })
