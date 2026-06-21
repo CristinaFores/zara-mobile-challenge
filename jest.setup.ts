@@ -13,7 +13,8 @@ process.env.APP_URL = 'http://localhost:3000'
 const originalError = console.error.bind(console)
 console.error = (...args: Parameters<typeof console.error>) => {
   // React passes printf-style args: args[0] = 'The tag <%s> is unrecognized…', args[1] = 'search'
-  if (typeof args[0] === 'string' && args[0].includes('is unrecognized') && args[1] === 'search') return
+  if (typeof args[0] === 'string' && args[0].includes('is unrecognized') && args[1] === 'search')
+    return
   originalError(...args)
 }
 
