@@ -1,5 +1,5 @@
-import { phoneDetailFixture } from '@/__mocks__/phones.fixtures'
 import { getPhoneById } from '@/services/phones.service'
+import { phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
 
 const mockNotFound = jest.fn().mockImplementation(() => {
   throw Object.assign(new Error('NEXT_NOT_FOUND'), { digest: 'NEXT_NOT_FOUND' })

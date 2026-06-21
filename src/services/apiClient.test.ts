@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw'
 
 import { server } from '@/test-utils/msw/server'
 
-import apiClient from '../apiClient'
+import apiClient from './apiClient'
 
 const API = process.env.API_BASE_URL
 

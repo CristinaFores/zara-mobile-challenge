@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 
-import { phoneDetailFixture } from '@/__mocks__/phones.fixtures'
+import { phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
 
 import { useProductSelection } from './useProductSelection'
 

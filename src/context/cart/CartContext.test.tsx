@@ -1,8 +1,8 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import type { ReactNode } from 'react'
 
-import { phoneDetailFixture, phoneListFixture } from '@/__mocks__/phones.fixtures'
 import { CART_KEY } from '@/constants'
+import { phoneDetailFixture, phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
 import type { CartItem } from '@/types'
 
 import { CartProvider, useCart } from './CartContext'

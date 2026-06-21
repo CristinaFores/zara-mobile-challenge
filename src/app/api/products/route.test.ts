@@ -1,8 +1,8 @@
 import { http, HttpResponse } from 'msw'
 import { NextRequest } from 'next/server'
 
-import { apiErrorFixtures, phoneListFixture } from '@/__mocks__/phones.fixtures'
 import { API_ENDPOINTS } from '@/constants'
+import { apiErrorFixtures, phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
 import { server } from '@/test-utils/msw/server'
 
 import { GET } from './route'
