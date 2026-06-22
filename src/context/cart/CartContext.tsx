@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useReducer,
+  useState,
   type ReactNode,
 } from 'react'
 
@@ -76,7 +77,31 @@ function useCartProviderValue(): CartContextValue {
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const cartValue = useCartProviderValue()
-  return <CartContext.Provider value={cartValue}>{children}</CartContext.Provider>
+  const [announcement, setAnnouncement] = useState('')
+
+  useEffect(() => {
+    if (!announcement) return
+    const timer = setTimeout(() => setAnnouncement(''), 3000)
+    return () => clearTimeout(timer)
+  }, [announcement])
+
+  const { addToCart: originalAddToCart, ...rest } = cartValue
+  const addToCart = useCallback<CartContextValue['addToCart']>(
+    (phone, selectedColor, selectedStorage) => {
+      originalAddToCart(phone, selectedColor, selectedStorage)
+      setAnnouncement(`${phone.brand} ${phone.name} added to cart`)
+    },
+    [originalAddToCart]
+  )
+
+  return (
+    <CartContext.Provider value={{ ...rest, addToCart }}>
+      {children}
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {announcement}
+      </div>
+    </CartContext.Provider>
+  )
 }
 
 export function useCart(): CartContextValue {
