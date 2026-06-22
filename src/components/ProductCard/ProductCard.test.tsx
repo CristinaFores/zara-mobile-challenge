@@ -99,4 +99,32 @@ describe('Given a ProductCard', () => {
       expect(beginProductRouteViewTransition).toHaveBeenCalledWith(phone.id)
     })
   })
+
+  describe('When view transitions are unavailable', () => {
+    beforeEach(() => {
+      jest.clearAllMocks()
+      Object.defineProperty(document, 'startViewTransition', {
+        configurable: true,
+        value: undefined,
+      })
+      globalThis.matchMedia = jest.fn().mockImplementation(() => ({
+        matches: true,
+        media: '(prefers-reduced-motion: reduce)',
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      }))
+      render(<ProductCard {...phone} />)
+    })
+
+    it('Then it stores the preview without starting a route transition', async () => {
+      await userEvent.click(screen.getByRole('link'))
+
+      expect(setProductPreview).toHaveBeenCalled()
+      expect(beginProductRouteViewTransition).not.toHaveBeenCalled()
+    })
+  })
 })

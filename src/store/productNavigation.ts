@@ -46,8 +46,8 @@ export function useProductPreview(productId?: string): ProductPreview | null {
     () => {
       if (!productId) return currentPreview
       const preview = currentPreview
-      if (!preview || preview.id !== productId) return null
-      if (preview.href !== getProductDetailHref(productId)) return null
+      if (preview?.id !== productId) return null
+      if (preview?.href !== getProductDetailHref(productId)) return null
       return preview
     },
     () => null
@@ -62,9 +62,7 @@ let pendingRouteTransition: {
 
 export function beginProductRouteViewTransition(productId: string): Promise<void> {
   pendingRouteTransition?.resolve()
-  if (pendingRouteTransition?.timeout) {
-    clearTimeout(pendingRouteTransition.timeout)
-  }
+  clearTimeout(pendingRouteTransition?.timeout)
 
   return new Promise<void>((resolve) => {
     const timeout = setTimeout(() => {

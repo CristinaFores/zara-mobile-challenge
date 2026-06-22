@@ -26,6 +26,14 @@ interface ProductDetailHeroProps {
   phone: PhoneDetail
 }
 
+function getImageSlotKey(routeTransitionDone: boolean, index: number): string {
+  if (!routeTransitionDone) {
+    return 'route-image'
+  }
+
+  return index === 0 ? 'image-slot-a' : 'image-slot-b'
+}
+
 export function ProductDetailHero({ phone }: ProductDetailHeroProps) {
   const routeTransitionDone = useAfterProductRouteTransition()
   const preview = useProductPreview(phone.id)
@@ -57,7 +65,7 @@ export function ProductDetailHero({ phone }: ProductDetailHeroProps) {
       <div className={styles['product-detail-hero__gallery']} style={imageTransitionStyle}>
         {imageSlots.map((slot, i) => (
           <figure
-            key={routeTransitionDone ? (i === 0 ? 'image-slot-a' : 'image-slot-b') : 'route-image'}
+            key={getImageSlotKey(routeTransitionDone, i)}
             className={styles['product-detail-hero__image']}
             style={{ zIndex: slot.zIndex, opacity: slot.opacity, transition: slot.transition }}
             aria-hidden={slot.opacity === 0}

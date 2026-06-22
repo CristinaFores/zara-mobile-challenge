@@ -96,7 +96,7 @@ export const ProductCard = memo(function ProductCard({
       }
       const canUseViewTransition =
         typeof viewTransitionDocument.startViewTransition === 'function' &&
-        !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        !globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
       if (!canUseViewTransition) {
         activateNavigation()
