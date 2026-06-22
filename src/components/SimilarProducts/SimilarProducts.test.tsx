@@ -4,8 +4,8 @@ import { phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
 
 import { SimilarProducts } from './SimilarProducts'
 
-jest.mock('@/components/ProductCard/ProductCard', () => ({
-  ProductCard: ({ name }: { name: string }) => <li>{name}</li>,
+jest.mock('./SimilarProductCard', () => ({
+  SimilarProductCard: ({ name }: { name: string }) => <li>{name}</li>,
 }))
 
 const products = phoneDetailFixture.similarProducts

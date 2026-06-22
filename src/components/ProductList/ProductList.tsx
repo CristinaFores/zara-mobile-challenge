@@ -2,6 +2,7 @@ import type { ExitingCard } from '@/hooks/useFlipAnimation'
 import type { Phone } from '@/types'
 
 import { ProductCard } from '../ProductCard/ProductCard'
+import { SimilarProductCard } from '../SimilarProducts/SimilarProductCard'
 
 import styles from './ProductList.module.scss'
 
@@ -29,7 +30,7 @@ export function ProductList({
       <ul className={styles['product-list']} aria-label="Phones catalog">
         {phones?.map((phone, index) => (
           <ProductCard
-            key={phone?.id}
+            key={`catalog-${phone?.id}`}
             {...phone}
             priority={index < PRIORITY_IMAGE_COUNT}
             cardRef={cardRef ? (el) => cardRef(phone.id, el) : undefined}
@@ -50,7 +51,7 @@ export function ProductList({
             height: rect.height,
           }}
         >
-          <ProductCard {...phone} priority={false} />
+          <SimilarProductCard {...phone} />
         </article>
       ))}
     </section>
