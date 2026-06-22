@@ -7,14 +7,14 @@ export interface Phone {
   brand: string
   name: string
   basePrice: number
-  imageUrl: string
+  imageUrl?: string
 }
 
 /** A selectable colour, each with its own product image. */
 export interface ColorOption {
   name: string
   hexCode: string
-  imageUrl: string
+  imageUrl?: string
 }
 
 /** A selectable storage tier with the price it sets for the device. */

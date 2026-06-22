@@ -1,10 +1,14 @@
 import { http, HttpResponse } from 'msw'
 
-import { apiErrorFixtures, phoneDetailFixture, phoneListFixture } from '@/__mocks__/phones.fixtures'
 import { API_ENDPOINTS, HTTP_STATUS, PHONES_FETCH_LIMIT } from '@/constants'
+import {
+  apiErrorFixtures,
+  phoneDetailFixture,
+  phoneListFixture,
+} from '@/test-utils/fixtures/phones.fixtures'
 import { server } from '@/test-utils/msw/server'
 
-import { getPhoneById, getPhones } from '../phones.service'
+import { getPhoneById, getPhones } from './phones.service'
 
 const API_BASE = process.env.API_BASE_URL
 const PRODUCTS_URL = `${API_BASE}${API_ENDPOINTS.PRODUCTS}`

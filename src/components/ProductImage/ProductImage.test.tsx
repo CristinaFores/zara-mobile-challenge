@@ -1,5 +1,5 @@
 'use client'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 
 import { ProductImage } from './ProductImage'
 
@@ -8,7 +8,7 @@ const SRC =
 const ALT = 'Samsung Galaxy S24 Ultra'
 
 describe('Given a ProductImage', () => {
-  describe('When rendered', () => {
+  describe('When rendered with a valid src', () => {
     it('Then it renders an image with the given alt text', () => {
       render(<ProductImage src={SRC} alt={ALT} />)
       expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
@@ -33,6 +33,64 @@ describe('Given a ProductImage', () => {
     it('Then the image has loading="lazy"', () => {
       render(<ProductImage src={SRC} alt={ALT} priority={false} />)
       expect(screen.getByRole('img', { name: ALT })).toHaveAttribute('loading', 'lazy')
+    })
+  })
+
+  describe('When src is undefined', () => {
+    it('Then it renders the fallback instead of an img element', () => {
+      render(<ProductImage src={undefined} alt={ALT} />)
+      expect(screen.queryByRole('img')).not.toBeInTheDocument()
+    })
+
+    it('Then onLoad is called so crossfade completes', () => {
+      const onLoad = jest.fn()
+      render(<ProductImage src={undefined} alt={ALT} onLoad={onLoad} />)
+      expect(onLoad).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('When src is an empty string', () => {
+    it('Then it renders the fallback', () => {
+      render(<ProductImage src="" alt={ALT} />)
+      expect(screen.queryByRole('img')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('When the image fires an error event', () => {
+    it('Then it hides the img and shows the fallback', () => {
+      render(<ProductImage src={SRC} alt={ALT} />)
+      const img = screen.getByRole('img', { name: ALT })
+      act(() => {
+        img.dispatchEvent(new Event('error', { bubbles: true }))
+      })
+      expect(screen.queryByRole('img')).not.toBeInTheDocument()
+    })
+
+    it('Then onLoad is called after the error so crossfade completes', () => {
+      const onLoad = jest.fn()
+      render(<ProductImage src={SRC} alt={ALT} onLoad={onLoad} />)
+      const img = screen.getByRole('img', { name: ALT })
+      act(() => {
+        img.dispatchEvent(new Event('error', { bubbles: true }))
+      })
+      expect(onLoad).toHaveBeenCalled()
+    })
+  })
+
+  describe('When src changes after an error', () => {
+    it('Then the error resets and the new image is attempted', () => {
+      const NEW_SRC = 'https://example.com/new-image.webp'
+      const { rerender } = render(<ProductImage src={SRC} alt={ALT} />)
+      const img = screen.getByRole('img', { name: ALT })
+      act(() => {
+        img.dispatchEvent(new Event('error', { bubbles: true }))
+      })
+      expect(screen.queryByRole('img')).not.toBeInTheDocument()
+
+      act(() => {
+        rerender(<ProductImage src={NEW_SRC} alt={ALT} />)
+      })
+      expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
     })
   })
 })

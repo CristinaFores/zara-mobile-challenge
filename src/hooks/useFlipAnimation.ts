@@ -16,7 +16,7 @@ export type { ExitingCard } from '@/lib/flip'
 
 const FLIP_TRANSITION_MS = 500
 
-type AnimationPhase = 'idle' | 'animating'
+export type AnimationPhase = 'idle' | 'animating'
 
 interface FlipAnimationResult {
   displayedPhones: Phone[]

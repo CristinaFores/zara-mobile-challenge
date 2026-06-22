@@ -9,7 +9,7 @@ export interface CartItem {
   id: string
   brand: string
   name: string
-  imageUrl: string
+  imageUrl?: string
   selectedColor: ColorOption
   selectedStorage: StorageOption
   price: number

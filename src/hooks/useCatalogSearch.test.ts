@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 
-import { phoneListFixture } from '@/__mocks__/phones.fixtures'
+import { phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
 
 import { useCatalogSearch } from './useCatalogSearch'
 
@@ -68,7 +68,9 @@ describe('Given useCatalogSearch', () => {
     })
 
     it('Then an empty query clears the URL param', () => {
-      const { result } = renderHook(() => useCatalogSearch({ phones: phoneListFixture }))
+      const { result } = renderHook(() =>
+        useCatalogSearch({ phones: phoneListFixture, initialQuery: 'apple' })
+      )
 
       act(() => result.current.onQueryChange(''))
       act(() => jest.advanceTimersByTime(300))

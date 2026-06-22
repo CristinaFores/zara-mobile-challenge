@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw'
 
-import { apiErrorFixtures, phoneDetailFixture } from '@/__mocks__/phones.fixtures'
 import { API_ENDPOINTS } from '@/constants'
+import { apiErrorFixtures, phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
 import { server } from '@/test-utils/msw/server'
 
 import { GET } from './route'

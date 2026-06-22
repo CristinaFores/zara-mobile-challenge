@@ -1,10 +1,12 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { SEARCH_DEBOUNCE_MS } from '@/constants'
 import type { Phone } from '@/types'
+
+import { useDebounce } from './useDebounce'
 
 interface UseCatalogSearchOptions {
   phones: Phone[]
@@ -23,20 +25,20 @@ export function useCatalogSearch({
   initialQuery = '',
 }: UseCatalogSearchOptions): CatalogSearchResult {
   const router = useRouter()
-  const urlDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [query, setQuery] = useState(initialQuery)
+  const debouncedQuery = useDebounce(query, SEARCH_DEBOUNCE_MS)
+  const isFirstRender = useRef(true)
 
-  const onQueryChange = useCallback(
-    (value: string) => {
-      setQuery(value)
-      if (urlDebounceRef.current) clearTimeout(urlDebounceRef.current)
-      urlDebounceRef.current = setTimeout(() => {
-        const url = value ? `/?search=${encodeURIComponent(value)}` : '/'
-        router.push(url, { scroll: false })
-      }, SEARCH_DEBOUNCE_MS)
-    },
-    [router]
-  )
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+    const url = debouncedQuery ? `/?search=${encodeURIComponent(debouncedQuery)}` : '/'
+    router.push(url, { scroll: false })
+  }, [debouncedQuery, router])
+
+  const onQueryChange = useCallback((value: string) => setQuery(value), [])
 
   return { query, filteredPhones: phones, resultCount: phones.length, onQueryChange }
 }

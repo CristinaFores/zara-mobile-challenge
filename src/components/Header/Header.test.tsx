@@ -12,7 +12,7 @@ jest.mock('@/context/cart/CartContext')
 const mockUseCart = jest.mocked(useCart)
 
 const mockCart = (cartCount: number) =>
-  mockUseCart.mockReturnValue({ cartCount } as CartContextValue)
+  mockUseCart.mockReturnValue({ cartCount, isHydrated: true } as CartContextValue)
 
 describe('Given a Header component', () => {
   describe('When the cart is empty', () => {
@@ -20,9 +20,9 @@ describe('Given a Header component', () => {
       mockCart(0)
     })
 
-    it('When rendered, Then the cart link has an accessible label indicating 0 items', () => {
+    it('When rendered, Then the cart link has an accessible label without item count', () => {
       render(<Header />)
-      expect(screen.getByRole('link', { name: 'Cart, 0 items' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Cart' })).toBeInTheDocument()
     })
 
     it('When rendered, Then the badge displays 0', () => {
@@ -79,22 +79,25 @@ describe('Given a Header component', () => {
     })
   })
 
-  describe('Given the Header mounts for the first time', () => {
+  describe('Given the Header mounts for the first time on a non-cart page', () => {
     beforeEach(() => {
       mockCart(0)
       jest.useFakeTimers()
     })
 
     afterEach(() => {
+      act(() => {
+        jest.runOnlyPendingTimers()
+      })
       jest.useRealTimers()
     })
 
-    it('When rendered, Then the loading bar is visible immediately on mount', () => {
+    it('When rendered, Then the animated loading bar is visible immediately', () => {
       const { container } = render(<Header />)
       expect(container.querySelector(`.${styles.header__loadingBar}`)).toBeInTheDocument()
     })
 
-    it('And after the animation completes, the loading bar is removed from the DOM', () => {
+    it('And after 1200ms the loading bar is removed', () => {
       const { container } = render(<Header />)
       act(() => {
         jest.advanceTimersByTime(1200)

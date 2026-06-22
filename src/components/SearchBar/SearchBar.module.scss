@@ -22,6 +22,7 @@
     color: var(--color-text-primary);
     background: transparent;
     outline: none;
+    min-height: 1.25rem;
 
     &::placeholder {
       color: var(--color-text-placeholder);

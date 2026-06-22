@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 
-import { phoneDetailFixture } from '@/__mocks__/phones.fixtures'
+import { phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
 
 import { useProductSelection } from './useProductSelection'
 
@@ -11,7 +11,7 @@ let mockParams: Record<string, string | null> = {}
 
 jest.mock('next/navigation', () => ({
   useSearchParams: () => ({ get: (key: string) => mockParams[key] ?? null, toString: () => '' }),
-  useRouter: () => ({ replace: mockReplace }),
+  useRouter: () => ({ replace: mockReplace, push: jest.fn() }),
   usePathname: () => '/phones/SMG-S24U',
 }))
 
@@ -32,29 +32,29 @@ beforeEach(() => {
 
 describe('Given useProductSelection', () => {
   describe('When no URL params are set', () => {
-    it('Then selectedColor is null', () => {
+    it('Then selectedColor defaults to the first color option', () => {
       const { result } = setup()
-      expect(result.current.selectedColor).toBeNull()
+      expect(result.current.selectedColor).toEqual(phoneDetailFixture.colorOptions[0])
     })
 
-    it('Then selectedStorage is null', () => {
+    it('Then selectedStorage defaults to the first storage option', () => {
       const { result } = setup()
-      expect(result.current.selectedStorage).toBeNull()
+      expect(result.current.selectedStorage).toEqual(phoneDetailFixture.storageOptions[0])
     })
 
-    it('Then canAddToCart is false', () => {
+    it('Then canAddToCart is true because both options are auto-selected', () => {
       const { result } = setup()
-      expect(result.current.canAddToCart).toBe(false)
+      expect(result.current.canAddToCart).toBe(true)
     })
 
-    it('Then imageUrl falls back to the first color option image', () => {
+    it('Then imageUrl is the first color option image', () => {
       const { result } = setup()
       expect(result.current.imageUrl).toBe(phoneDetailFixture.colorOptions[0].imageUrl)
     })
 
-    it('Then priceLabel shows "From X EUR" using the base price', () => {
+    it('Then priceLabel shows the first storage price without "From"', () => {
       const { result } = setup()
-      expect(result.current.priceLabel).toBe(`From ${phoneDetailFixture.basePrice} EUR`)
+      expect(result.current.priceLabel).toBe(`${phoneDetailFixture.storageOptions[0].price} EUR`)
     })
   })
 
@@ -117,8 +117,11 @@ describe('Given useProductSelection', () => {
   })
 
   describe('When handleAddToCart is called without full selection', () => {
-    it('Then it does not call addToCart', () => {
-      const { result } = setup({ color: phoneDetailFixture.colorOptions[0].name })
+    it('Then it does not call addToCart when storageOptions is empty', () => {
+      mockParams = {}
+      const { result } = renderHook(() =>
+        useProductSelection({ ...phoneDetailFixture, storageOptions: [] })
+      )
 
       act(() => result.current.handleAddToCart())
 

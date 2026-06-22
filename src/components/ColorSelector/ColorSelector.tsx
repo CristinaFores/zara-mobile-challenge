@@ -27,7 +27,7 @@ export function ColorSelector({ options, selected, onSelect }: ColorSelectorProp
               key={option.name}
               type="button"
               className={styles['color-selector__swatch']}
-              style={{ backgroundColor: option.hexCode }}
+              style={{ backgroundColor: option.hexCode || 'transparent' }}
               aria-pressed={isSelected}
               aria-label={option.name}
               data-selected={isSelected}
@@ -37,9 +37,9 @@ export function ColorSelector({ options, selected, onSelect }: ColorSelectorProp
         })}
       </fieldset>
       <div className={styles['color-selector__name-wrapper']} aria-live="polite">
-        {[nameSlot0, nameSlot1].map((slot, i) => (
+        {[nameSlot0, nameSlot1].map((slot, index) => (
           <span
-            key={i === 0 ? 'name-slot-a' : 'name-slot-b'}
+            key={index === 0 ? 'name-slot-a' : 'name-slot-b'}
             className={styles['color-selector__selected-name']}
             style={{ opacity: slot.isActive ? 1 : 0, transition: 'opacity 0.3s ease' }}
             aria-hidden={!slot.isActive}

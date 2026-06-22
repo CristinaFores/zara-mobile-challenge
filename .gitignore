@@ -57,3 +57,7 @@ next-env.d.ts
 # AI
 AUDIT.md
 AGENTS.md
+# Local AI runtime state
+.atl/
+.claude/
+CLAUDE.md

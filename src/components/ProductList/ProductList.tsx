@@ -25,7 +25,7 @@ export function ProductList({
   const isAnimating = animationPhase === 'animating'
 
   return (
-    <section className={styles['product-list-wrapper']}>
+    <section className={styles['product-list-wrapper']} aria-label="Search results">
       <ul className={styles['product-list']} aria-label="Phones catalog">
         {phones?.map((phone, index) => (
           <ProductCard

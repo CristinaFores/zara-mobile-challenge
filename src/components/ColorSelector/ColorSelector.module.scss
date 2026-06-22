@@ -3,7 +3,6 @@
 .color-selector {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
   position: relative;
   margin-bottom: 1.25rem;
 
@@ -12,6 +11,7 @@
     font-weight: var(--font-weight-thin);
     text-transform: uppercase;
     color: var(--color-text-primary);
+    margin-bottom: 1.25rem;
   }
 
   &__swatches {

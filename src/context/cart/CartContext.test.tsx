@@ -1,8 +1,8 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import type { ReactNode } from 'react'
 
-import { phoneDetailFixture, phoneListFixture } from '@/__mocks__/phones.fixtures'
 import { CART_KEY } from '@/constants'
+import { phoneDetailFixture, phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
 import type { CartItem } from '@/types'
 
 import { CartProvider, useCart } from './CartContext'
@@ -103,7 +103,7 @@ describe('Given the cart is empty', () => {
 
 describe('Given the same phone, color, and storage combination is already in the cart', () => {
   describe('When addToCart is called again with the identical combination', () => {
-    it('Then quantity increments to 2 instead of creating a duplicate entry', async () => {
+    it('Then the second call is a no-op — one item per unique combination', async () => {
       const result = await renderCart()
 
       act(() => {
@@ -112,10 +112,10 @@ describe('Given the same phone, color, and storage combination is already in the
       })
 
       expect(result.current.cartItems).toHaveLength(1)
-      expect(result.current.cartItems[0].quantity).toBe(2)
+      expect(result.current.cartItems[0].quantity).toBe(1)
     })
 
-    it('And the total doubles to reflect the higher quantity', async () => {
+    it('And the total reflects only one unit price', async () => {
       const result = await renderCart()
 
       act(() => {
@@ -123,7 +123,7 @@ describe('Given the same phone, color, and storage combination is already in the
         result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
       })
 
-      expect(result.current.cartTotal).toBe(STORAGE_256.price * 2)
+      expect(result.current.cartTotal).toBe(STORAGE_256.price)
     })
   })
 })
@@ -299,6 +299,67 @@ describe('Given useCart is invoked outside of CartProvider', () => {
         'useCart must be used within a CartProvider'
       )
     })
+  })
+})
+
+describe('Given syncPrices updates the price of a cart item', () => {
+  it('Then only the price changes — imageUrl, name, brand and selectedColor are untouched', async () => {
+    const result = await renderCart()
+
+    act(() => {
+      result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+    })
+
+    const before = result.current.cartItems[0]
+
+    act(() => {
+      result.current.syncPrices({ [before.key]: 9999 })
+    })
+
+    const after = result.current.cartItems[0]
+    expect(after.price).toBe(9999)
+    expect(after.imageUrl).toBe(before.imageUrl)
+    expect(after.name).toBe(before.name)
+    expect(after.brand).toBe(before.brand)
+    expect(after.selectedColor).toBe(before.selectedColor)
+  })
+})
+
+describe('Given a phone with no imageUrl is added to the cart', () => {
+  it('Then the cart item has imageUrl undefined and the cart total is still correct', async () => {
+    const noImagePhone = { ...PHONE, imageUrl: undefined }
+    const noImageColor = { ...COLOR_VIOLET, imageUrl: undefined }
+    const result = await renderCart()
+
+    act(() => {
+      result.current.addToCart(noImagePhone, noImageColor, STORAGE_256)
+    })
+
+    expect(result.current.cartItems[0].imageUrl).toBeUndefined()
+    expect(result.current.cartTotal).toBe(STORAGE_256.price)
+  })
+})
+
+describe('Given localStorage contains a cart item with imageUrl undefined', () => {
+  it('Then the cart hydrates correctly and the item is restored without crashing', async () => {
+    const savedItem: CartItem = {
+      key: toItemKey(PHONE.id, COLOR_VIOLET.name, STORAGE_256.capacity),
+      id: PHONE.id,
+      brand: PHONE.brand,
+      name: PHONE.name,
+      imageUrl: undefined,
+      selectedColor: { ...COLOR_VIOLET, imageUrl: undefined },
+      selectedStorage: STORAGE_256,
+      price: STORAGE_256.price,
+      quantity: 1,
+    }
+    localStorage.setItem(CART_KEY, JSON.stringify([savedItem]))
+
+    const result = await renderCart()
+
+    expect(result.current.cartItems).toHaveLength(1)
+    expect(result.current.cartItems[0].imageUrl).toBeUndefined()
+    expect(result.current.cartTotal).toBe(STORAGE_256.price)
   })
 })
 
