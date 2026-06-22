@@ -7,9 +7,9 @@ export interface SpecRow {
 
 export function SpecsTableRow({ label, value }: SpecRow) {
   return (
-    <li className={styles['specs-table-row']}>
+    <div className={styles['specs-table-row']}>
       <dt className={styles['specs-table-row__label']}>{label}</dt>
       <dd className={styles['specs-table-row__value']}>{value}</dd>
-    </li>
+    </div>
   )
 }

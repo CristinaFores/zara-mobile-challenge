@@ -16,7 +16,7 @@ describe('Given SpecsTable', () => {
   })
 
   it('Then it renders one entry per row', () => {
-    expect(screen.getAllByRole('listitem')).toHaveLength(rows.length)
+    expect(screen.getAllByRole('term')).toHaveLength(rows.length)
   })
 
   it('Then each row shows its label', () => {
