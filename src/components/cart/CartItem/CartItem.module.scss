@@ -6,22 +6,23 @@
   gap: 1.5rem;
   align-items: center;
 
-  // @include breakpoint(tablet) {
-  //   grid-template-columns: 12.5rem 1fr;
-  //   gap: 1.5rem;
-  // }
+  @include breakpoint(tablet) {
+    // grid-template-columns: 12.5rem 1fr;
+    gap: 4.0625rem;
+  }
 
   &__image {
-    position: relative;
     width: 8.75rem;
     height: 8.75rem;
     flex-shrink: 0;
     overflow: hidden;
+  }
 
-    img {
-      object-fit: contain;
-      object-position: left top;
-    }
+  &__img {
+    width: 8.75rem;
+    height: 8.75rem;
+    object-fit: contain;
+    object-position: left top;
   }
 
   &__content {

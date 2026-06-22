@@ -5,7 +5,6 @@
   display: flex;
   flex-direction: column;
   gap: 3.125rem;
-  max-width: 75rem;
 
   &__heading {
     font-size: var(--font-size-lg);
@@ -21,6 +20,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    gap: 2.5rem;
   }
 
   &__footer {
@@ -41,8 +41,15 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: space-between;
-        padding-bottom: 3rem;
+        display: grid;
+        grid-template-columns: minmax(12.5rem, auto) auto minmax(16.25rem, auto);
+        grid-template-areas: 'continue total pay';
+        gap: 3.5rem;
+      }
+
+      @include breakpoint(desktop) {
+        grid-template-columns: minmax(16.25rem, auto) auto minmax(16.25rem, auto);
+        gap: 5rem;
       }
     }
   }
@@ -67,22 +74,21 @@
     margin: 0;
 
     @include breakpoint(tablet) {
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: initial;
+      justify-content: flex-end;
+      align-items: flex-end;
       gap: 0.25rem;
     }
   }
 
   &__total-label {
     font-size: var(--font-size-base);
-    font-weight: var(--font-weight-thin);
+    font-weight: var(--font-weight-medium);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
   &__total-value {
     font-size: var(--font-size-base);
-    font-weight: var(--font-weight-thin);
+    font-weight: var(--font-weight-medium);
   }
 }
