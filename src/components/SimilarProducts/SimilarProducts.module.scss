@@ -1,45 +1,13 @@
-@use '@/scss/_mixins' as *;
-
 .similar-products {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  width: 100%;
+  min-width: 0;
 
   &__heading {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-thin);
     text-transform: uppercase;
-  }
-
-  &__carousel {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 21.5rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    overscroll-behavior-x: contain;
-    scroll-behavior: smooth;
-    padding-bottom: 2.5rem;
-
-    &>* {
-      scroll-snap-align: start;
-    }
-
-    &::-webkit-scrollbar {
-      height: 1px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: rgb(204, 204, 204);
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--color-text-primary);
-      border-radius: 0;
-    }
-
-    @supports not selector(::-webkit-scrollbar) {
-      scrollbar-color: var(--color-text-primary) var(--color-border);
-    }
   }
 }

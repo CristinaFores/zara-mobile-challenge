@@ -1,0 +1,61 @@
+@use '@/scss/_mixins' as *;
+
+.scroll-row {
+  @include full-width;
+  display: flex;
+  min-width: 0;
+  padding-inline: calc((100vw - 100%) / 2);
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.5rem;
+  padding-bottom: 2.5rem;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+
+  & > * {
+    flex: 0 0 calc(100% - 3rem);
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  @include breakpoint(tablet) {
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: calc(50% - 10.75rem);
+
+    & > * {
+      flex-basis: 21.5rem;
+      scroll-snap-stop: normal;
+    }
+  }
+
+  &--dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+    user-select: none;
+
+    a {
+      pointer-events: none;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    height: 1px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgb(204, 204, 204);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-text-primary);
+    border-radius: 0;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    scrollbar-color: var(--color-text-primary) var(--color-border);
+  }
+}
