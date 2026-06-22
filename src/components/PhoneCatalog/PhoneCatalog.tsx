@@ -23,7 +23,10 @@ export function PhoneCatalog({ phones, initialSearch = '' }: PhoneCatalogProps) 
     useFlipAnimation(filteredPhones)
 
   return (
-    <section className={styles['phone-catalog']}>
+    <section className={styles['phone-catalog']} aria-labelledby="catalog-heading">
+      <h1 id="catalog-heading" className="sr-only">
+        Phone catalog
+      </h1>
       <SearchBar query={query} resultCount={resultCount} onQueryChange={onQueryChange} />
       <ProductList
         phones={displayedPhones}

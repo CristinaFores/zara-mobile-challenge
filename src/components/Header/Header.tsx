@@ -15,7 +15,7 @@ import styles from './Header.module.scss'
 const LOADING_BAR_DURATION_MS = 1200
 
 export function Header() {
-  const { cartCount } = useCart()
+  const { cartCount, isHydrated } = useCart()
   const pathname = usePathname()
   const hasItems = cartCount > 0
   const isCart = pathname === ROUTES.CART
@@ -43,10 +43,14 @@ export function Header() {
         <Link
           href={ROUTES.CART}
           className={styles.header__cart}
-          aria-label={`Cart, ${cartCount} ${cartCount === 1 ? 'item' : 'items'}`}
+          aria-label={`Cart${isHydrated && cartCount > 0 ? `, ${cartCount} ${cartCount === 1 ? 'item' : 'items'}` : ''}`}
         >
-          <CartIcon mode={hasItems ? 'full' : 'empty'} aria-hidden="true" />
-          <span className={styles.header__badge} aria-hidden="true">
+          <CartIcon mode={isHydrated && hasItems ? 'full' : 'empty'} aria-hidden="true" />
+          <span
+            className={styles.header__badge}
+            aria-hidden="true"
+            style={{ visibility: isHydrated ? 'visible' : 'hidden' }}
+          >
             {cartCount}
           </span>
         </Link>

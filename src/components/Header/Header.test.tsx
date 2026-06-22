@@ -12,7 +12,7 @@ jest.mock('@/context/cart/CartContext')
 const mockUseCart = jest.mocked(useCart)
 
 const mockCart = (cartCount: number) =>
-  mockUseCart.mockReturnValue({ cartCount } as CartContextValue)
+  mockUseCart.mockReturnValue({ cartCount, isHydrated: true } as CartContextValue)
 
 describe('Given a Header component', () => {
   describe('When the cart is empty', () => {
@@ -20,9 +20,9 @@ describe('Given a Header component', () => {
       mockCart(0)
     })
 
-    it('When rendered, Then the cart link has an accessible label indicating 0 items', () => {
+    it('When rendered, Then the cart link has an accessible label without item count', () => {
       render(<Header />)
-      expect(screen.getByRole('link', { name: 'Cart, 0 items' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Cart' })).toBeInTheDocument()
     })
 
     it('When rendered, Then the badge displays 0', () => {

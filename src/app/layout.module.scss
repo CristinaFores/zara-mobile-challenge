@@ -1,16 +1,16 @@
 @use '@/scss/_mixins' as *;
 
 .main {
-  margin: 0 auto;
-  padding-inline: 1rem;
-  padding-bottom: 5rem;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
 
   @include breakpoint(tablet) {
-    padding-inline: 2.5rem;
-    padding-bottom: 9.375rem;
+    padding: 2.5rem 3.75rem;
   }
 
   @include breakpoint(desktop) {
-    padding-inline: 6.25rem;
+    padding-inline: 6.25rem 3.75rem;
   }
 }
