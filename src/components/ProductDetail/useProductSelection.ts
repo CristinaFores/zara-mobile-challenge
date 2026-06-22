@@ -28,26 +28,40 @@ export function useProductSelection(phone: PhoneDetail): ProductSelection {
   const pathname = usePathname()
   const { addToCart } = useCart()
 
-  const selectedColor = phone.colorOptions.find((c) => c.name === searchParams.get('color')) ?? null
+  const selectedColor =
+    phone.colorOptions.find((c) => c.name === searchParams.get('color')) ??
+    phone.colorOptions[0] ??
+    null
+
   const selectedStorage =
-    phone.storageOptions.find((s) => s.capacity === searchParams.get('storage')) ?? null
+    phone.storageOptions.find((s) => s.capacity === searchParams.get('storage')) ??
+    phone.storageOptions[0] ??
+    null
 
   const setSelectedColor = useCallback(
     (color: ColorOption) => {
       const params = new URLSearchParams(searchParams.toString())
       params.set('color', color.name)
+      const storageIsValid = phone.storageOptions.some((s) => s.capacity === params.get('storage'))
+      if (!storageIsValid && phone.storageOptions[0]) {
+        params.set('storage', phone.storageOptions[0].capacity)
+      }
       router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     },
-    [pathname, router, searchParams]
+    [pathname, router, searchParams, phone.storageOptions]
   )
 
   const setSelectedStorage = useCallback(
     (storage: StorageOption) => {
       const params = new URLSearchParams(searchParams.toString())
       params.set('storage', storage.capacity)
+      const colorIsValid = phone.colorOptions.some((c) => c.name === params.get('color'))
+      if (!colorIsValid && phone.colorOptions[0]) {
+        params.set('color', phone.colorOptions[0].name)
+      }
       router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     },
-    [pathname, router, searchParams]
+    [pathname, router, searchParams, phone.colorOptions]
   )
 
   const imageUrl = selectedColor?.imageUrl ?? phone.colorOptions[0]?.imageUrl ?? ''
