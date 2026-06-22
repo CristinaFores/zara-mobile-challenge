@@ -31,7 +31,11 @@ export function CartView() {
       <footer
         className={`${styles['cart-view__footer']} ${cartItems.length > 0 ? styles['cart-view__footer--has-items'] : ''}`}
       >
-        <Button href={ROUTES.HOME} variant="secondary" className={styles['cart__btn-continue']}>
+        <Button
+          href={ROUTES.HOME}
+          variant="secondary"
+          className={styles['cart-view__btn-continue']}
+        >
           Continue shopping
         </Button>
         {cartItems.length > 0 && (
@@ -40,7 +44,6 @@ export function CartView() {
               <span className={styles['cart-view__total-label']}>Total</span>
               <span className={styles['cart-view__total-value']}>{cartTotal} EUR</span>
             </p>
-
             <Button className={styles['cart-view__btn-pay']}>Pay</Button>
           </>
         )}

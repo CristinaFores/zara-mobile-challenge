@@ -25,6 +25,8 @@ video,
 canvas,
 svg {
   display: block;
+  -webkit-user-drag: none;
+  user-select: none;
   // max-width: 100%;
 }
 

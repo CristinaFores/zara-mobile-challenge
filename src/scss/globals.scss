@@ -13,6 +13,39 @@ body {
   flex-direction: column;
   max-width: 100vw;
   min-height: 100vh;
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(*) {
+    animation-duration: 520ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 520ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 120ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  ::view-transition-image-pair(*) {
+    isolation: auto;
+  }
+
+  html.product-route-view-transition::view-transition-old(root) {
+    animation-duration: 90ms;
+  }
+
+  html.product-route-view-transition::view-transition-new(root) {
+    animation-duration: 120ms;
+  }
 }
 
 .sr-only {

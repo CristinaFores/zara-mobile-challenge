@@ -11,6 +11,10 @@ const mockSetSelectedColor = jest.fn()
 
 let mockCanAddToCart = false
 
+jest.mock('@/hooks/useAfterProductRouteTransition', () => ({
+  useAfterProductRouteTransition: () => true,
+}))
+
 jest.mock('./useProductSelection', () => ({
   useProductSelection: () => ({
     imageUrl: 'https://example.com/image.webp',

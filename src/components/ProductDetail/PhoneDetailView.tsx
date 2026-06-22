@@ -35,7 +35,7 @@ export function PhoneDetailView({ phone }: PhoneDetailViewProps) {
       <article className={styles['phone-detail-view']}>
         <ProductDetailHero phone={phone} />
         <SpecsTable rows={buildSpecRows(phone)} />
-        <SimilarProducts products={phone.similarProducts} />
+        <SimilarProducts products={phone.similarProducts} currentProductId={phone.id} />
       </article>
     </>
   )

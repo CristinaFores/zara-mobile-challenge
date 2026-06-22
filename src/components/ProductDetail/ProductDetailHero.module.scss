@@ -1,7 +1,7 @@
 @use '@/scss/_mixins' as *;
 
 $gallery-width: 42.5%;
-$info-max-width: 23.75rem;
+$info-max-width: max(25rem, $gallery-width);
 $info-top-offset: 5.5rem;
 $gallery-height: 28.75rem;
 $heading-gap: 0.6875rem;
@@ -18,10 +18,16 @@ $heading-gap: 0.6875rem;
   &__gallery {
     position: relative;
     flex-shrink: 0;
-    width: auto;
     aspect-ratio: 1/1;
     height: auto;
     max-width: 200px;
+    width: 200px;
+
+    img {
+      object-position: left;
+      transform: scale(1);
+      // transform-origin: center top;
+    }
 
     @include breakpoint(tablet) {
       aspect-ratio: auto;

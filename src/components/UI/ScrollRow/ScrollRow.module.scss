@@ -1,0 +1,73 @@
+@use '@/scss/_mixins' as *;
+
+.scroll-row-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+  // overflow-x: clip;
+}
+
+.scroll-row {
+  @include full-width;
+  display: flex;
+  min-width: 0;
+  padding-inline: calc((100vw - 100%) / 2);
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pinch-zoom;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.5rem;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  & > * {
+    flex: 0 0 calc(100% - 3rem);
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  @include breakpoint(tablet) {
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: calc(50% - 10.75rem);
+
+    & > * {
+      flex-basis: 21.5rem;
+      scroll-snap-stop: normal;
+    }
+  }
+
+  &--dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+    user-select: none;
+
+    a {
+      pointer-events: none;
+    }
+  }
+
+  &__scrollbar {
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  &__scrollbar-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1px;
+    min-width: 2rem;
+    background: var(--color-text-primary);
+  }
+}
