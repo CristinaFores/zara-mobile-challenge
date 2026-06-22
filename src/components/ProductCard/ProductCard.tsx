@@ -35,7 +35,12 @@ export const ProductCard = memo(function ProductCard({
         aria-label={`${brand} ${name}, ${basePrice} EUR`}
       >
         <figure className={styles['product-card__image-wrapper']}>
-          <ProductImage src={imageUrl} alt={`${brand} ${name}`} priority={priority} />
+          <ProductImage
+            src={imageUrl}
+            alt={`${brand} ${name}`}
+            sizes="(max-width: 479px) 100vw, (max-width: 767px) 50vw, (max-width: 1023px) 33vw, 25vw"
+            priority={priority}
+          />
         </figure>
         <div className={styles['product-card__info']}>
           <hgroup className={styles['product-card__details']}>

@@ -27,7 +27,7 @@ export function ColorSelector({ options, selected, onSelect }: ColorSelectorProp
               key={option.name}
               type="button"
               className={styles['color-selector__swatch']}
-              style={{ backgroundColor: option.hexCode }}
+              style={{ backgroundColor: option.hexCode || 'transparent' }}
               aria-pressed={isSelected}
               aria-label={option.name}
               data-selected={isSelected}

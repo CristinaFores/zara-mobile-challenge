@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Image processing failed:', error)
+    if (process.env.NODE_ENV !== 'production') console.error('Image processing failed:', error)
     return NextResponse.json({ error: 'Image processing failed' }, { status: 500 })
   }
 }

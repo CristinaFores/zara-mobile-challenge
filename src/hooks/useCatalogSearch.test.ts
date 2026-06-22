@@ -68,7 +68,9 @@ describe('Given useCatalogSearch', () => {
     })
 
     it('Then an empty query clears the URL param', () => {
-      const { result } = renderHook(() => useCatalogSearch({ phones: phoneListFixture }))
+      const { result } = renderHook(() =>
+        useCatalogSearch({ phones: phoneListFixture, initialQuery: 'apple' })
+      )
 
       act(() => result.current.onQueryChange(''))
       act(() => jest.advanceTimersByTime(300))
