@@ -24,7 +24,8 @@ $heading-gap: 0.6875rem;
     max-width: 200px;
 
     @include breakpoint(tablet) {
-      width: auto;
+      aspect-ratio: auto;
+      width: 100%;
       max-width: none;
       height: $gallery-height;
     }

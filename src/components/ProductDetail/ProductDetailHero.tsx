@@ -4,6 +4,7 @@ import { ColorSelector } from '@/components/ColorSelector/ColorSelector'
 import { ProductImage } from '@/components/ProductImage/ProductImage'
 import { StorageSelector } from '@/components/StorageSelector/StorageSelector'
 import { Button } from '@/components/UI/Button/Button'
+import { useColorVariantPreload } from '@/hooks/useColorVariantPreload'
 import { useTextCrossfade } from '@/hooks/useTextCrossfade'
 import type { PhoneDetail } from '@/types'
 
@@ -18,6 +19,7 @@ interface ProductDetailHeroProps {
 
 export function ProductDetailHero({ phone }: ProductDetailHeroProps) {
   const selection = useProductSelection(phone)
+  useColorVariantPreload(phone.colorOptions, selection.imageUrl)
   const [imageSlot0, imageSlot1] = useImageCrossfade(selection.imageUrl)
   const [priceSlot0, priceSlot1] = useTextCrossfade(selection.priceLabel)
   const imageAlt = `${phone.brand} ${phone.name}`
