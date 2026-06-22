@@ -302,6 +302,67 @@ describe('Given useCart is invoked outside of CartProvider', () => {
   })
 })
 
+describe('Given syncPrices updates the price of a cart item', () => {
+  it('Then only the price changes — imageUrl, name, brand and selectedColor are untouched', async () => {
+    const result = await renderCart()
+
+    act(() => {
+      result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+    })
+
+    const before = result.current.cartItems[0]
+
+    act(() => {
+      result.current.syncPrices({ [before.key]: 9999 })
+    })
+
+    const after = result.current.cartItems[0]
+    expect(after.price).toBe(9999)
+    expect(after.imageUrl).toBe(before.imageUrl)
+    expect(after.name).toBe(before.name)
+    expect(after.brand).toBe(before.brand)
+    expect(after.selectedColor).toBe(before.selectedColor)
+  })
+})
+
+describe('Given a phone with no imageUrl is added to the cart', () => {
+  it('Then the cart item has imageUrl undefined and the cart total is still correct', async () => {
+    const noImagePhone = { ...PHONE, imageUrl: undefined }
+    const noImageColor = { ...COLOR_VIOLET, imageUrl: undefined }
+    const result = await renderCart()
+
+    act(() => {
+      result.current.addToCart(noImagePhone, noImageColor, STORAGE_256)
+    })
+
+    expect(result.current.cartItems[0].imageUrl).toBeUndefined()
+    expect(result.current.cartTotal).toBe(STORAGE_256.price)
+  })
+})
+
+describe('Given localStorage contains a cart item with imageUrl undefined', () => {
+  it('Then the cart hydrates correctly and the item is restored without crashing', async () => {
+    const savedItem: CartItem = {
+      key: toItemKey(PHONE.id, COLOR_VIOLET.name, STORAGE_256.capacity),
+      id: PHONE.id,
+      brand: PHONE.brand,
+      name: PHONE.name,
+      imageUrl: undefined,
+      selectedColor: { ...COLOR_VIOLET, imageUrl: undefined },
+      selectedStorage: STORAGE_256,
+      price: STORAGE_256.price,
+      quantity: 1,
+    }
+    localStorage.setItem(CART_KEY, JSON.stringify([savedItem]))
+
+    const result = await renderCart()
+
+    expect(result.current.cartItems).toHaveLength(1)
+    expect(result.current.cartItems[0].imageUrl).toBeUndefined()
+    expect(result.current.cartTotal).toBe(STORAGE_256.price)
+  })
+})
+
 describe('Given the user has items in the cart', () => {
   describe('When clearCart is called', () => {
     it('Then the cart is cleared and the user starts with a new empty cart', async () => {

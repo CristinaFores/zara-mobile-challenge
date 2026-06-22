@@ -1,31 +1,16 @@
 @use '@/scss/_mixins' as *;
 
-.cart {
+.cart-view {
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
-  min-height: calc(100dvh - 5rem);
-  padding: 1.25rem 1rem 0;
+  gap: 3.125rem;
   max-width: 75rem;
-  margin: 0 auto;
-
-  @include breakpoint(tablet) {
-    padding: 2rem 2.5rem 0;
-  }
-
-  @include breakpoint(desktop) {
-    padding: 2.5rem 6.25rem 0;
-  }
-
-  &__loading {
-    min-height: 60vh;
-  }
 
   &__heading {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-thin);
     text-transform: uppercase;
-    letter-spacing: 0.02em;
-    margin-bottom: 1rem;
 
     @include breakpoint(tablet) {
       font-size: var(--font-size-xl);
@@ -42,10 +27,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    padding: 1.5rem 0 2rem;
     margin-top: auto;
 
-    // When cart has items: grid on mobile so total spans full width above the two buttons
     &--has-items {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -67,8 +50,6 @@
   &__btn-continue {
     grid-area: continue;
     font-size: var(--font-size-sm);
-    // align-self: start prevents stretching to full width in flex-column (empty state)
-    // In grid context align-self controls vertical only, justify-self (stretch) still fills the cell
     align-self: start;
   }
 
