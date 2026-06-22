@@ -1,0 +1,110 @@
+@use '@/scss/_mixins' as *;
+
+@keyframes skeletonPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+$skeleton-bg: var(--color-bg-secondary, #f3f2f2);
+$skeleton-radius: 4px;
+
+// Sizing comes from the reused hero gallery class; this module only adds the
+// empty-state skeleton background (direct loads with no preview from a card)
+// and the skeleton primitives for the info/specs columns.
+.detail-loading {
+  &__media[data-has-preview='false'] {
+    background: $skeleton-bg;
+    border-radius: $skeleton-radius;
+    animation: skeletonPulse 1.2s ease-in-out infinite;
+  }
+
+  &__selectors {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__line {
+    display: block;
+    height: 0.75rem;
+    width: 100%;
+    background: $skeleton-bg;
+    border-radius: $skeleton-radius;
+    animation: skeletonPulse 1.2s ease-in-out infinite;
+
+    &[data-variant='title'] {
+      height: 1.5rem;
+      width: 70%;
+    }
+
+    &[data-variant='price'] {
+      height: 1rem;
+      width: 40%;
+    }
+
+    &[data-variant='label'] {
+      height: 0.625rem;
+      width: 55%;
+    }
+
+    &[data-variant='spec-label'] {
+      width: 30%;
+    }
+
+    &[data-variant='spec-value'] {
+      width: 45%;
+    }
+  }
+
+  &__chip {
+    display: block;
+    height: 2.5rem;
+    width: 4rem;
+    background: $skeleton-bg;
+    border-radius: $skeleton-radius;
+    animation: skeletonPulse 1.2s ease-in-out infinite;
+  }
+
+  &__button {
+    height: 2.75rem;
+    width: 100%;
+    background: $skeleton-bg;
+    border-radius: $skeleton-radius;
+    animation: skeletonPulse 1.2s ease-in-out infinite;
+  }
+
+  &__specs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-top: 2rem;
+  }
+
+  &__spec-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detail-loading {
+    &__media[data-has-preview='false'],
+    &__line,
+    &__chip,
+    &__button {
+      animation: none;
+    }
+  }
+}
