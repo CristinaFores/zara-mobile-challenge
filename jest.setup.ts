@@ -20,6 +20,14 @@ console.error = (...args: Parameters<typeof console.error>) => {
 
 import { server } from '@/test-utils/msw/server'
 
+class ResizeObserverMock {
+  observe = jest.fn()
+  unobserve = jest.fn()
+  disconnect = jest.fn()
+}
+
+global.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver
+
 // Fail any test that hits an un-mocked endpoint, so we never call the real network.
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 afterEach(() => server.resetHandlers())

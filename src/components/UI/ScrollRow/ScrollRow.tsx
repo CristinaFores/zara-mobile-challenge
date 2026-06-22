@@ -19,18 +19,33 @@ export function ScrollRow({
   className,
   'aria-label': ariaLabel,
 }: ScrollRowProps) {
-  const { ref, isDragging, handlers } = useScrollRow<HTMLUListElement>({ resetKey })
+  const { ref, isDragging, handlers, thumb } = useScrollRow<HTMLUListElement>({ resetKey })
 
   return (
-    <ul
-      ref={ref}
-      className={[styles['scroll-row'], isDragging ? styles['scroll-row--dragging'] : '', className]
-        .filter(Boolean)
-        .join(' ')}
-      aria-label={ariaLabel}
-      {...handlers}
-    >
-      {children}
-    </ul>
+    <div className={styles['scroll-row-wrapper']}>
+      <ul
+        ref={ref}
+        className={[
+          styles['scroll-row'],
+          isDragging ? styles['scroll-row--dragging'] : '',
+          className,
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        aria-label={ariaLabel}
+        {...handlers}
+      >
+        {children}
+      </ul>
+
+      {thumb.visible ? (
+        <div className={styles['scroll-row__scrollbar']} aria-hidden="true">
+          <span
+            className={styles['scroll-row__scrollbar-thumb']}
+            style={{ width: `${thumb.width}%`, left: `${thumb.left}%` }}
+          />
+        </div>
+      ) : null}
+    </div>
   )
 }
