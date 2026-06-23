@@ -20,11 +20,11 @@ import {
   scrollToProductDetailTop,
   setProductPreview,
 } from '@/shared/store/productNavigation'
-import type { Phone } from '@/shared/types'
+import type { Product } from '@/shared/types'
 
 import styles from './ProductCard.module.scss'
 
-type ProductCardProps = Phone & {
+type ProductCardProps = Product & {
   className?: string
   priority?: boolean
   cardRef?: (element: HTMLElement | null) => void

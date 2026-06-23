@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 
 import { useAfterProductRouteTransition } from '@/features/product-detail/hooks/useAfterProductRouteTransition'
 import { ScrollRow } from '@/shared/components/ui/ScrollRow/ScrollRow'
-import type { Phone } from '@/shared/types'
+import type { Product } from '@/shared/types'
 import { dedupeById } from '@/shared/utils/dedupeById'
 
 import { SimilarProductCard } from './SimilarProductCard'
@@ -12,7 +12,7 @@ import { SimilarProductCard } from './SimilarProductCard'
 import styles from './SimilarProducts.module.scss'
 
 interface SimilarProductsProps {
-  products: Phone[]
+  products: Product[]
   currentProductId?: string
 }
 
@@ -34,7 +34,11 @@ export function SimilarProducts({ products, currentProductId }: SimilarProductsP
   return (
     <section className={styles['similar-products']} aria-label="Similar items">
       <h2 className={styles['similar-products__heading']}>Similar items</h2>
-      <ScrollRow resetKey={productIds} aria-label="Similar products">
+      <ScrollRow
+        resetKey={productIds}
+        aria-label="Similar products"
+        className={styles['similar-products__row']}
+      >
         {uniqueProducts.map((product, index) => (
           <SimilarProductCard key={`similar-${product.id}-${index}`} {...product} />
         ))}

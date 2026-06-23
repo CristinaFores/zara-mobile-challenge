@@ -1,2 +1,2 @@
 export type { CartItem } from './cart'
-export type { ColorOption, Phone, PhoneDetail, PhoneSpecs, StorageOption } from './phone'
+export type { ColorOption, Product, ProductDetail, ProductSpecs, StorageOption } from './product'

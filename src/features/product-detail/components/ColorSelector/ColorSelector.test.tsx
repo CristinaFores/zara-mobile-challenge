@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productDetailFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { ColorSelector } from './ColorSelector'
 
@@ -12,7 +12,7 @@ jest.mock('@/shared/hooks/useTextCrossfade', () => ({
   ],
 }))
 
-const options = phoneDetailFixture.colorOptions
+const options = productDetailFixture.colorOptions
 
 describe('Given ColorSelector', () => {
   describe('When rendered with color options and no selection', () => {

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productDetailFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { ProductDetailHero } from './ProductDetailHero'
 
@@ -90,36 +90,36 @@ describe('Given ProductDetailHero', () => {
   })
 
   describe('When rendered', () => {
-    it('Then it renders the phone name', () => {
-      render(<ProductDetailHero phone={phoneDetailFixture} />)
-      expect(screen.getByText(phoneDetailFixture.name)).toBeInTheDocument()
+    it('Then it renders the product name', () => {
+      render(<ProductDetailHero product={productDetailFixture} />)
+      expect(screen.getByText(productDetailFixture.name)).toBeInTheDocument()
     })
 
     it('Then it renders the price label', () => {
-      render(<ProductDetailHero phone={phoneDetailFixture} />)
+      render(<ProductDetailHero product={productDetailFixture} />)
       expect(screen.getByText('1329 EUR')).toBeInTheDocument()
     })
 
     it('Then it renders two image slots', () => {
-      render(<ProductDetailHero phone={phoneDetailFixture} />)
+      render(<ProductDetailHero product={productDetailFixture} />)
       expect(screen.getAllByTestId('product-image')).toHaveLength(2)
     })
 
     it('Then it renders the color selector', () => {
-      render(<ProductDetailHero phone={phoneDetailFixture} />)
+      render(<ProductDetailHero product={productDetailFixture} />)
       expect(screen.getByTestId('color-selector')).toBeInTheDocument()
     })
 
     it('Then it renders the storage selector', () => {
-      render(<ProductDetailHero phone={phoneDetailFixture} />)
+      render(<ProductDetailHero product={productDetailFixture} />)
       expect(screen.getByTestId('storage-selector')).toBeInTheDocument()
     })
 
     it('Then the section has an accessible label with brand and name', () => {
-      render(<ProductDetailHero phone={phoneDetailFixture} />)
+      render(<ProductDetailHero product={productDetailFixture} />)
       expect(
         screen.getByRole('region', {
-          name: `${phoneDetailFixture.brand} ${phoneDetailFixture.name}`,
+          name: `${productDetailFixture.brand} ${productDetailFixture.name}`,
         })
       ).toBeInTheDocument()
     })
@@ -127,7 +127,7 @@ describe('Given ProductDetailHero', () => {
 
   describe('When canAddToCart is false', () => {
     it('Then the Add button is disabled', () => {
-      render(<ProductDetailHero phone={phoneDetailFixture} />)
+      render(<ProductDetailHero product={productDetailFixture} />)
       expect(screen.getByRole('button')).toBeDisabled()
     })
   })
@@ -142,12 +142,12 @@ describe('Given ProductDetailHero', () => {
     })
 
     it('Then the Add button is enabled', () => {
-      render(<ProductDetailHero phone={phoneDetailFixture} />)
+      render(<ProductDetailHero product={productDetailFixture} />)
       expect(screen.getByRole('button')).not.toBeDisabled()
     })
 
     it('Then clicking Add calls handleAddToCart', async () => {
-      render(<ProductDetailHero phone={phoneDetailFixture} />)
+      render(<ProductDetailHero product={productDetailFixture} />)
       await userEvent.click(screen.getByRole('button'))
       expect(mockHandleAddToCart).toHaveBeenCalledTimes(1)
     })

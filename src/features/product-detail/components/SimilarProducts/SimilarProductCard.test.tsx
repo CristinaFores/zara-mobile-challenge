@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 
 import { ROUTES } from '@/shared/constants'
-import { phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productListFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { SimilarProductCard } from './SimilarProductCard'
 
@@ -9,24 +9,31 @@ jest.mock('@/shared/components/ProductImage/ProductImage', () => ({
   ProductImage: ({ alt }: { alt: string }) => <span role="img" aria-label={alt} />,
 }))
 
-const [phone] = phoneListFixture
+const [product] = productListFixture
 
 describe('Given a SimilarProductCard', () => {
-  describe('When rendered with a phone', () => {
-    beforeEach(() => render(<SimilarProductCard {...phone} />))
+  describe('When rendered with a product', () => {
+    beforeEach(() => render(<SimilarProductCard {...product} />))
 
-    it('Then it links to the phone detail page', () => {
-      expect(screen.getByRole('link')).toHaveAttribute('href', `${ROUTES.PHONE_DETAIL}/${phone.id}`)
+    it('Then it links to the product detail page', () => {
+      expect(screen.getByRole('link')).toHaveAttribute(
+        'href',
+        `${ROUTES.PRODUCT_DETAIL}/${product.id}`
+      )
     })
 
     it('Then it has an accessible label with brand, name and price', () => {
       expect(
-        screen.getByRole('link', { name: `${phone.brand} ${phone.name}, ${phone.basePrice} EUR` })
+        screen.getByRole('link', {
+          name: `${product.brand} ${product.name}, ${product.basePrice} EUR`,
+        })
       ).toBeInTheDocument()
     })
 
     it('Then it renders the product image', () => {
-      expect(screen.getByRole('img', { name: `${phone.brand} ${phone.name}` })).toBeInTheDocument()
+      expect(
+        screen.getByRole('img', { name: `${product.brand} ${product.name}` })
+      ).toBeInTheDocument()
     })
   })
 })

@@ -7,15 +7,15 @@
   align-items: center;
 
   @include breakpoint(tablet) {
-    // grid-template-columns: 12.5rem 1fr;
+    grid-template-columns: 12.5rem 1fr;
     gap: 4.0625rem;
   }
 
   &__image {
-    width: 8.75rem;
-    height: 8.75rem;
     flex-shrink: 0;
     overflow: hidden;
+    position: relative;
+    aspect-ratio: 1 / 1;
   }
 
   &__img {

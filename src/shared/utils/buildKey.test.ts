@@ -1,6 +1,6 @@
 import { buildKey } from './buildKey'
 
-describe('Given a phone id, a selected colour and a selected storage capacity', () => {
+describe('Given a product id, a selected colour and a selected storage capacity', () => {
   describe('When buildKey is called', () => {
     it('Then it joins the three parts with "::" into a single cart-line key', () => {
       expect(buildKey('SMG-S24U', 'Titanium Black', '512 GB')).toBe(
@@ -16,7 +16,7 @@ describe('Given a phone id, a selected colour and a selected storage capacity', 
   })
 })
 
-describe('Given the same phone configured differently', () => {
+describe('Given the same product configured differently', () => {
   describe('When only the colour differs', () => {
     it('Then the keys differ so each colour is a separate cart line', () => {
       expect(buildKey('SMG-S24U', 'Titanium Black', '256 GB')).not.toBe(

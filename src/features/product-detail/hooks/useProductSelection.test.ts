@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 
-import { phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productDetailFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { useProductSelection } from './useProductSelection'
 
@@ -12,7 +12,7 @@ let mockParams: Record<string, string | null> = {}
 jest.mock('next/navigation', () => ({
   useSearchParams: () => ({ get: (key: string) => mockParams[key] ?? null, toString: () => '' }),
   useRouter: () => ({ replace: mockReplace, push: jest.fn() }),
-  usePathname: () => '/phones/SMG-S24U',
+  usePathname: () => '/products/SMG-S24U',
 }))
 
 jest.mock('@/features/cart/context/CartContext', () => ({
@@ -21,7 +21,7 @@ jest.mock('@/features/cart/context/CartContext', () => ({
 
 function setup(params: Record<string, string | null> = {}) {
   mockParams = params
-  return renderHook(() => useProductSelection(phoneDetailFixture))
+  return renderHook(() => useProductSelection(productDetailFixture))
 }
 
 beforeEach(() => {
@@ -49,18 +49,18 @@ describe('Given useProductSelection', () => {
 
     it('Then imageUrl falls back to the first color preview image', () => {
       const { result } = setup()
-      expect(result.current.imageUrl).toBe(phoneDetailFixture.colorOptions[0].imageUrl)
+      expect(result.current.imageUrl).toBe(productDetailFixture.colorOptions[0].imageUrl)
     })
 
     it('Then priceLabel shows the base price with "From"', () => {
       const { result } = setup()
-      expect(result.current.priceLabel).toBe(`From ${phoneDetailFixture.basePrice} EUR`)
+      expect(result.current.priceLabel).toBe(`From ${productDetailFixture.basePrice} EUR`)
     })
   })
 
   describe('When both color and storage are in the URL', () => {
-    const color = phoneDetailFixture.colorOptions[1]
-    const storage = phoneDetailFixture.storageOptions[1]
+    const color = productDetailFixture.colorOptions[1]
+    const storage = productDetailFixture.storageOptions[1]
 
     it('Then selectedColor matches the URL param', () => {
       const { result } = setup({ color: color.name, storage: storage.capacity })
@@ -91,7 +91,7 @@ describe('Given useProductSelection', () => {
   describe('When setSelectedColor is called', () => {
     it('Then it calls router.replace with the color in the URL', () => {
       const { result } = setup()
-      const color = phoneDetailFixture.colorOptions[0]
+      const color = productDetailFixture.colorOptions[0]
 
       act(() => result.current.setSelectedColor(color))
 
@@ -105,7 +105,7 @@ describe('Given useProductSelection', () => {
   describe('When setSelectedStorage is called', () => {
     it('Then it calls router.replace with the storage in the URL', () => {
       const { result } = setup()
-      const storage = phoneDetailFixture.storageOptions[0]
+      const storage = productDetailFixture.storageOptions[0]
 
       act(() => result.current.setSelectedStorage(storage))
 
@@ -120,7 +120,7 @@ describe('Given useProductSelection', () => {
     it('Then it does not call addToCart when storageOptions is empty', () => {
       mockParams = {}
       const { result } = renderHook(() =>
-        useProductSelection({ ...phoneDetailFixture, storageOptions: [] })
+        useProductSelection({ ...productDetailFixture, storageOptions: [] })
       )
 
       act(() => result.current.handleAddToCart())
@@ -129,7 +129,7 @@ describe('Given useProductSelection', () => {
     })
 
     it('Then it does not call addToCart when only color is selected', () => {
-      const color = phoneDetailFixture.colorOptions[0]
+      const color = productDetailFixture.colorOptions[0]
       const { result } = setup({ color: color.name })
 
       act(() => result.current.handleAddToCart())
@@ -139,15 +139,15 @@ describe('Given useProductSelection', () => {
   })
 
   describe('When handleAddToCart is called with both color and storage selected', () => {
-    it('Then it calls addToCart with the phone, color, and storage', () => {
-      const color = phoneDetailFixture.colorOptions[0]
-      const storage = phoneDetailFixture.storageOptions[0]
+    it('Then it calls addToCart with the product, color, and storage', () => {
+      const color = productDetailFixture.colorOptions[0]
+      const storage = productDetailFixture.storageOptions[0]
       const { result } = setup({ color: color.name, storage: storage.capacity })
 
       act(() => result.current.handleAddToCart())
 
       expect(mockAddToCart).toHaveBeenCalledWith(
-        expect.objectContaining({ id: phoneDetailFixture.id }),
+        expect.objectContaining({ id: productDetailFixture.id }),
         color,
         storage
       )

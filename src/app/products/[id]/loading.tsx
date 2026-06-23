@@ -4,8 +4,8 @@ import { useParams } from 'next/navigation'
 import { useLayoutEffect } from 'react'
 import type { CSSProperties } from 'react'
 
-import detailStyles from '@/features/product-detail/components/ProductDetail/PhoneDetailView.module.scss'
 import heroStyles from '@/features/product-detail/components/ProductDetail/ProductDetailHero.module.scss'
+import detailStyles from '@/features/product-detail/components/ProductDetail/ProductDetailView.module.scss'
 import { BackLink } from '@/shared/components/BackLink/BackLink'
 import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
 import { ROUTES } from '@/shared/constants'
@@ -25,7 +25,7 @@ interface ViewTransitionStyle extends CSSProperties {
   readonly viewTransitionName?: string
 }
 
-export default function PhoneDetailLoading() {
+export default function ProductDetailLoading() {
   const params = useParams<{ id?: string }>()
   const productId = Array.isArray(params.id) ? params.id[0] : (params.id ?? '')
   const preview = useProductPreview(productId)
@@ -58,7 +58,7 @@ export default function PhoneDetailLoading() {
   return (
     <>
       <BackLink href={ROUTES.HOME} />
-      <article className={detailStyles['phone-detail-view']}>
+      <article className={detailStyles['product-detail-view']}>
         <section className={heroStyles['product-detail-hero']} aria-label="Loading product">
           <div
             className={`${heroStyles['product-detail-hero__gallery']} ${styles['detail-loading__media']}`}

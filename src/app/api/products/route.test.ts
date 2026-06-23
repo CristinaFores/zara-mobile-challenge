@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw'
 import { NextRequest } from 'next/server'
 
 import { API_ENDPOINTS } from '@/shared/constants'
-import { apiErrorFixtures, phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { apiErrorFixtures, productListFixture } from '@/test-utils/fixtures/products.fixtures'
 import { server } from '@/test-utils/msw/server'
 
 import { GET } from './route'
@@ -21,7 +21,7 @@ describe('Given GET /api/products', () => {
     it('Then it proxies the response from the external API', async () => {
       const res = await GET(makeRequest())
       expect(res.status).toBe(200)
-      expect(await res.json()).toEqual(phoneListFixture)
+      expect(await res.json()).toEqual(productListFixture)
     })
 
     it('Then it forwards the limit param to the external API', async () => {
@@ -29,7 +29,7 @@ describe('Given GET /api/products', () => {
       server.use(
         http.get(PRODUCTS_URL, ({ request }) => {
           capturedLimit = new URL(request.url).searchParams.get('limit')
-          return HttpResponse.json(phoneListFixture)
+          return HttpResponse.json(productListFixture)
         })
       )
 
@@ -45,7 +45,7 @@ describe('Given GET /api/products', () => {
       server.use(
         http.get(PRODUCTS_URL, ({ request }) => {
           capturedSearch = new URL(request.url).searchParams.get('search')
-          return HttpResponse.json(phoneListFixture)
+          return HttpResponse.json(productListFixture)
         })
       )
 

@@ -15,7 +15,7 @@ import {
   scrollToProductDetailTop,
   useProductPreview,
 } from '@/shared/store/productNavigation'
-import type { PhoneDetail } from '@/shared/types'
+import type { ProductDetail } from '@/shared/types'
 
 import { useImageCrossfade } from '../../hooks/useImageCrossfade'
 import { useProductSelection } from '../../hooks/useProductSelection'
@@ -23,7 +23,7 @@ import { useProductSelection } from '../../hooks/useProductSelection'
 import styles from './ProductDetailHero.module.scss'
 
 interface ProductDetailHeroProps {
-  phone: PhoneDetail
+  product: ProductDetail
 }
 
 function getImageSlotKey(routeTransitionDone: boolean, index: number): string {
@@ -34,27 +34,27 @@ function getImageSlotKey(routeTransitionDone: boolean, index: number): string {
   return index === 0 ? 'image-slot-a' : 'image-slot-b'
 }
 
-export function ProductDetailHero({ phone }: ProductDetailHeroProps) {
+export function ProductDetailHero({ product }: ProductDetailHeroProps) {
   const routeTransitionDone = useAfterProductRouteTransition()
-  const preview = useProductPreview(phone.id)
-  const selection = useProductSelection(phone)
+  const preview = useProductPreview(product.id)
+  const selection = useProductSelection(product)
   const routeImageUrl = preview?.imageUrl ?? selection.imageUrl
   const [imageSlot0, imageSlot1] = useImageCrossfade(
     routeTransitionDone ? selection.imageUrl : routeImageUrl
   )
-  useColorVariantPreload(phone.colorOptions, selection.imageUrl)
+  useColorVariantPreload(product.colorOptions, selection.imageUrl)
   const [priceSlot0, priceSlot1] = useTextCrossfade(selection.priceLabel)
-  const imageAlt = `${phone.brand} ${phone.name}`
+  const imageAlt = `${product.brand} ${product.name}`
 
   const imageTransitionStyle = useMemo(
-    () => ({ viewTransitionName: getProductViewTransitionName(phone.id, 'image') }),
-    [phone.id]
+    () => ({ viewTransitionName: getProductViewTransitionName(product.id, 'image') }),
+    [product.id]
   )
 
   useLayoutEffect(() => {
     scrollToProductDetailTop()
-    resolveProductRouteViewTransition(phone.id)
-  }, [phone.id])
+    resolveProductRouteViewTransition(product.id)
+  }, [product.id])
 
   const imageSlots = routeTransitionDone
     ? [imageSlot0, imageSlot1]
@@ -77,7 +77,7 @@ export function ProductDetailHero({ phone }: ProductDetailHeroProps) {
 
       <div className={styles['product-detail-hero__info']}>
         <hgroup className={styles['product-detail-hero__heading']}>
-          <h1 className={styles['product-detail-hero__name']}>{phone.name}</h1>
+          <h1 className={styles['product-detail-hero__name']}>{product.name}</h1>
           {[priceSlot0, priceSlot1].map((slot, i) => (
             <span
               key={i === 0 ? 'price-slot-a' : 'price-slot-b'}
@@ -92,13 +92,13 @@ export function ProductDetailHero({ phone }: ProductDetailHeroProps) {
 
         <div className={styles['product-detail-hero__selectors']}>
           <StorageSelector
-            options={phone.storageOptions}
+            options={product.storageOptions}
             selected={selection.selectedStorage}
             onSelect={selection.setSelectedStorage}
           />
 
           <ColorSelector
-            options={phone.colorOptions}
+            options={product.colorOptions}
             selected={selection.selectedColor}
             onSelect={selection.setSelectedColor}
           />

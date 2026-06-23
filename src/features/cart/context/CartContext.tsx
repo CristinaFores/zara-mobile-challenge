@@ -11,7 +11,7 @@ import {
 } from 'react'
 
 import { cartStorage } from '@/features/cart/lib/cartStorage'
-import type { CartItem, ColorOption, Phone, StorageOption } from '@/shared/types'
+import type { CartItem, ColorOption, Product, StorageOption } from '@/shared/types'
 
 import { cartReducer, initialState } from './cartReducer'
 
@@ -20,7 +20,7 @@ export interface CartContextValue {
   cartTotal: number
   cartCount: number
   isHydrated: boolean
-  addToCart: (phone: Phone, selectedColor: ColorOption, selectedStorage: StorageOption) => void
+  addToCart: (product: Product, selectedColor: ColorOption, selectedStorage: StorageOption) => void
   removeFromCart: (key: string) => void
   clearCart: () => void
   syncPrices: (updates: Record<string, number>) => void
@@ -43,8 +43,8 @@ function useCartProviderValue(): CartContextValue {
   }, [cartItems, isHydrated])
 
   const addToCart = useCallback<CartContextValue['addToCart']>(
-    (phone, selectedColor, selectedStorage) =>
-      dispatch({ type: 'ADD', payload: { phone, selectedColor, selectedStorage } }),
+    (product, selectedColor, selectedStorage) =>
+      dispatch({ type: 'ADD', payload: { product, selectedColor, selectedStorage } }),
     []
   )
 
@@ -87,9 +87,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const { addToCart: originalAddToCart, ...rest } = cartValue
   const addToCart = useCallback<CartContextValue['addToCart']>(
-    (phone, selectedColor, selectedStorage) => {
-      originalAddToCart(phone, selectedColor, selectedStorage)
-      setAnnouncement(`${phone.brand} ${phone.name} added to cart`)
+    (product, selectedColor, selectedStorage) => {
+      originalAddToCart(product, selectedColor, selectedStorage)
+      setAnnouncement(`${product.brand} ${product.name} added to cart`)
     },
     [originalAddToCart]
   )

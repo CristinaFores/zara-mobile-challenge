@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react'
 
 import * as productNavigation from '@/shared/store/productNavigation'
-import { phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productListFixture } from '@/test-utils/fixtures/products.fixtures'
 
-import PhoneDetailLoading from './loading'
+import ProductDetailLoading from './loading'
 
-const [phone] = phoneListFixture
-const productId = phone.id
+const [product] = productListFixture
+const productId = product.id
 
 const useParamsMock = jest.fn()
 
@@ -22,7 +22,7 @@ jest.mock('@/shared/components/ProductImage/ProductImage', () => ({
   ProductImage: ({ alt }: { alt: string }) => <span role="img" aria-label={alt} />,
 }))
 
-describe('Given PhoneDetailLoading', () => {
+describe('Given ProductDetailLoading', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     useParamsMock.mockReturnValue({ id: productId })
@@ -34,10 +34,10 @@ describe('Given PhoneDetailLoading', () => {
     jest.spyOn(window, 'scrollTo').mockImplementation(() => {})
     productNavigation.setProductPreview({
       id: 'preview-reset',
-      brand: phone.brand,
-      name: phone.name,
-      basePrice: phone.basePrice,
-      imageUrl: phone.imageUrl,
+      brand: product.brand,
+      name: product.name,
+      basePrice: product.basePrice,
+      imageUrl: product.imageUrl,
       href: productNavigation.getProductDetailHref('preview-reset'),
     })
   })
@@ -49,18 +49,20 @@ describe('Given PhoneDetailLoading', () => {
   describe('When a matching product preview exists', () => {
     beforeEach(() => {
       productNavigation.setProductPreview({
-        id: phone.id,
-        brand: phone.brand,
-        name: phone.name,
-        basePrice: phone.basePrice,
-        imageUrl: phone.imageUrl,
-        href: productNavigation.getProductDetailHref(phone.id),
+        id: product.id,
+        brand: product.brand,
+        name: product.name,
+        basePrice: product.basePrice,
+        imageUrl: product.imageUrl,
+        href: productNavigation.getProductDetailHref(product.id),
       })
-      render(<PhoneDetailLoading />)
+      render(<ProductDetailLoading />)
     })
 
     it('Then it renders the preview image', () => {
-      expect(screen.getByRole('img', { name: `${phone.brand} ${phone.name}` })).toBeInTheDocument()
+      expect(
+        screen.getByRole('img', { name: `${product.brand} ${product.name}` })
+      ).toBeInTheDocument()
     })
 
     it('Then it scrolls to the top of the page', () => {
@@ -70,7 +72,7 @@ describe('Given PhoneDetailLoading', () => {
 
   describe('When no preview is available', () => {
     beforeEach(() => {
-      render(<PhoneDetailLoading />)
+      render(<ProductDetailLoading />)
     })
 
     it('Then it renders the loading skeleton without a preview image', () => {
@@ -82,14 +84,14 @@ describe('Given PhoneDetailLoading', () => {
   describe('When the preview href does not match the route', () => {
     beforeEach(() => {
       productNavigation.setProductPreview({
-        id: phone.id,
-        brand: phone.brand,
-        name: phone.name,
-        basePrice: phone.basePrice,
-        imageUrl: phone.imageUrl,
+        id: product.id,
+        brand: product.brand,
+        name: product.name,
+        basePrice: product.basePrice,
+        imageUrl: product.imageUrl,
         href: productNavigation.getProductDetailHref('other-id'),
       })
-      render(<PhoneDetailLoading />)
+      render(<ProductDetailLoading />)
     })
 
     it('Then it ignores the preview and shows the skeleton', () => {

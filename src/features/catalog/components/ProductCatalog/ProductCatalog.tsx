@@ -4,32 +4,32 @@ import { ProductList } from '@/features/catalog/components/ProductList/ProductLi
 import { SearchBar } from '@/features/catalog/components/SearchBar/SearchBar'
 import { useCatalogSearch } from '@/features/catalog/hooks/useCatalogSearch'
 import { useFlipAnimation } from '@/shared/hooks/useFlipAnimation'
-import type { Phone } from '@/shared/types'
+import type { Product } from '@/shared/types'
 
-import styles from './PhoneCatalog.module.scss'
+import styles from './ProductCatalog.module.scss'
 
-interface PhoneCatalogProps {
-  phones: Phone[]
+interface ProductCatalogProps {
+  products: Product[]
   initialSearch?: string
 }
 
-export function PhoneCatalog({ phones, initialSearch = '' }: PhoneCatalogProps) {
-  const { query, filteredPhones, resultCount, onQueryChange } = useCatalogSearch({
-    phones,
+export function ProductCatalog({ products, initialSearch = '' }: ProductCatalogProps) {
+  const { query, filteredProducts, resultCount, onQueryChange } = useCatalogSearch({
+    products,
     initialQuery: initialSearch,
   })
 
-  const { displayedPhones, exitingCards, animationPhase, cardRef } =
-    useFlipAnimation(filteredPhones)
+  const { displayedProducts, exitingCards, animationPhase, cardRef } =
+    useFlipAnimation(filteredProducts)
 
   return (
-    <section className={styles['phone-catalog']} aria-labelledby="catalog-heading">
+    <section className={styles['product-catalog']} aria-labelledby="catalog-heading">
       <h1 id="catalog-heading" className="sr-only">
-        Phone catalog
+        Product catalog
       </h1>
       <SearchBar query={query} resultCount={resultCount} onQueryChange={onQueryChange} />
       <ProductList
-        phones={displayedPhones}
+        products={displayedProducts}
         exitingCards={exitingCards}
         animationPhase={animationPhase}
         cardRef={cardRef}

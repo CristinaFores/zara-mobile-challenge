@@ -1,14 +1,14 @@
 import { http, HttpResponse } from 'msw'
 
-import { API_ENDPOINTS, HTTP_STATUS, PHONES_FETCH_LIMIT } from '@/shared/constants'
+import { API_ENDPOINTS, HTTP_STATUS, PRODUCTS_FETCH_LIMIT } from '@/shared/constants'
 import {
   apiErrorFixtures,
-  phoneDetailFixture,
-  phoneListFixture,
-} from '@/test-utils/fixtures/phones.fixtures'
+  productDetailFixture,
+  productListFixture,
+} from '@/test-utils/fixtures/products.fixtures'
 import { server } from '@/test-utils/msw/server'
 
-import { getPhoneById, getPhones } from './phones.service'
+import { getProductById, getProducts } from './products.service'
 
 const API_BASE = process.env.API_BASE_URL
 const PRODUCTS_URL = `${API_BASE}${API_ENDPOINTS.PRODUCTS}`
@@ -22,30 +22,30 @@ function captureProductsRequest() {
   server.use(
     http.get(PRODUCTS_URL, ({ request }) => {
       captured.url = new URL(request.url)
-      return HttpResponse.json(phoneListFixture)
+      return HttpResponse.json(productListFixture)
     })
   )
   return captured
 }
 
 describe('Given the catalog page is loaded', () => {
-  describe('When getPhones is called', () => {
+  describe('When getProducts is called', () => {
     it('Then it over-fetches by one so duplicates can be removed before capping the catalog', async () => {
       const captured = captureProductsRequest()
 
-      await getPhones()
+      await getProducts()
 
-      expect(captured.url?.searchParams.get('limit')).toBe(String(PHONES_FETCH_LIMIT))
+      expect(captured.url?.searchParams.get('limit')).toBe(String(PRODUCTS_FETCH_LIMIT))
     })
   })
 })
 
-describe('Given the API responds successfully with a list of phones', () => {
-  describe('When getPhones resolves', () => {
-    it('Then it returns an array with one object per phone, each carrying the fields the catalog card needs', async () => {
-      const result = await getPhones()
+describe('Given the API responds successfully with a list of products', () => {
+  describe('When getProducts resolves', () => {
+    it('Then it returns an array with one object per product, each carrying the fields the catalog card needs', async () => {
+      const result = await getProducts()
 
-      expect(result).toHaveLength(phoneListFixture.length)
+      expect(result).toHaveLength(productListFixture.length)
       expect(result[0]).toEqual(
         expect.objectContaining({
           id: expect.any(String),
@@ -60,11 +60,11 @@ describe('Given the API responds successfully with a list of phones', () => {
 })
 
 describe('Given the API returns an empty catalog', () => {
-  describe('When getPhones resolves', () => {
+  describe('When getProducts resolves', () => {
     it('Then it returns an empty array so the UI can show the empty-state message', async () => {
       server.use(http.get(PRODUCTS_URL, () => HttpResponse.json([])))
 
-      const result = await getPhones()
+      const result = await getProducts()
 
       expect(result).toEqual([])
     })
@@ -72,30 +72,30 @@ describe('Given the API returns an empty catalog', () => {
 })
 
 describe('Given the user navigates to a valid product detail page', () => {
-  describe('When getPhoneById is called with the phone id from the URL', () => {
+  describe('When getProductById is called with the product id from the URL', () => {
     it('Then it requests the external product detail endpoint for that id', async () => {
       let requestedPath: string | null = null
       server.use(
         http.get(`${PRODUCTS_URL}/:id`, ({ request, params }) => {
           requestedPath = new URL(request.url).pathname
           expect(params.id).toBe('SMG-S24U')
-          return HttpResponse.json(phoneDetailFixture)
+          return HttpResponse.json(productDetailFixture)
         })
       )
 
-      await getPhoneById('SMG-S24U')
+      await getProductById('SMG-S24U')
 
       expect(requestedPath).toBe('/products/SMG-S24U')
     })
 
     it('And it returns the full detail object exactly as the route delivers it', async () => {
-      const result = await getPhoneById('SMG-S24U')
+      const result = await getProductById('SMG-S24U')
 
-      expect(result).toEqual(phoneDetailFixture)
+      expect(result).toEqual(productDetailFixture)
     })
 
     it('And the specs block contains all eight technical fields the detail page displays', async () => {
-      const result = await getPhoneById('SMG-S24U')
+      const result = await getProductById('SMG-S24U')
 
       expect(result.specs).toEqual(
         expect.objectContaining({
@@ -112,7 +112,7 @@ describe('Given the user navigates to a valid product detail page', () => {
     })
 
     it('And each color option carries a name, hex code and its own image URL so switching color swaps the photo', async () => {
-      const result = await getPhoneById('SMG-S24U')
+      const result = await getProductById('SMG-S24U')
 
       expect(result.colorOptions.length).toBeGreaterThan(0)
       result.colorOptions.forEach((option) => {
@@ -127,7 +127,7 @@ describe('Given the user navigates to a valid product detail page', () => {
     })
 
     it('And each storage tier carries a capacity label and its price so the UI can update the total when the user switches tier', async () => {
-      const result = await getPhoneById('SMG-S24U')
+      const result = await getProductById('SMG-S24U')
 
       expect(result.storageOptions.length).toBeGreaterThan(0)
       result.storageOptions.forEach((option) => {
@@ -142,13 +142,13 @@ describe('Given the user navigates to a valid product detail page', () => {
   })
 })
 
-describe('Given the id in the URL does not match any phone in the catalog', () => {
-  describe('When getPhoneById is called with that unknown id', () => {
+describe('Given the id in the URL does not match any product in the catalog', () => {
+  describe('When getProductById is called with that unknown id', () => {
     it('Then it propagates a 404 Not Found error so the page can redirect the user to the catalog', async () => {
       const { status, message } = apiErrorFixtures.notFound
       server.use(http.get(`${PRODUCTS_URL}/:id`, () => HttpResponse.json({ message }, { status })))
 
-      const error = (await getPhoneById('INVALID').catch((e) => e)) as AxiosLikeError
+      const error = (await getProductById('INVALID').catch((e) => e)) as AxiosLikeError
 
       expect(error.response?.status).toBe(HTTP_STATUS.NOT_FOUND)
       expect(error.response?.data.message).toBe(apiErrorFixtures.notFound.message)
@@ -157,17 +157,17 @@ describe('Given the id in the URL does not match any phone in the catalog', () =
 })
 
 describe('Given the id contains characters that would break the upstream path', () => {
-  describe('When getPhoneById is called with a malformed id', () => {
+  describe('When getProductById is called with a malformed id', () => {
     it('Then it rejects with 404 before calling the external API', async () => {
       let requestCount = 0
       server.use(
         http.get(`${PRODUCTS_URL}/:id`, () => {
           requestCount += 1
-          return HttpResponse.json(phoneDetailFixture)
+          return HttpResponse.json(productDetailFixture)
         })
       )
 
-      const error = await getPhoneById('foo/bar').catch((e) => e)
+      const error = await getProductById('foo/bar').catch((e) => e)
 
       expect(error).toMatchObject({ status: HTTP_STATUS.NOT_FOUND, message: 'Product not found' })
       expect(requestCount).toBe(0)
@@ -176,24 +176,24 @@ describe('Given the id contains characters that would break the upstream path', 
 })
 
 describe('Given the API key is missing or has been rotated and the current one is no longer valid', () => {
-  describe('When getPhones is called', () => {
+  describe('When getProducts is called', () => {
     it('Then it propagates a 401 Unauthorized error so the caller knows the problem is authentication, not data', async () => {
       const { status, message } = apiErrorFixtures.unauthorized
       server.use(http.get(PRODUCTS_URL, () => HttpResponse.json({ message }, { status })))
 
-      const error = (await getPhones().catch((e) => e)) as AxiosLikeError
+      const error = (await getProducts().catch((e) => e)) as AxiosLikeError
 
       expect(error.response?.status).toBe(HTTP_STATUS.UNAUTHORIZED)
       expect(error.response?.data.message).toBe(apiErrorFixtures.unauthorized.message)
     })
   })
 
-  describe('When getPhoneById is called', () => {
+  describe('When getProductById is called', () => {
     it('Then it propagates a 401 Unauthorized error for the same reason', async () => {
       const { status, message } = apiErrorFixtures.unauthorized
       server.use(http.get(`${PRODUCTS_URL}/:id`, () => HttpResponse.json({ message }, { status })))
 
-      const error = (await getPhoneById('SMG-S24U').catch((e) => e)) as AxiosLikeError
+      const error = (await getProductById('SMG-S24U').catch((e) => e)) as AxiosLikeError
 
       expect(error.response?.status).toBe(HTTP_STATUS.UNAUTHORIZED)
       expect(error.response?.data.message).toBe(apiErrorFixtures.unauthorized.message)
@@ -202,19 +202,19 @@ describe('Given the API key is missing or has been rotated and the current one i
 })
 
 describe('Given the device has no internet connection or the API server is unreachable', () => {
-  describe('When getPhones is called', () => {
+  describe('When getProducts is called', () => {
     it('Then it propagates the network error so the UI can show a connection error message', async () => {
       server.use(http.get(PRODUCTS_URL, () => HttpResponse.error()))
 
-      await expect(getPhones()).rejects.toThrow()
+      await expect(getProducts()).rejects.toThrow()
     })
   })
 
-  describe('When getPhoneById is called', () => {
+  describe('When getProductById is called', () => {
     it('Then it propagates the network error so the UI can show a connection error message', async () => {
       server.use(http.get(`${PRODUCTS_URL}/:id`, () => HttpResponse.error()))
 
-      await expect(getPhoneById('SMG-S24U')).rejects.toThrow()
+      await expect(getProductById('SMG-S24U')).rejects.toThrow()
     })
   })
 })

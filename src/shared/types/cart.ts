@@ -1,8 +1,8 @@
-import type { ColorOption, StorageOption } from './phone'
+import type { ColorOption, StorageOption } from './product'
 
 /**
  * A line in the cart, uniquely identified by `key` (product + colour + storage),
- * so the same phone in two configurations stays as two separate lines.
+ * so the same product in two configurations stays as two separate lines.
  */
 export interface CartItem {
   key: string

@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productDetailFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { StorageSelector } from './StorageSelector'
 
-const options = phoneDetailFixture.storageOptions
+const options = productDetailFixture.storageOptions
 
 describe('Given StorageSelector', () => {
   describe('When rendered with storage options and no selection', () => {

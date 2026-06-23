@@ -3,17 +3,17 @@
 import { useSyncExternalStore } from 'react'
 
 import { ROUTES } from '@/shared/constants'
-import type { Phone } from '@/shared/types'
+import type { Product } from '@/shared/types'
 
 export interface ProductPreview extends Pick<
-  Phone,
+  Product,
   'id' | 'brand' | 'name' | 'basePrice' | 'imageUrl'
 > {
   readonly href: string
 }
 
 export function getProductDetailHref(productId: string): string {
-  return `${ROUTES.PHONE_DETAIL}/${encodeURIComponent(productId)}`
+  return `${ROUTES.PRODUCT_DETAIL}/${encodeURIComponent(productId)}`
 }
 
 export function getProductViewTransitionName(productId: string, part: 'image' | 'title'): string {

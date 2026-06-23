@@ -5,22 +5,22 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { SEARCH_DEBOUNCE_MS } from '@/shared/constants'
 import { useDebounce } from '@/shared/hooks/useDebounce'
-import type { Phone } from '@/shared/types'
+import type { Product } from '@/shared/types'
 
 interface UseCatalogSearchOptions {
-  phones: Phone[]
+  products: Product[]
   initialQuery?: string
 }
 
 interface CatalogSearchResult {
   query: string
-  filteredPhones: Phone[]
+  filteredProducts: Product[]
   resultCount: number
   onQueryChange: (value: string) => void
 }
 
 export function useCatalogSearch({
-  phones,
+  products,
   initialQuery = '',
 }: UseCatalogSearchOptions): CatalogSearchResult {
   const router = useRouter()
@@ -48,5 +48,5 @@ export function useCatalogSearch({
 
   const onQueryChange = useCallback((value: string) => setQuery(value), [])
 
-  return { query, filteredPhones: phones, resultCount: phones.length, onQueryChange }
+  return { query, filteredProducts: products, resultCount: products.length, onQueryChange }
 }

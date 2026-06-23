@@ -1,9 +1,9 @@
-import type { Phone } from '@/shared/types'
+import type { Product } from '@/shared/types'
 
 import { clearFlipStyles, findExitingCards, haveIdsChanged, playFlip, snapshotRects } from './flip'
 
-function makePhone(id: string): Phone {
-  return { id, brand: 'Brand', name: `Phone ${id}`, basePrice: 100, imageUrl: 'x.webp' }
+function makeProduct(id: string): Product {
+  return { id, brand: 'Brand', name: `Product ${id}`, basePrice: 100, imageUrl: 'x.webp' }
 }
 
 function makeElement(rect: Partial<DOMRect>): HTMLElement {
@@ -15,21 +15,21 @@ function makeElement(rect: Partial<DOMRect>): HTMLElement {
 describe('Given haveIdsChanged', () => {
   describe('When the lists have different lengths', () => {
     it('Then it reports a change', () => {
-      expect(haveIdsChanged([makePhone('a')], [makePhone('a'), makePhone('b')])).toBe(true)
+      expect(haveIdsChanged([makeProduct('a')], [makeProduct('a'), makeProduct('b')])).toBe(true)
     })
   })
 
   describe('When the lists hold the same ids', () => {
     it('Then it reports no change', () => {
       expect(
-        haveIdsChanged([makePhone('a'), makePhone('b')], [makePhone('a'), makePhone('b')])
+        haveIdsChanged([makeProduct('a'), makeProduct('b')], [makeProduct('a'), makeProduct('b')])
       ).toBe(false)
     })
   })
 
   describe('When the lists share length but differ in ids', () => {
     it('Then it reports a change', () => {
-      expect(haveIdsChanged([makePhone('a')], [makePhone('b')])).toBe(true)
+      expect(haveIdsChanged([makeProduct('a')], [makeProduct('b')])).toBe(true)
     })
   })
 })
@@ -51,28 +51,28 @@ describe('Given snapshotRects', () => {
 })
 
 describe('Given findExitingCards', () => {
-  describe('When a phone is absent from the next ids', () => {
-    it('Then it returns that phone with its snapshotted rect', () => {
-      const leaving = makePhone('a')
+  describe('When a product is absent from the next ids', () => {
+    it('Then it returns that product with its snapshotted rect', () => {
+      const leaving = makeProduct('a')
       const snapshot = new Map([['a', { left: 5, top: 5 } as DOMRect]])
 
       const result = findExitingCards([leaving], new Set(['b']), snapshot)
 
-      expect(result).toEqual([{ phone: leaving, rect: { left: 5, top: 5 } }])
+      expect(result).toEqual([{ product: leaving, rect: { left: 5, top: 5 } }])
     })
   })
 
-  describe('When the phone has no snapshot', () => {
+  describe('When the product has no snapshot', () => {
     it('Then it is skipped', () => {
-      const result = findExitingCards([makePhone('a')], new Set<string>(), new Map())
+      const result = findExitingCards([makeProduct('a')], new Set<string>(), new Map())
       expect(result).toEqual([])
     })
   })
 
-  describe('When the phone remains in the next ids', () => {
+  describe('When the product remains in the next ids', () => {
     it('Then it is not exiting', () => {
       const snapshot = new Map([['a', { left: 0, top: 0 } as DOMRect]])
-      expect(findExitingCards([makePhone('a')], new Set(['a']), snapshot)).toEqual([])
+      expect(findExitingCards([makeProduct('a')], new Set(['a']), snapshot)).toEqual([])
     })
   })
 })

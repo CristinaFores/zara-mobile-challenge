@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 
-import { phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productListFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { ProductList } from './ProductList'
 
@@ -9,19 +9,19 @@ jest.mock('../ProductCard/ProductCard', () => ({
 }))
 
 describe('Given a ProductList', () => {
-  describe('When rendered with a list of phones', () => {
-    beforeEach(() => render(<ProductList phones={phoneListFixture} />))
+  describe('When rendered with a list of products', () => {
+    beforeEach(() => render(<ProductList products={productListFixture} />))
 
     it('Then it renders a list with an accessible label', () => {
-      expect(screen.getByRole('list', { name: /phones catalog/i })).toBeInTheDocument()
+      expect(screen.getByRole('list', { name: /products catalog/i })).toBeInTheDocument()
     })
 
-    it('Then it renders one item per phone', () => {
-      expect(screen.getAllByRole('listitem')).toHaveLength(phoneListFixture.length)
+    it('Then it renders one item per product', () => {
+      expect(screen.getAllByRole('listitem')).toHaveLength(productListFixture.length)
     })
 
-    it('Then it renders each phone name', () => {
-      phoneListFixture.forEach(({ name }) => {
+    it('Then it renders each product name', () => {
+      productListFixture.forEach(({ name }) => {
         expect(screen.getByText(name)).toBeInTheDocument()
       })
     })
@@ -29,7 +29,7 @@ describe('Given a ProductList', () => {
 
   describe('When rendered with an empty list', () => {
     it('Then it renders an empty list', () => {
-      render(<ProductList phones={[]} />)
+      render(<ProductList products={[]} />)
       expect(screen.queryAllByRole('listitem')).toHaveLength(0)
     })
   })

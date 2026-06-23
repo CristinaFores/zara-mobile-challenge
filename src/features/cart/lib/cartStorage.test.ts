@@ -1,17 +1,17 @@
 import { CART_KEY } from '@/shared/constants'
-import { phoneDetailFixture, phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productDetailFixture, productListFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { cartStorage } from './cartStorage'
 
-const PHONE = phoneListFixture[0]
-const COLOR = phoneDetailFixture.colorOptions[0]
-const STORAGE = phoneDetailFixture.storageOptions[0]
+const PRODUCT = productListFixture[0]
+const COLOR = productDetailFixture.colorOptions[0]
+const STORAGE = productDetailFixture.storageOptions[0]
 
 const validCartItem = {
-  key: `${PHONE.id}::${COLOR.name}::${STORAGE.capacity}`,
-  id: PHONE.id,
-  brand: PHONE.brand,
-  name: PHONE.name,
+  key: `${PRODUCT.id}::${COLOR.name}::${STORAGE.capacity}`,
+  id: PRODUCT.id,
+  brand: PRODUCT.brand,
+  name: PRODUCT.name,
   imageUrl: COLOR.imageUrl,
   selectedColor: COLOR,
   selectedStorage: STORAGE,

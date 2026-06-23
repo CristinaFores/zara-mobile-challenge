@@ -2,7 +2,7 @@
  * Catalog list item returned by `GET /products`.
  * These are the only fields a product card needs.
  */
-export interface Phone {
+export interface Product {
   id: string
   brand: string
   name: string
@@ -24,7 +24,7 @@ export interface StorageOption {
 }
 
 /** Technical specifications shown on the detail page. */
-export interface PhoneSpecs {
+export interface ProductSpecs {
   screen: string
   resolution: string
   processor: string
@@ -40,12 +40,12 @@ export interface PhoneSpecs {
  * Shares the catalog identity fields but the displayed image comes from the
  * selected colour, so a top-level `imageUrl` is not guaranteed.
  */
-export interface PhoneDetail extends Omit<Phone, 'imageUrl'> {
+export interface ProductDetail extends Omit<Product, 'imageUrl'> {
   imageUrl?: string
   description: string
   rating: number
-  specs: PhoneSpecs
+  specs: ProductSpecs
   colorOptions: ColorOption[]
   storageOptions: StorageOption[]
-  similarProducts: Phone[]
+  similarProducts: Product[]
 }

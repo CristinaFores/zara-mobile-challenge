@@ -1,6 +1,6 @@
-import type { Phone, PhoneDetail } from '@/shared/types'
+import type { Product, ProductDetail } from '@/shared/types'
 
-export const phoneListFixture: Phone[] = [
+export const productListFixture: Product[] = [
   {
     id: 'SMG-S24U',
     brand: 'Samsung',
@@ -42,7 +42,7 @@ export const phoneListFixture: Phone[] = [
   },
 ]
 
-export const phoneDetailFixture: PhoneDetail = {
+export const productDetailFixture: ProductDetail = {
   id: 'SMG-S24U',
   brand: 'Samsung',
   name: 'Galaxy S24 Ultra',

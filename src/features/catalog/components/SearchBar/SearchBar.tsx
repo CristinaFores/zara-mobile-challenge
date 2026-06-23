@@ -22,12 +22,12 @@ export function SearchBar({ query, resultCount, onQueryChange }: SearchBarProps)
 
   return (
     <search className={styles['search-bar']}>
-      <label htmlFor="phone-search" className="sr-only">
+      <label htmlFor="product-search" className="sr-only">
         Search
       </label>
       <div className={styles['search-bar__input-wrapper']}>
         <input
-          id="phone-search"
+          id="product-search"
           type="search"
           value={query}
           onChange={handleInputChange}
@@ -45,7 +45,7 @@ export function SearchBar({ query, resultCount, onQueryChange }: SearchBarProps)
           </button>
         )}
       </div>
-      <output htmlFor="phone-search" className={styles['search-bar__count']}>
+      <output htmlFor="product-search" className={styles['search-bar__count']}>
         {resultCount} {resultCount === 1 ? 'result' : 'results'}
       </output>
     </search>

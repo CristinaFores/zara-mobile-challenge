@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 
-import { phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productDetailFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { SimilarProducts } from './SimilarProducts'
 
@@ -8,7 +8,7 @@ jest.mock('./SimilarProductCard', () => ({
   SimilarProductCard: ({ name }: { name: string }) => <li>{name}</li>,
 }))
 
-const products = phoneDetailFixture.similarProducts
+const products = productDetailFixture.similarProducts
 
 describe('Given SimilarProducts', () => {
   describe('When the products array is empty', () => {

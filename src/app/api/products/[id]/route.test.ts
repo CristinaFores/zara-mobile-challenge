@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw'
 
 import { API_ENDPOINTS } from '@/shared/constants'
-import { apiErrorFixtures, phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { apiErrorFixtures, productDetailFixture } from '@/test-utils/fixtures/products.fixtures'
 import { server } from '@/test-utils/msw/server'
 
 import { GET } from './route'
@@ -14,11 +14,11 @@ function callGET(id: string) {
 }
 
 describe('Given GET /api/products/[id]', () => {
-  describe('When called with a valid phone id', () => {
-    it('Then it returns the phone detail from the external API', async () => {
-      const res = await callGET(phoneDetailFixture.id)
+  describe('When called with a valid product id', () => {
+    it('Then it returns the product detail from the external API', async () => {
+      const res = await callGET(productDetailFixture.id)
       expect(res.status).toBe(200)
-      expect(await res.json()).toEqual(phoneDetailFixture)
+      expect(await res.json()).toEqual(productDetailFixture)
     })
   })
 
@@ -40,7 +40,7 @@ describe('Given GET /api/products/[id]', () => {
       server.use(
         http.get(`${PRODUCTS_URL}/:id`, () => {
           requestCount += 1
-          return HttpResponse.json(phoneDetailFixture)
+          return HttpResponse.json(productDetailFixture)
         })
       )
 
@@ -57,7 +57,7 @@ describe('Given GET /api/products/[id]', () => {
       const { status, message } = apiErrorFixtures.unauthorized
       server.use(http.get(`${PRODUCTS_URL}/:id`, () => HttpResponse.json({ message }, { status })))
 
-      const res = await callGET(phoneDetailFixture.id)
+      const res = await callGET(productDetailFixture.id)
 
       expect(res.status).toBe(401)
     })
@@ -67,7 +67,7 @@ describe('Given GET /api/products/[id]', () => {
     it('Then it returns 500', async () => {
       server.use(http.get(`${PRODUCTS_URL}/:id`, () => HttpResponse.error()))
 
-      const res = await callGET(phoneDetailFixture.id)
+      const res = await callGET(productDetailFixture.id)
 
       expect(res.status).toBe(500)
     })

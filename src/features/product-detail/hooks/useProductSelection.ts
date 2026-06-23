@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 
 import { useCart } from '@/features/cart/context/CartContext'
 import { ROUTES } from '@/shared/constants'
-import type { ColorOption, Phone, PhoneDetail, StorageOption } from '@/shared/types'
+import type { ColorOption, Product, ProductDetail, StorageOption } from '@/shared/types'
 
 export interface ProductSelection {
   selectedColor: ColorOption | null
@@ -22,16 +22,17 @@ function formatPrice(price: number, hasStorage: boolean): string {
   return hasStorage ? `${price} EUR` : `From ${price} EUR`
 }
 
-export function useProductSelection(phone: PhoneDetail): ProductSelection {
+export function useProductSelection(product: ProductDetail): ProductSelection {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
   const { addToCart } = useCart()
 
-  const selectedColor = phone.colorOptions.find((c) => c.name === searchParams.get('color')) ?? null
+  const selectedColor =
+    product.colorOptions.find((c) => c.name === searchParams.get('color')) ?? null
 
   const selectedStorage =
-    phone.storageOptions.find((s) => s.capacity === searchParams.get('storage')) ?? null
+    product.storageOptions.find((s) => s.capacity === searchParams.get('storage')) ?? null
 
   const setSelectedColor = useCallback(
     (color: ColorOption) => {
@@ -51,25 +52,25 @@ export function useProductSelection(phone: PhoneDetail): ProductSelection {
     [pathname, router, searchParams]
   )
 
-  const imageUrl = selectedColor?.imageUrl ?? phone.colorOptions[0]?.imageUrl ?? ''
+  const imageUrl = selectedColor?.imageUrl ?? product.colorOptions[0]?.imageUrl ?? ''
   const priceLabel = formatPrice(
-    selectedStorage?.price ?? phone.basePrice,
+    selectedStorage?.price ?? product.basePrice,
     selectedStorage !== null
   )
   const canAddToCart = selectedColor !== null && selectedStorage !== null
 
   const handleAddToCart = useCallback(() => {
     if (!selectedColor || !selectedStorage) return
-    const phoneForCart: Phone = {
-      id: phone.id,
-      brand: phone.brand,
-      name: phone.name,
-      basePrice: phone.basePrice,
+    const productForCart: Product = {
+      id: product.id,
+      brand: product.brand,
+      name: product.name,
+      basePrice: product.basePrice,
       imageUrl: selectedColor.imageUrl,
     }
-    addToCart(phoneForCart, selectedColor, selectedStorage)
+    addToCart(productForCart, selectedColor, selectedStorage)
     router.push(ROUTES.CART)
-  }, [phone, selectedColor, selectedStorage, addToCart, router])
+  }, [product, selectedColor, selectedStorage, addToCart, router])
 
   return {
     selectedColor,

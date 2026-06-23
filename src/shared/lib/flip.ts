@@ -1,19 +1,19 @@
-import type { Phone } from '@/shared/types'
+import type { Product } from '@/shared/types'
 
 /** A card that left the grid, captured with the position it occupied so it can animate out. */
 export interface ExitingCard {
-  phone: Phone
+  product: Product
   rect: DOMRect
 }
 
-/** Snapshot of each card's on-screen position, keyed by phone id (the FLIP "First" read). */
+/** Snapshot of each card's on-screen position, keyed by product id (the FLIP "First" read). */
 export type RectSnapshot = Map<string, DOMRect>
 
 /** True when the two lists differ in length or contain a different set of ids. */
-export function haveIdsChanged(prev: readonly Phone[], next: readonly Phone[]): boolean {
+export function haveIdsChanged(prev: readonly Product[], next: readonly Product[]): boolean {
   if (prev.length !== next.length) return true
-  const prevIds = new Set(prev.map((phone) => phone.id))
-  return next.some((phone) => !prevIds.has(phone.id))
+  const prevIds = new Set(prev.map((product) => product.id))
+  return next.some((product) => !prevIds.has(product.id))
 }
 
 /** Records the current bounding box of every mounted card. */
@@ -27,15 +27,15 @@ export function snapshotRects(elements: ReadonlyMap<string, HTMLElement>): RectS
 
 /** Cards present before the update but absent after, paired with their last known position. */
 export function findExitingCards(
-  previousPhones: readonly Phone[],
+  previousProducts: readonly Product[],
   nextIds: ReadonlySet<string>,
   snapshot: RectSnapshot
 ): ExitingCard[] {
   const exiting: ExitingCard[] = []
-  for (const phone of previousPhones) {
-    if (nextIds.has(phone.id)) continue
-    const rect = snapshot.get(phone.id)
-    if (rect) exiting.push({ phone, rect })
+  for (const product of previousProducts) {
+    if (nextIds.has(product.id)) continue
+    const rect = snapshot.get(product.id)
+    if (rect) exiting.push({ product, rect })
   }
   return exiting
 }

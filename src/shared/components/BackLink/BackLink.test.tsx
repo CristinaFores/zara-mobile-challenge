@@ -29,7 +29,7 @@ describe('Given BackLink', () => {
 
   describe('When a custom label is provided', () => {
     it('Then it renders the custom label instead', () => {
-      render(<BackLink href="/phones" label="Go back" />)
+      render(<BackLink href="/products" label="Go back" />)
       expect(screen.getByRole('link', { name: /go back/i })).toBeInTheDocument()
     })
   })

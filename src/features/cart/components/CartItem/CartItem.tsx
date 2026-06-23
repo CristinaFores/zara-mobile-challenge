@@ -14,8 +14,6 @@ function cartLoader({ src, width, quality }: ImageLoaderProps) {
   return buildProxyUrl(src, width, quality)
 }
 
-const CART_IMG_PX = 140
-
 interface CartItemProps {
   item: CartItemType
   onRemove: (key: string) => void
@@ -24,7 +22,7 @@ interface CartItemProps {
 export function CartItem({ item, onRemove }: CartItemProps) {
   const [imgError, setImgError] = useState(false)
 
-  const detailHref = `${ROUTES.PHONE_DETAIL}/${item.id}?color=${encodeURIComponent(item.selectedColor.name)}&storage=${encodeURIComponent(item.selectedStorage.capacity)}`
+  const detailHref = `${ROUTES.PRODUCT_DETAIL}/${item.id}?color=${encodeURIComponent(item.selectedColor.name)}&storage=${encodeURIComponent(item.selectedStorage.capacity)}`
 
   return (
     <li className={styles['cart-item']}>
@@ -38,11 +36,10 @@ export function CartItem({ item, onRemove }: CartItemProps) {
             loader={cartLoader}
             src={item.imageUrl}
             alt={`${item.brand} ${item.name}`}
-            width={CART_IMG_PX}
-            height={CART_IMG_PX}
             className={styles['cart-item__img']}
-            sizes="8.75rem"
+            sizes="(max-width: 767px) 100vw, 8.75rem"
             onError={() => setImgError(true)}
+            fill
           />
         )}
       </Link>

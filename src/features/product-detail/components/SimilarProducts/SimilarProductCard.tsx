@@ -3,9 +3,9 @@ import Link from 'next/link'
 import cardStyles from '@/features/catalog/components/ProductCard/ProductCard.module.scss'
 import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
 import { getProductDetailHref } from '@/shared/store/productNavigation'
-import type { Phone } from '@/shared/types'
+import type { Product } from '@/shared/types'
 
-export function SimilarProductCard({ id, brand, name, basePrice, imageUrl }: Phone) {
+export function SimilarProductCard({ id, brand, name, basePrice, imageUrl }: Product) {
   const href = getProductDetailHref(id)
 
   return (

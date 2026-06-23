@@ -3,15 +3,15 @@ import type { ReactNode } from 'react'
 
 import { CART_KEY } from '@/shared/constants'
 import type { CartItem } from '@/shared/types'
-import { phoneDetailFixture, phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productDetailFixture, productListFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { CartProvider, useCart } from './CartContext'
 
-const PHONE = phoneListFixture[0]
-const COLOR_VIOLET = phoneDetailFixture.colorOptions[0]
-const COLOR_BLACK = phoneDetailFixture.colorOptions[1]
-const STORAGE_256 = phoneDetailFixture.storageOptions[0]
-const STORAGE_512 = phoneDetailFixture.storageOptions[1]
+const PRODUCT = productListFixture[0]
+const COLOR_VIOLET = productDetailFixture.colorOptions[0]
+const COLOR_BLACK = productDetailFixture.colorOptions[1]
+const STORAGE_256 = productDetailFixture.storageOptions[0]
+const STORAGE_512 = productDetailFixture.storageOptions[1]
 
 const toItemKey = (id: string, colorName: string, capacity: string) =>
   `${id}::${colorName}::${capacity}`
@@ -45,12 +45,12 @@ describe('Given CartProvider mounts with an empty localStorage', () => {
 })
 
 describe('Given the cart is empty', () => {
-  describe('When addToCart is called with a phone, a color, and a storage tier', () => {
+  describe('When addToCart is called with a product, a color, and a storage tier', () => {
     it('Then the item appears in the cart with quantity 1', async () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
 
       expect(result.current.cartItems).toHaveLength(1)
@@ -61,7 +61,7 @@ describe('Given the cart is empty', () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
 
       expect(result.current.cartTotal).toBe(STORAGE_256.price)
@@ -71,7 +71,7 @@ describe('Given the cart is empty', () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
 
       expect(result.current.cartCount).toBe(1)
@@ -83,17 +83,20 @@ describe('Given the cart is empty', () => {
       jest.spyOn(Storage.prototype, 'setItem')
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
 
-      expect(localStorage.setItem).toHaveBeenCalledWith(CART_KEY, expect.stringContaining(PHONE.id))
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        CART_KEY,
+        expect.stringContaining(PRODUCT.id)
+      )
     })
 
     it('And the cart item stores the color image URL so the correct photo shows in the cart', async () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
 
       expect(result.current.cartItems[0].imageUrl).toBe(COLOR_VIOLET.imageUrl)
@@ -101,14 +104,14 @@ describe('Given the cart is empty', () => {
   })
 })
 
-describe('Given the same phone, color, and storage combination is already in the cart', () => {
+describe('Given the same product, color, and storage combination is already in the cart', () => {
   describe('When addToCart is called again with the identical combination', () => {
     it('Then the second call is a no-op — one item per unique combination', async () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
 
       expect(result.current.cartItems).toHaveLength(1)
@@ -119,8 +122,8 @@ describe('Given the same phone, color, and storage combination is already in the
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
 
       expect(result.current.cartTotal).toBe(STORAGE_256.price)
@@ -128,14 +131,14 @@ describe('Given the same phone, color, and storage combination is already in the
   })
 })
 
-describe('Given the same phone model is added with two different color selections', () => {
+describe('Given the same product model is added with two different color selections', () => {
   describe('When addToCart is called once per color', () => {
     it('Then each color is stored as a separate line item — not merged', async () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
-        result.current.addToCart(PHONE, COLOR_BLACK, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_BLACK, STORAGE_256)
       })
 
       expect(result.current.cartItems).toHaveLength(2)
@@ -148,8 +151,8 @@ describe('Given the same phone model is added with two different color selection
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
-        result.current.addToCart(PHONE, COLOR_BLACK, STORAGE_512)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_BLACK, STORAGE_512)
       })
 
       expect(result.current.cartTotal).toBe(STORAGE_256.price + STORAGE_512.price)
@@ -163,7 +166,7 @@ describe('Given an item is in the cart', () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
       const { key } = result.current.cartItems[0]
 
@@ -178,7 +181,7 @@ describe('Given an item is in the cart', () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
       const { key } = result.current.cartItems[0]
 
@@ -193,7 +196,7 @@ describe('Given an item is in the cart', () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
       const { key } = result.current.cartItems[0]
 
@@ -214,8 +217,8 @@ describe('Given two items are in the cart', () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
-        result.current.addToCart(PHONE, COLOR_BLACK, STORAGE_512)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_BLACK, STORAGE_512)
       })
       const keyToRemove = result.current.cartItems[0].key
 
@@ -235,7 +238,7 @@ describe('Given an item in the cart whose catalog price has changed since it was
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
       const { key } = result.current.cartItems[0]
 
@@ -251,8 +254,8 @@ describe('Given an item in the cart whose catalog price has changed since it was
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
-        result.current.addToCart(PHONE, COLOR_BLACK, STORAGE_512)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_BLACK, STORAGE_512)
       })
       const keyViolet = result.current.cartItems[0].key
 
@@ -269,10 +272,10 @@ describe('Given the user had items saved in localStorage from a previous session
   describe('When CartProvider mounts', () => {
     it('Then the saved cart is restored so the user continues from where they left off', async () => {
       const savedItem: CartItem = {
-        key: toItemKey(PHONE.id, COLOR_VIOLET.name, STORAGE_256.capacity),
-        id: PHONE.id,
-        brand: PHONE.brand,
-        name: PHONE.name,
+        key: toItemKey(PRODUCT.id, COLOR_VIOLET.name, STORAGE_256.capacity),
+        id: PRODUCT.id,
+        brand: PRODUCT.brand,
+        name: PRODUCT.name,
         imageUrl: COLOR_VIOLET.imageUrl,
         selectedColor: COLOR_VIOLET,
         selectedStorage: STORAGE_256,
@@ -284,7 +287,7 @@ describe('Given the user had items saved in localStorage from a previous session
       const result = await renderCart()
 
       expect(result.current.cartItems).toHaveLength(1)
-      expect(result.current.cartItems[0].id).toBe(PHONE.id)
+      expect(result.current.cartItems[0].id).toBe(PRODUCT.id)
       expect(result.current.cartTotal).toBe(STORAGE_256.price)
     })
   })
@@ -307,7 +310,7 @@ describe('Given syncPrices updates the price of a cart item', () => {
     const result = await renderCart()
 
     act(() => {
-      result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+      result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
     })
 
     const before = result.current.cartItems[0]
@@ -325,14 +328,14 @@ describe('Given syncPrices updates the price of a cart item', () => {
   })
 })
 
-describe('Given a phone with no imageUrl is added to the cart', () => {
+describe('Given a product with no imageUrl is added to the cart', () => {
   it('Then the cart item has imageUrl undefined and the cart total is still correct', async () => {
-    const noImagePhone = { ...PHONE, imageUrl: undefined }
+    const noImageProduct = { ...PRODUCT, imageUrl: undefined }
     const noImageColor = { ...COLOR_VIOLET, imageUrl: undefined }
     const result = await renderCart()
 
     act(() => {
-      result.current.addToCart(noImagePhone, noImageColor, STORAGE_256)
+      result.current.addToCart(noImageProduct, noImageColor, STORAGE_256)
     })
 
     expect(result.current.cartItems[0].imageUrl).toBeUndefined()
@@ -343,10 +346,10 @@ describe('Given a phone with no imageUrl is added to the cart', () => {
 describe('Given localStorage contains a cart item with imageUrl undefined', () => {
   it('Then the cart hydrates correctly and the item is restored without crashing', async () => {
     const savedItem: CartItem = {
-      key: toItemKey(PHONE.id, COLOR_VIOLET.name, STORAGE_256.capacity),
-      id: PHONE.id,
-      brand: PHONE.brand,
-      name: PHONE.name,
+      key: toItemKey(PRODUCT.id, COLOR_VIOLET.name, STORAGE_256.capacity),
+      id: PRODUCT.id,
+      brand: PRODUCT.brand,
+      name: PRODUCT.name,
       imageUrl: undefined,
       selectedColor: { ...COLOR_VIOLET, imageUrl: undefined },
       selectedStorage: STORAGE_256,
@@ -383,7 +386,7 @@ describe('Given the user has items in the cart', () => {
       const result = await renderCart()
 
       act(() => {
-        result.current.addToCart(PHONE, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
         result.current.clearCart()
       })
 

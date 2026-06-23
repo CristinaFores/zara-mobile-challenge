@@ -10,12 +10,12 @@ import {
   setProductPreview,
   useProductPreview,
 } from '@/shared/store/productNavigation'
-import { phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productListFixture } from '@/test-utils/fixtures/products.fixtures'
 
 describe('Given productNavigation', () => {
   describe('When getProductDetailHref is called', () => {
-    it('Then it returns the phone detail route', () => {
-      expect(getProductDetailHref('SMG-S24U')).toBe(`${ROUTES.PHONE_DETAIL}/SMG-S24U`)
+    it('Then it returns the product detail route', () => {
+      expect(getProductDetailHref('SMG-S24U')).toBe(`${ROUTES.PRODUCT_DETAIL}/SMG-S24U`)
     })
   })
 
@@ -37,33 +37,33 @@ describe('Given productNavigation', () => {
   })
 
   describe('When a product preview is stored', () => {
-    const [phone] = phoneListFixture
+    const [product] = productListFixture
 
     it('Then useProductPreview returns it for the matching product id', () => {
       const preview = {
-        id: phone.id,
-        brand: phone.brand,
-        name: phone.name,
-        basePrice: phone.basePrice,
-        imageUrl: phone.imageUrl,
-        href: getProductDetailHref(phone.id),
+        id: product.id,
+        brand: product.brand,
+        name: product.name,
+        basePrice: product.basePrice,
+        imageUrl: product.imageUrl,
+        href: getProductDetailHref(product.id),
       }
 
       setProductPreview(preview)
 
-      const { result } = renderHook(() => useProductPreview(phone.id))
+      const { result } = renderHook(() => useProductPreview(product.id))
 
       expect(result.current).toEqual(preview)
     })
 
     it('Then useProductPreview returns null for a different product id', () => {
       const preview = {
-        id: phone.id,
-        brand: phone.brand,
-        name: phone.name,
-        basePrice: phone.basePrice,
-        imageUrl: phone.imageUrl,
-        href: getProductDetailHref(phone.id),
+        id: product.id,
+        brand: product.brand,
+        name: product.name,
+        basePrice: product.basePrice,
+        imageUrl: product.imageUrl,
+        href: getProductDetailHref(product.id),
       }
 
       setProductPreview(preview)

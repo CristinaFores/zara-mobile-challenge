@@ -7,7 +7,7 @@ import {
   beginProductRouteViewTransition,
   setProductPreview,
 } from '@/shared/store/productNavigation'
-import { phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { productListFixture } from '@/test-utils/fixtures/products.fixtures'
 
 const pushMock = jest.fn()
 const prefetchMock = jest.fn()
@@ -18,7 +18,7 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('@/shared/store/productNavigation', () => ({
   beginProductRouteViewTransition: jest.fn(() => Promise.resolve()),
-  getProductDetailHref: (id: string) => `/phones/${id}`,
+  getProductDetailHref: (id: string) => `/products/${id}`,
   getProductViewTransitionName: (id: string, part: string) => `product-${part}-${id}`,
   scrollToProductDetailTop: jest.fn(),
   setProductPreview: jest.fn(),
@@ -28,32 +28,37 @@ jest.mock('@/shared/components/ProductImage/ProductImage', () => ({
   ProductImage: ({ alt }: { alt: string }) => <span data-testid="product-image" aria-label={alt} />,
 }))
 
-const [phone] = phoneListFixture
+const [product] = productListFixture
 
 describe('Given a ProductCard', () => {
-  describe('When rendered with a phone', () => {
-    beforeEach(() => render(<ProductCard {...phone} />))
+  describe('When rendered with a product', () => {
+    beforeEach(() => render(<ProductCard {...product} />))
 
-    it('Then it links to the phone detail page', () => {
-      expect(screen.getByRole('link')).toHaveAttribute('href', `${ROUTES.PHONE_DETAIL}/${phone.id}`)
+    it('Then it links to the product detail page', () => {
+      expect(screen.getByRole('link')).toHaveAttribute(
+        'href',
+        `${ROUTES.PRODUCT_DETAIL}/${product.id}`
+      )
     })
 
     it('Then it has an accessible label with brand, name and price', () => {
       expect(
-        screen.getByRole('link', { name: `${phone.brand} ${phone.name}, ${phone.basePrice} EUR` })
+        screen.getByRole('link', {
+          name: `${product.brand} ${product.name}, ${product.basePrice} EUR`,
+        })
       ).toBeInTheDocument()
     })
 
     it('Then it renders the brand', () => {
-      expect(screen.getByText(phone.brand)).toBeInTheDocument()
+      expect(screen.getByText(product.brand)).toBeInTheDocument()
     })
 
     it('Then it renders the model name', () => {
-      expect(screen.getByText(phone.name)).toBeInTheDocument()
+      expect(screen.getByText(product.name)).toBeInTheDocument()
     })
 
     it('Then it renders the price with EUR suffix', () => {
-      expect(screen.getByText(`${phone.basePrice} EUR`)).toBeInTheDocument()
+      expect(screen.getByText(`${product.basePrice} EUR`)).toBeInTheDocument()
     })
 
     it('Then it renders the product image', () => {
@@ -84,21 +89,21 @@ describe('Given a ProductCard', () => {
         removeEventListener: jest.fn(),
         dispatchEvent: jest.fn(),
       }))
-      render(<ProductCard {...phone} />)
+      render(<ProductCard {...product} />)
     })
 
     it('Then it stores the preview and starts the route view transition', async () => {
       await userEvent.click(screen.getByRole('link'))
 
       expect(setProductPreview).toHaveBeenCalledWith({
-        id: phone.id,
-        brand: phone.brand,
-        name: phone.name,
-        basePrice: phone.basePrice,
-        imageUrl: phone.imageUrl,
-        href: `${ROUTES.PHONE_DETAIL}/${phone.id}`,
+        id: product.id,
+        brand: product.brand,
+        name: product.name,
+        basePrice: product.basePrice,
+        imageUrl: product.imageUrl,
+        href: `${ROUTES.PRODUCT_DETAIL}/${product.id}`,
       })
-      expect(beginProductRouteViewTransition).toHaveBeenCalledWith(phone.id)
+      expect(beginProductRouteViewTransition).toHaveBeenCalledWith(product.id)
     })
   })
 
@@ -119,7 +124,7 @@ describe('Given a ProductCard', () => {
         removeEventListener: jest.fn(),
         dispatchEvent: jest.fn(),
       }))
-      render(<ProductCard {...phone} />)
+      render(<ProductCard {...product} />)
     })
 
     it('Then it stores the preview without starting a route transition', async () => {

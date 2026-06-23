@@ -1,8 +1,8 @@
 import { isAxiosError } from 'axios'
 import { NextResponse } from 'next/server'
 
-import { API_ENDPOINTS, HTTP_STATUS, PHONES_LIMIT } from '@/shared/constants'
-import type { Phone, PhoneDetail } from '@/shared/types'
+import { API_ENDPOINTS, HTTP_STATUS, PRODUCTS_LIMIT } from '@/shared/constants'
+import type { Product, ProductDetail } from '@/shared/types'
 
 import apiClient from './apiClient'
 
@@ -22,19 +22,19 @@ export interface FetchProductListOptions {
   readonly search?: string
 }
 
-export async function fetchProductList(options: FetchProductListOptions = {}): Promise<Phone[]> {
-  const limit = options.limit ?? PHONES_LIMIT
-  const { data } = await apiClient.get<Phone[]>(API_ENDPOINTS.PRODUCTS, {
+export async function fetchProductList(options: FetchProductListOptions = {}): Promise<Product[]> {
+  const limit = options.limit ?? PRODUCTS_LIMIT
+  const { data } = await apiClient.get<Product[]>(API_ENDPOINTS.PRODUCTS, {
     params: { limit, ...(options.search ? { search: options.search } : {}) },
   })
-  return [...new Map(data.map((phone) => [phone.id, phone])).values()]
+  return [...new Map(data.map((product) => [product.id, product])).values()]
 }
 
-export async function fetchProductById(id: string): Promise<PhoneDetail> {
+export async function fetchProductById(id: string): Promise<ProductDetail> {
   if (!PRODUCT_ID_PATTERN.test(id)) {
     throw new ProductNotFoundError()
   }
-  const { data } = await apiClient.get<PhoneDetail>(
+  const { data } = await apiClient.get<ProductDetail>(
     `${API_ENDPOINTS.PRODUCTS}/${encodeURIComponent(id)}`
   )
   return data

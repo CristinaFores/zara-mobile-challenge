@@ -4,9 +4,9 @@ import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
 import { HTTP_STATUS } from '@/shared/constants'
-import { getPhoneById } from '@/shared/services/phones.service'
 import { ProductNotFoundError } from '@/shared/services/products.api'
-import type { PhoneDetail } from '@/shared/types'
+import { getProductById } from '@/shared/services/products.service'
+import type { ProductDetail } from '@/shared/types'
 
 function isNotFoundError(error: unknown): boolean {
   return (
@@ -15,18 +15,18 @@ function isNotFoundError(error: unknown): boolean {
   )
 }
 
-export const loadPhoneDetail = cache(async (id: string): Promise<PhoneDetail> => {
+export const loadProductDetail = cache(async (id: string): Promise<ProductDetail> => {
   try {
-    return await getPhoneById(id)
+    return await getProductById(id)
   } catch (error) {
     if (isNotFoundError(error)) notFound()
     throw error
   }
 })
 
-export function buildPhoneDetailMetadata(phone: PhoneDetail): Metadata {
+export function buildProductDetailMetadata(product: ProductDetail): Metadata {
   return {
-    title: `${phone.name} - ${phone.brand}`,
-    description: phone.description,
+    title: `${product.name} - ${product.brand}`,
+    description: product.description,
   }
 }

@@ -1,14 +1,14 @@
 import { ProductCard } from '@/features/catalog/components/ProductCard/ProductCard'
 import { SimilarProductCard } from '@/features/product-detail/components/SimilarProducts/SimilarProductCard'
 import type { ExitingCard } from '@/shared/hooks/useFlipAnimation'
-import type { Phone } from '@/shared/types'
+import type { Product } from '@/shared/types'
 
 import styles from './ProductList.module.scss'
 
 type AnimationPhase = 'idle' | 'animating'
 
 interface ProductListProps {
-  phones: Phone[]
+  products: Product[]
   exitingCards?: ExitingCard[]
   animationPhase?: AnimationPhase
   cardRef?: (id: string, el: HTMLElement | null) => void
@@ -17,7 +17,7 @@ interface ProductListProps {
 const PRIORITY_IMAGE_COUNT = 10
 
 export function ProductList({
-  phones,
+  products,
   exitingCards = [],
   animationPhase = 'idle',
   cardRef,
@@ -26,20 +26,20 @@ export function ProductList({
 
   return (
     <section className={styles['product-list-wrapper']} aria-label="Search results">
-      <ul className={styles['product-list']} aria-label="Phones catalog">
-        {phones?.map((phone, index) => (
+      <ul className={styles['product-list']} aria-label="Products catalog">
+        {products.map((product, index) => (
           <ProductCard
-            key={`catalog-${phone?.id}`}
-            {...phone}
+            key={`catalog-${product.id}`}
+            {...product}
             priority={index < PRIORITY_IMAGE_COUNT}
-            cardRef={cardRef ? (el) => cardRef(phone.id, el) : undefined}
+            cardRef={cardRef ? (el) => cardRef(product.id, el) : undefined}
           />
         ))}
       </ul>
 
-      {exitingCards?.map(({ phone, rect }) => (
+      {exitingCards.map(({ product, rect }) => (
         <article
-          key={`exit-${phone.id}`}
+          key={`exit-${product.id}`}
           aria-hidden="true"
           className={`${styles['product-list__exiting']} ${isAnimating ? styles['product-list__exiting--active'] : ''}`}
           style={{
@@ -50,7 +50,7 @@ export function ProductList({
             height: rect.height,
           }}
         >
-          <SimilarProductCard {...phone} />
+          <SimilarProductCard {...product} />
         </article>
       ))}
     </section>

@@ -52,18 +52,18 @@ describe('Given a Button', () => {
 
   describe('When rendered with href (navigation button)', () => {
     it('Then renders an anchor element instead of a button', () => {
-      render(<Button href="/phones">Go to phones</Button>)
-      expect(screen.getByRole('link', { name: 'Go to phones' })).toBeInTheDocument()
+      render(<Button href="/products">Go to products</Button>)
+      expect(screen.getByRole('link', { name: 'Go to products' })).toBeInTheDocument()
     })
 
     it('Then the anchor has the correct href', () => {
-      render(<Button href="/phones">Go to phones</Button>)
-      expect(screen.getByRole('link')).toHaveAttribute('href', '/phones')
+      render(<Button href="/products">Go to products</Button>)
+      expect(screen.getByRole('link')).toHaveAttribute('href', '/products')
     })
 
     it('Then applies the fullWidth class on the link too', () => {
       render(
-        <Button href="/phones" fullWidth>
+        <Button href="/products" fullWidth>
           Full Width Link
         </Button>
       )
