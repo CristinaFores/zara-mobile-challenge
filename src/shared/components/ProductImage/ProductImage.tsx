@@ -20,13 +20,21 @@ function sharpLoader({ src, width, quality }: ImageLoaderProps): string {
   return buildProxyUrl(src, width, quality)
 }
 
-// WIP
 function ImageFallback() {
   return (
     <span className={styles['image-fallback']} aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="12" cy="18" r="1" fill="currentColor" />
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="4" width="20" height="40" rx="4" stroke="currentColor" strokeWidth="1.5" />
+        <line
+          x1="21"
+          y1="9"
+          x2="27"
+          y2="9"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+        <circle cx="24" cy="39" r="1.5" fill="currentColor" />
       </svg>
     </span>
   )

@@ -6,6 +6,8 @@ import type { CSSProperties } from 'react'
 
 import heroStyles from '@/features/product-detail/components/ProductDetail/ProductDetailHero.module.scss'
 import detailStyles from '@/features/product-detail/components/ProductDetail/ProductDetailView.module.scss'
+import specsStyles from '@/features/product-detail/components/SpecsTable/SpecsTable.module.scss'
+import rowStyles from '@/features/product-detail/components/SpecsTable/SpecsTableRow.module.scss'
 import { BackLink } from '@/shared/components/BackLink/BackLink'
 import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
 import { ROUTES } from '@/shared/constants'
@@ -58,7 +60,7 @@ export default function ProductDetailLoading() {
   return (
     <>
       <BackLink href={ROUTES.HOME} />
-      <article className={detailStyles['product-detail-view']}>
+      <article className={detailStyles['product-detail-view']} data-page="product-detail">
         <section className={heroStyles['product-detail-hero']} aria-label="Loading product">
           <div
             className={`${heroStyles['product-detail-hero__gallery']} ${styles['detail-loading__media']}`}
@@ -79,27 +81,45 @@ export default function ProductDetailLoading() {
           </div>
 
           <div className={heroStyles['product-detail-hero__info']} aria-hidden="true">
-            <div className={styles['detail-loading__line']} data-variant="title" />
-            <div className={styles['detail-loading__line']} data-variant="price" />
+            <div className={styles['detail-loading__heading']}>
+              <div className={styles['detail-loading__line']} data-variant="title" />
+              <div className={styles['detail-loading__line']} data-variant="price" />
+            </div>
+
             <div className={styles['detail-loading__selectors']}>
-              <div className={styles['detail-loading__line']} data-variant="label" />
-              <div className={styles['detail-loading__row']}>
-                <span className={styles['detail-loading__chip']} />
-                <span className={styles['detail-loading__chip']} />
-                <span className={styles['detail-loading__chip']} />
+              <div className={styles['detail-loading__selector']}>
+                <div className={styles['detail-loading__line']} data-variant="label" />
+                <div className={styles['detail-loading__chips']}>
+                  <span className={styles['detail-loading__chip']} />
+                  <span className={styles['detail-loading__chip']} />
+                </div>
+              </div>
+
+              <div className={styles['detail-loading__selector']}>
+                <div className={styles['detail-loading__line']} data-variant="label" />
+                <div className={styles['detail-loading__row']}>
+                  <span className={styles['detail-loading__swatch']} />
+                  <span className={styles['detail-loading__swatch']} />
+                  <span className={styles['detail-loading__swatch']} />
+                  <span className={styles['detail-loading__swatch']} />
+                </div>
               </div>
             </div>
+
             <div className={styles['detail-loading__button']} />
           </div>
         </section>
 
-        <section className={styles['detail-loading__specs']} aria-hidden="true">
-          {Array.from({ length: SPEC_ROW_COUNT }, (_, index) => (
-            <div className={styles['detail-loading__spec-row']} key={index}>
-              <span className={styles['detail-loading__line']} data-variant="spec-label" />
-              <span className={styles['detail-loading__line']} data-variant="spec-value" />
-            </div>
-          ))}
+        <section className={specsStyles['specs-table']} aria-label="Loading specifications">
+          <div className={styles['detail-loading__line']} data-variant="heading" />
+          <div className={specsStyles['specs-table__list']}>
+            {Array.from({ length: SPEC_ROW_COUNT }, (_, index) => (
+              <div className={rowStyles['specs-table-row']} key={index}>
+                <span className={styles['detail-loading__line']} data-variant="spec-label" />
+                <span className={styles['detail-loading__line']} data-variant="spec-value" />
+              </div>
+            ))}
+          </div>
         </section>
       </article>
     </>
