@@ -24,7 +24,7 @@ export interface ProductCardBaseProps extends Pick<
   onClick?: (event: MouseEvent<HTMLAnchorElement>) => void
   onNavigate?: () => void
   headingLevel?: 2 | 3
-  transitionTypes?: readonly string[] | undefined
+  transitionTypes?: readonly string[]
 }
 
 const DEFAULT_IMAGE_SIZES =

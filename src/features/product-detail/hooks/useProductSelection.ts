@@ -1,11 +1,15 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 
 import { useCart } from '@/features/cart/context/CartContext'
 import { ROUTES } from '@/shared/constants'
-import { readBrowserSearchParams, replaceSearchParamsInHistory } from '@/shared/lib/browser'
+import {
+  getBrowserSearchParamsSnapshot,
+  replaceSearchParamsInHistory,
+  subscribeToPopstate,
+} from '@/shared/lib/browser'
 import { navigateToCart } from '@/shared/lib/cartRouteTransition'
 import type { ColorOption, Product, ProductDetail, StorageOption } from '@/shared/types'
 
@@ -31,22 +35,19 @@ export function useProductSelection(product: ProductDetail): ProductSelection {
   const { addToCart } = useCart()
   const [baselineParams] = useState(() => new URLSearchParams(searchParams.toString()))
   const [optimisticParams, setOptimisticParams] = useState<URLSearchParams | null>(null)
-  const [historyVersion, setHistoryVersion] = useState(0)
 
-  useEffect(() => {
-    const syncFromHistory = (): void => {
-      setOptimisticParams(null)
-      setHistoryVersion((version) => version + 1)
-    }
+  useEffect(() => subscribeToPopstate(() => setOptimisticParams(null)), [])
 
-    globalThis.addEventListener('popstate', syncFromHistory)
-    return () => globalThis.removeEventListener('popstate', syncFromHistory)
-  }, [])
+  const searchSnapshot = useSyncExternalStore(
+    subscribeToPopstate,
+    getBrowserSearchParamsSnapshot,
+    () => null
+  )
 
   const browserParams = useMemo(() => {
-    void historyVersion
-    return readBrowserSearchParams()
-  }, [historyVersion])
+    if (searchSnapshot === null) return null
+    return new URLSearchParams(searchSnapshot)
+  }, [searchSnapshot])
 
   const selectionParams = useMemo(() => {
     if (optimisticParams) return optimisticParams

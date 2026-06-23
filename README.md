@@ -12,7 +12,11 @@ Production-grade smartphone catalog for the [Napptilus Tech Labs](https://www.na
 Browse, search, configure variants, and manage a persistent cart — with strict linters,
 GitHub Actions CI, SonarCloud, and Playwright E2E on every pull request.
 
-**Live:** [App](https://zara-mobile-challenge.vercel.app/) · [Delivery page](https://zara-mobile-challenge.vercel.app/entrega)
+**Live app:** [zara-mobile-challenge.vercel.app](https://zara-mobile-challenge.vercel.app/)
+
+**Delivery page:** [Delivery page](https://zara-mobile-challenge.vercel.app/entrega)
+
+**Author:** Cristina Fores · [LinkedIn](https://www.linkedin.com/in/cristina-fores) · [Portfolio](https://cristinafores.dev)
 
 **Languages:** [English](./README.md) · [Español](./README.es.md) · [AGENTS.md](./AGENTS.md) · [DESIGN.md](./DESIGN.md)
 
@@ -22,12 +26,13 @@ GitHub Actions CI, SonarCloud, and Playwright E2E on every pull request.
 
 |                     |                                                                                                                                                  |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Live**            | [App](https://zara-mobile-challenge.vercel.app/) · [Delivery page](https://zara-mobile-challenge.vercel.app/entrega)                             |
+| **Live app**        | [zara-mobile-challenge.vercel.app](https://zara-mobile-challenge.vercel.app/)                                                                    |
+| **Delivery page**   | [Delivery page](https://zara-mobile-challenge.vercel.app/entrega)                                                                                |
 | **Getting started** | [Quick start](#quick-start) · [GitHub setup](#github-setup) · [Scripts](#scripts-reference)                                                      |
 | **Application**     | [Product scope](#product-scope) · [URL state](#url-driven-state-query-params) · [Cart](#cart-integrity)                                          |
 | **Architecture**    | [Stack](#technology-stack--rationale) · [Structure](#architecture) · [Images](#image-pipeline--optimization) · [Motion](#motion--figma-fidelity) |
 | **Quality**         | [Testing](#quality-engineering) · [CI/CD](#cicd) · [E2E (Playwright)](#end-to-end-tests-playwright)                                              |
-| **Other**           | [Accessibility & SEO](#accessibility--seo)                                                                                                       |
+| **Other**           | [Accessibility & SEO](#accessibility--seo) · [Author](#author) · [License](#license)                                                             |
 
 ---
 
@@ -444,6 +449,22 @@ E2E runs in GitHub Actions but **not** in Husky pre-push — run locally before 
 | `npm run test:e2e:headed`         | E2E headed, chromium          |
 | `npm run test:e2e:debug`          | E2E with Playwright Inspector |
 | `npm run test:e2e:ui`             | E2E interactive UI            |
+
+---
+
+## Author
+
+**Cristina Fores** — Frontend Developer
+
+- [LinkedIn](https://www.linkedin.com/in/cristina-fores)
+- [Portfolio](https://cristinafores.dev)
+- [GitHub](https://github.com/CristinaFores)
+
+---
+
+## License
+
+[MIT](./LICENSE) © 2026 Cristina Fores Campos
 
 ---
 

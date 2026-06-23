@@ -32,9 +32,9 @@ export function ProductCatalog({ products, initialSearch = '' }: ProductCatalogP
       </h1>
       <SearchBar query={query} resultCount={resultCount} onQueryChange={onQueryChange} />
       {showEmptySearchState ? (
-        <p className={styles['product-catalog__empty-results']} role="status">
+        <output htmlFor="product-search" className={styles['product-catalog__empty-results']}>
           {CATALOG_EMPTY_SEARCH_MESSAGE}
-        </p>
+        </output>
       ) : (
         <ProductList
           products={displayedProducts}

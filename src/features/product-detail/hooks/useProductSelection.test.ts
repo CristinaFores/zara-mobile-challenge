@@ -7,7 +7,7 @@ import { useProductSelection } from './useProductSelection'
 const mockReplace = jest.fn()
 const mockAddToCart = jest.fn()
 const mockReplaceSearchParamsInHistory = jest.fn()
-const mockReadBrowserSearchParams = jest.fn((): URLSearchParams | null => null)
+const mockGetBrowserSearchParamsSnapshot = jest.fn((): string | null => null)
 
 let mockParams: Record<string, string | null> = {}
 
@@ -32,7 +32,8 @@ jest.mock('@/shared/lib/browser', () => {
 
   return {
     ...actual,
-    readBrowserSearchParams: () => mockReadBrowserSearchParams(),
+    getBrowserSearchParamsSnapshot: () => mockGetBrowserSearchParamsSnapshot(),
+    subscribeToPopstate: () => () => undefined,
     replaceSearchParamsInHistory: (...args: unknown[]) => mockReplaceSearchParamsInHistory(...args),
   }
 })
@@ -46,7 +47,7 @@ beforeEach(() => {
   mockReplace.mockClear()
   mockAddToCart.mockClear()
   mockReplaceSearchParamsInHistory.mockClear()
-  mockReadBrowserSearchParams.mockReturnValue(null)
+  mockGetBrowserSearchParamsSnapshot.mockReturnValue(null)
   mockParams = {}
 })
 

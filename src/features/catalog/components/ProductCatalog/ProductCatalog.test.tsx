@@ -43,7 +43,9 @@ describe('Given a ProductCatalog', () => {
     it('Then it shows an empty search message when the server returns no matches', () => {
       render(<ProductCatalog products={[]} initialSearch="zzzznonexistentphone" />)
 
-      expect(screen.getByText('No smartphones match your search.')).toBeInTheDocument()
+      const emptyResults = screen.getByText('No smartphones match your search.')
+      expect(emptyResults).toBeInTheDocument()
+      expect(emptyResults.closest('output')).toHaveAttribute('for', 'product-search')
       expect(screen.queryByRole('listitem')).not.toBeInTheDocument()
     })
   })

@@ -12,7 +12,11 @@ Catálogo de smartphones para la prueba frontend de [Napptilus Tech Labs](https:
 Listado, búsqueda, configuración de variantes y carrito persistente — con linters estrictos,
 GitHub Actions CI, SonarCloud y E2E con Playwright en cada pull request.
 
-**Producción:** [App](https://zara-mobile-challenge.vercel.app/) · [Entrega](https://zara-mobile-challenge.vercel.app/entrega)
+**App en producción:** [zara-mobile-challenge.vercel.app](https://zara-mobile-challenge.vercel.app/)
+
+**Página de entrega:** [Entrega](https://zara-mobile-challenge.vercel.app/entrega)
+
+**Autora:** Cristina Fores · [LinkedIn](https://www.linkedin.com/in/cristina-fores) · [Portfolio](https://cristinafores.dev)
 
 **Idiomas:** [English](./README.md) · [Español](./README.es.md) · [AGENTS.md](./AGENTS.md) · [DESIGN.md](./DESIGN.md)
 
@@ -20,14 +24,15 @@ GitHub Actions CI, SonarCloud y E2E con Playwright en cada pull request.
 
 ## Índice
 
-|                  |                                                                                                                                                           |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Producción**   | [App](https://zara-mobile-challenge.vercel.app/) · [Entrega](https://zara-mobile-challenge.vercel.app/entrega)                                            |
-| **Inicio**       | [Inicio rápido](#inicio-rápido) · [Setup GitHub](#setup-github) · [Scripts](#scripts)                                                                     |
-| **Aplicación**   | [Alcance funcional](#alcance-funcional) · [Estado en URL](#estado-en-url-query-params) · [Carrito](#integridad-del-carrito)                               |
-| **Arquitectura** | [Stack](#stack-tecnológico-y-por-qué) · [Estructura](#arquitectura) · [Imágenes](#imágenes-pipeline-y-optimización) · [Motion](#motion-y-fidelidad-figma) |
-| **Calidad**      | [Testing](#ingeniería-de-calidad) · [CI/CD](#cicd) · [E2E (Playwright)](#tests-end-to-end-playwright)                                                     |
-| **Otros**        | [Accesibilidad y SEO](#accesibilidad-y-seo)                                                                                                               |
+|                       |                                                                                                                                                           |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **App en producción** | [zara-mobile-challenge.vercel.app](https://zara-mobile-challenge.vercel.app/)                                                                             |
+| **Página de entrega** | [Entrega](https://zara-mobile-challenge.vercel.app/entrega)                                                                                               |
+| **Inicio**            | [Inicio rápido](#inicio-rápido) · [Setup GitHub](#setup-github) · [Scripts](#scripts)                                                                     |
+| **Aplicación**        | [Alcance funcional](#alcance-funcional) · [Estado en URL](#estado-en-url-query-params) · [Carrito](#integridad-del-carrito)                               |
+| **Arquitectura**      | [Stack](#stack-tecnológico-y-por-qué) · [Estructura](#arquitectura) · [Imágenes](#imágenes-pipeline-y-optimización) · [Motion](#motion-y-fidelidad-figma) |
+| **Calidad**           | [Testing](#ingeniería-de-calidad) · [CI/CD](#cicd) · [E2E (Playwright)](#tests-end-to-end-playwright)                                                     |
+| **Otros**             | [Accesibilidad y SEO](#accesibilidad-y-seo) · [Autora](#autora) · [Licencia](#licencia)                                                                   |
 
 ---
 
@@ -444,6 +449,22 @@ E2E corre en GitHub Actions pero **no** en pre-push de Husky — ejecútalo en l
 | `npm run test:e2e:headed`         | E2E headed, chromium          |
 | `npm run test:e2e:debug`          | E2E con Playwright Inspector  |
 | `npm run test:e2e:ui`             | E2E UI interactiva            |
+
+---
+
+## Autora
+
+**Cristina Fores** — Frontend Developer
+
+- [LinkedIn](https://www.linkedin.com/in/cristina-fores)
+- [Portfolio](https://cristinafores.dev)
+- [GitHub](https://github.com/CristinaFores)
+
+---
+
+## Licencia
+
+[MIT](./LICENSE) © 2026 Cristina Fores Campos
 
 ---
 

@@ -37,9 +37,39 @@ export function replaceSearchParamsInHistory(pathname: string, params: URLSearch
   globalThis.history.replaceState(globalThis.history.state, '', url)
 }
 
-export function readBrowserSearchParams(): URLSearchParams | null {
+const popstateListeners = new Set<() => void>()
+let popstateListenerRegistered = false
+
+function notifyPopstateListeners(): void {
+  popstateListeners.forEach((listener) => listener())
+}
+
+function ensurePopstateListener(): void {
+  if (!isBrowser() || popstateListenerRegistered) return
+  globalThis.addEventListener('popstate', notifyPopstateListeners)
+  popstateListenerRegistered = true
+}
+
+/** Shared popstate subscription for URL-driven client state (e.g. useSyncExternalStore). */
+export function subscribeToPopstate(listener: () => void): () => void {
+  if (!isBrowser()) return () => undefined
+
+  ensurePopstateListener()
+  popstateListeners.add(listener)
+  return () => {
+    popstateListeners.delete(listener)
+  }
+}
+
+export function getBrowserSearchParamsSnapshot(): string | null {
   if (!isBrowser()) return null
-  return new URLSearchParams(globalThis.window.location.search)
+  return globalThis.window.location.search
+}
+
+export function readBrowserSearchParams(): URLSearchParams | null {
+  const search = getBrowserSearchParamsSnapshot()
+  if (search === null) return null
+  return new URLSearchParams(search)
 }
 
 export function scheduleTimeout(
