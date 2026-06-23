@@ -5,7 +5,18 @@ export function isBrowser(): boolean {
 }
 
 export function hasBrowserHistory(): boolean {
-  return isBrowser() && globalThis.history.length > 1
+  if (!isBrowser()) return false
+
+  // Navigation API (Chrome 102+) correctly excludes about:blank and external
+  // referrers from the app's own history stack. Falls back to history.length
+  // for browsers that don't support it yet.
+
+  const nav = (globalThis as typeof globalThis & { navigation?: { canGoBack?: boolean } })
+    .navigation
+
+  if (typeof nav?.canGoBack === 'boolean') return nav.canGoBack
+
+  return globalThis.history.length > 1
 }
 
 export function prefersReducedMotion(): boolean {
