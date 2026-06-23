@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useState } from 'react'
 
 import { useCart } from '@/features/cart/context/CartContext'
 import { ROUTES } from '@/shared/constants'
@@ -28,31 +28,28 @@ export function useProductSelection(product: ProductDetail): ProductSelection {
   const router = useRouter()
   const pathname = usePathname()
   const { addToCart } = useCart()
+  const [optimisticParams, setOptimisticParams] = useState<URLSearchParams | null>(null)
+
+  if (optimisticParams !== null && optimisticParams.toString() === searchParams.toString()) {
+    setOptimisticParams(null)
+  }
+
+  const selectionParams = optimisticParams ?? new URLSearchParams(searchParams.toString())
 
   const selectedColor =
-    product.colorOptions.find((c) => c.name === searchParams.get('color')) ?? null
+    product.colorOptions.find((c) => c.name === selectionParams.get('color')) ?? null
 
   const selectedStorage =
-    product.storageOptions.find((s) => s.capacity === searchParams.get('storage')) ?? null
-
-  // router.replace is async: searchParams only updates once the navigation commits.
-  // Two quick selections would each start from the same stale snapshot, so the
-  // second would drop the first. We merge updates into a pending ref synchronously
-  // and reset it when searchParams actually reflects the change.
-  const pendingParamsRef = useRef<URLSearchParams | null>(null)
-
-  useEffect(() => {
-    pendingParamsRef.current = null
-  }, [searchParams])
+    product.storageOptions.find((s) => s.capacity === selectionParams.get('storage')) ?? null
 
   const updateSelectionParam = useCallback(
     (key: 'color' | 'storage', value: string) => {
-      const params = pendingParamsRef.current ?? new URLSearchParams(searchParams.toString())
+      const params = new URLSearchParams((optimisticParams ?? searchParams).toString())
       params.set(key, value)
-      pendingParamsRef.current = params
+      setOptimisticParams(params)
       router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     },
-    [pathname, router, searchParams]
+    [optimisticParams, pathname, router, searchParams]
   )
 
   const setSelectedColor = useCallback(

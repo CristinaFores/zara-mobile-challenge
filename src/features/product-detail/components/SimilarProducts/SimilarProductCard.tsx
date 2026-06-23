@@ -26,6 +26,7 @@ export function SimilarProductCard({ id, brand, name, basePrice, imageUrl }: Pro
         basePrice={basePrice}
         imageUrl={imageUrl}
         href={href}
+        headingLevel={3}
         prefetch={prefetchFull ? true : 'auto'}
         imageTransitionStyle={imageTransitionStyle}
         imageSizes={SIMILAR_IMAGE_SIZES}

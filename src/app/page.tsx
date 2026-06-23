@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
-
 import { ProductCatalog } from '@/features/catalog/components/ProductCatalog/ProductCatalog'
+import { buildPageMetadata } from '@/shared/lib/siteMetadata'
 import { getProducts } from '@/shared/services/products.service'
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Smartphones',
-  description: 'Browse the latest smartphones — search the catalog, compare specs and add to cart.',
-}
+  description:
+    'Browse the latest smartphones. Search the catalog, compare specs, configure variants, and add to cart.',
+})
 
 interface HomeProps {
   searchParams: Promise<{ search?: string }>

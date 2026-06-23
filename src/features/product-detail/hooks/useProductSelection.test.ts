@@ -10,7 +10,13 @@ const mockAddToCart = jest.fn()
 let mockParams: Record<string, string | null> = {}
 
 jest.mock('next/navigation', () => ({
-  useSearchParams: () => ({ get: (key: string) => mockParams[key] ?? null, toString: () => '' }),
+  useSearchParams: () => ({
+    get: (key: string) => mockParams[key] ?? null,
+    toString: () =>
+      new URLSearchParams(
+        Object.entries(mockParams).flatMap(([key, value]) => (value === null ? [] : [[key, value]]))
+      ).toString(),
+  }),
   useRouter: () => ({ replace: mockReplace, push: jest.fn() }),
   usePathname: () => '/products/SMG-S24U',
 }))
@@ -89,6 +95,15 @@ describe('Given useProductSelection', () => {
   })
 
   describe('When setSelectedColor is called', () => {
+    it('Then it updates the selection immediately before the URL commits', () => {
+      const { result } = setup()
+      const color = productDetailFixture.colorOptions[0]
+
+      act(() => result.current.setSelectedColor(color))
+
+      expect(result.current.selectedColor).toEqual(color)
+    })
+
     it('Then it calls router.replace with the color in the URL', () => {
       const { result } = setup()
       const color = productDetailFixture.colorOptions[0]
@@ -103,6 +118,15 @@ describe('Given useProductSelection', () => {
   })
 
   describe('When setSelectedStorage is called', () => {
+    it('Then it updates the selection immediately before the URL commits', () => {
+      const { result } = setup()
+      const storage = productDetailFixture.storageOptions[0]
+
+      act(() => result.current.setSelectedStorage(storage))
+
+      expect(result.current.selectedStorage).toEqual(storage)
+    })
+
     it('Then it calls router.replace with the storage in the URL', () => {
       const { result } = setup()
       const storage = productDetailFixture.storageOptions[0]

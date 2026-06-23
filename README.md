@@ -1,133 +1,61 @@
 # Zara Mobile Catalog
 
-<p align="center">
-  <a href="https://github.com/CristinaFores/zara-mobile-challenge/actions/workflows/ci.yml"><img src="https://github.com/CristinaFores/zara-mobile-challenge/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <a href="https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge"><img src="https://sonarcloud.io/images/project_badges/sonarcloud-light.svg" height="20" alt="SonarQube Cloud" /></a>
-</p>
+|                                                                                         CI                                                                                          |                                                                              Sonar                                                                               |                                                     Tests                                                      |                                              Coverage gate                                              |                                                       TypeScript                                                       |                                                      ESLint                                                      |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------: |
+| [![CI](https://github.com/CristinaFores/zara-mobile-challenge/actions/workflows/ci.yml/badge.svg)](https://github.com/CristinaFores/zara-mobile-challenge/actions/workflows/ci.yml) | [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | ![tests](https://img.shields.io/badge/tests-276%20passing-success?style=flat-square&logo=jest&logoColor=white) | ![coverage gate](https://img.shields.io/badge/coverage%20gate-%E2%89%A585%25-success?style=flat-square) | ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white) | ![ESLint](https://img.shields.io/badge/ESLint-0%20warnings-4B32C3?style=flat-square&logo=eslint&logoColor=white) |
 
-<p align="center">
-  <a href="https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge"><img src="https://sonarcloud.io/api/project_badges/quality_gate?project=CristinaFores_zara-mobile-challenge" alt="Quality Gate" /></a>
-</p>
-
-<p align="center">
-  <a href="https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge"><img src="https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=alert_status" alt="Quality Gate Status" /></a>
-  <a href="https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge"><img src="https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=coverage" alt="Coverage" /></a>
-  <a href="https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge"><img src="https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=bugs" alt="Bugs" /></a>
-  <a href="https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge"><img src="https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=code_smells" alt="Code Smells" /></a>
-  <a href="https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge"><img src="https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=duplicated_lines_density" alt="Duplicated Lines (%)" /></a>
-</p>
-
-<p align="center">
-  <img alt="Tests" src="https://img.shields.io/badge/tests-276%20passing-success?style=flat-square&logo=jest&logoColor=white" />
-  <img alt="Coverage gate" src="https://img.shields.io/badge/coverage%20gate-%E2%89%A585%25-success?style=flat-square" />
-  <img alt="TypeScript strict" src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white" />
-  <img alt="ESLint zero warnings" src="https://img.shields.io/badge/ESLint-0%20warnings-4B32C3?style=flat-square&logo=eslint&logoColor=white" />
-</p>
+|                                                                                            Quality gate                                                                                             |                                                                                                  Coverage                                                                                                  |                                                                                                Bugs                                                                                                |                                                                                                   Code smells                                                                                                    |                                                                                                          Duplicated lines                                                                                                          |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [![Quality Gate](https://sonarcloud.io/api/project_badges/quality_gate?project=CristinaFores_zara-mobile-challenge)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=coverage)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=bugs)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | [![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) |
 
 Production-grade mobile phone catalog for the Zara / Inditex technical challenge.
-Browse, search, configure variants, and manage a persistent cart — with **strict linters,
-GitHub Actions CI, and SonarCloud** on every pull request.
+Browse, search, configure variants, and manage a persistent cart — with strict linters,
+GitHub Actions CI, SonarCloud, and Playwright E2E on every pull request.
 
 **Languages:** [English](./README.md) · [Español](./README.es.md)
 
 ---
 
-## Linters & GitHub Actions
+## Contents
 
-Every change is gated locally **and** in CI. Nothing merges without passing all checks.
-
-### Linters (local + CI)
-
-<p align="center">
-  <img src="https://img.shields.io/badge/ESLint-9-4B32C3?style=flat-square&logo=eslint&logoColor=white" alt="ESLint 9" />
-  <img src="https://img.shields.io/badge/Stylelint-17-263238?style=flat-square&logo=stylelint&logoColor=white" alt="Stylelint 17" />
-  <img src="https://img.shields.io/badge/Prettier-3-F7B93E?style=flat-square&logo=prettier&logoColor=black" alt="Prettier 3" />
-  <img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript strict" />
-  <img src="https://img.shields.io/badge/warnings-0-success?style=flat-square" alt="zero warnings" />
-</p>
-
-| Tool           | Command                | Config              | What it enforces                                                   |
-| -------------- | ---------------------- | ------------------- | ------------------------------------------------------------------ |
-| **ESLint**     | `npm run lint`         | `eslint.config.mjs` | TS/React/Next rules, import order, `--max-warnings=0`              |
-| **Stylelint**  | `npm run lint:styles`  | `.stylelintrc`      | SCSS BEM modules, no hardcoded colors (`declaration-strict-value`) |
-| **Prettier**   | `npm run format:check` | `.prettierrc`       | Consistent formatting across TS/TSX/SCSS/JSON/MD                   |
-| **TypeScript** | `npm run typecheck`    | `tsconfig.json`     | `strict` mode, no emit                                             |
-
-**When they run**
-
-| Stage                  | What runs                                                                                 |
-| ---------------------- | ----------------------------------------------------------------------------------------- |
-| **pre-commit** (Husky) | lint-staged → Prettier + ESLint fix on staged TS/TSX; Stylelint + Prettier on staged SCSS |
-| **pre-push** (Husky)   | typecheck → lint → lint:styles → format:check → test → build                              |
-| **GitHub Actions**     | Same gates + coverage + SonarCloud (see below)                                            |
-
-### GitHub Actions CI
-
-<p align="center">
-  <a href="https://github.com/CristinaFores/zara-mobile-challenge/actions/workflows/ci.yml">
-    <img src="https://img.shields.io/badge/GitHub_Actions-CI-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions" />
-  </a>
-</p>
-
-Workflow: [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) — triggers on **push** and **pull_request** to `main`.
-
-```mermaid
-flowchart TB
-  subgraph Trigger["🚀 Trigger"]
-    PUSH["push to main"]
-    PR["pull_request"]
-  end
-
-  subgraph Job1["Job 1 · Quality · ubuntu-latest"]
-    direction TB
-    INSTALL["npm install"]
-    ESLINT["ESLint --max-warnings=0"]
-    STYLE["Stylelint SCSS"]
-    PRETTIER["Prettier check"]
-    TSC["tsc --noEmit"]
-    TEST["Jest + coverage ≥ 85%"]
-    BUILD["next build"]
-    INSTALL --> ESLINT --> STYLE --> PRETTIER --> TSC --> TEST --> BUILD
-  end
-
-  subgraph Job2["Job 2 · SonarCloud · needs Quality"]
-    SONAR["SonarQube Scan + lcov upload"]
-  end
-
-  PUSH --> Job1
-  PR --> Job1
-  BUILD --> SONAR
-
-  style Job1 fill:#ddf4ff,stroke:#0969da
-  style Job2 fill:#fff8c5,stroke:#bf8700
-```
-
-| Job            | Steps                                                                          | Blocks merge |
-| -------------- | ------------------------------------------------------------------------------ | ------------ |
-| **Quality**    | install → ESLint → Stylelint → Prettier → typecheck → tests + coverage → build | ✅           |
-| **SonarCloud** | full git history → coverage → static analysis                                  | ✅           |
-
-**Secrets:** `API_KEY` (build step) · `SONAR_TOKEN` (Sonar job)
+|                     |                                                                                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Getting started** | [Quick start](#quick-start) · [GitHub setup](#github-setup) · [Scripts](#scripts-reference)                                                      |
+| **Application**     | [Product scope](#product-scope) · [URL state](#url-driven-state-query-params) · [Cart](#cart-integrity)                                          |
+| **Architecture**    | [Stack](#technology-stack--rationale) · [Structure](#architecture) · [Images](#image-pipeline--optimization) · [Motion](#motion--figma-fidelity) |
+| **Quality**         | [Testing](#quality-engineering) · [CI/CD](#cicd) · [E2E (Playwright)](#end-to-end-tests-playwright)                                              |
+| **Other**           | [Accessibility & SEO](#accessibility--seo)                                                                                                       |
 
 ---
 
-## Contents
+## Quick start
 
-|     | Section                                                           |
-| --- | ----------------------------------------------------------------- |
-| 🔍  | [Linters & GitHub Actions](#linters--github-actions)              |
-| 📱  | [Product scope](#product-scope)                                   |
-| 🔗  | [URL-driven state (query params)](#url-driven-state-query-params) |
-| 🛒  | [Cart integrity](#cart-integrity)                                 |
-| 🧱  | [Technology stack](#technology-stack--rationale)                  |
-| 🖼️  | [Image pipeline & optimization](#image-pipeline--optimization)    |
-| ✨  | [Motion & Figma fidelity](#motion--figma-fidelity)                |
-| 🏗️  | [Architecture](#architecture)                                     |
-| ✅  | [Quality engineering](#quality-engineering)                       |
-| 🎭  | [End-to-end tests (Playwright)](#end-to-end-tests-playwright)     |
-| ♿  | [Accessibility & SEO](#accessibility--seo)                        |
-| ⚡  | [Quick start](#quick-start)                                       |
-| 📜  | [Scripts reference](#scripts-reference)                           |
+**Requirements:** Node.js ≥ 20 · npm ≥ 10
+
+```bash
+npm install
+npm run playwright:install   # first time only — E2E browsers
+cp .env.example .env.local     # fill API_KEY
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+| Mode             | Command                                                              |
+| ---------------- | -------------------------------------------------------------------- |
+| Development      | `npm run dev`                                                        |
+| Production       | `npm run build && npm run start`                                     |
+| Full local gate  | `npm run typecheck && npm run lint && npm run test && npm run build` |
+| E2E (same as CI) | `npm run test:e2e -- --project=chromium`                             |
+
+**GitHub (fork / new repo):** see [GitHub setup](#github-setup) for secrets and branch protection.
+
+Server-only env vars (never `NEXT_PUBLIC_`):
+
+```env
+API_BASE_URL=https://prueba-tecnica-api-tienda-moviles.onrender.com
+API_KEY=your-api-key
+```
 
 ---
 
@@ -187,13 +115,9 @@ State that must survive refresh, back/forward, and shareable links is encoded in
 | Clear      | `CLEAR`                                                  | ✓                      |
 | Price sync | `SYNC_PRICES` + public `syncPrices(updates)`             | ✓                      |
 
-**Price reconciliation:** each line stores the price chosen at add-to-cart. `syncPrices` accepts a map of line keys → current prices and recalculates `cartTotal`. Reducer and context behaviour are fully covered by BDD tests; wiring a cart-mount re-fetch against `GET /products/:id` is a thin integration step on top of this API.
+**Price reconciliation:** each line stores the price chosen at add-to-cart. `syncPrices` accepts a map of line keys → current prices and recalculates `cartTotal`.
 
-**Stock / availability:** the challenge API exposes no inventory field. Availability is inferred as follows:
-
-- Catalog: product appears in `GET /products` response.
-- Detail: invalid or removed id → `ProductNotFoundError` / 404 path (`loadProduct`, `products.api` id validation).
-- Cart: lines remain until the user removes them; `syncPrices` + optional re-fetch can flag stale configs when upstream data changes.
+**Stock / availability:** the challenge API exposes no inventory field. Availability is inferred from catalog presence, detail 404 paths, and optional cart price sync.
 
 **Tests:** `CartContext.test.tsx`, `cartStorage.test.ts`, `buildKey.test.ts`, `CartView.test.tsx`
 
@@ -201,160 +125,56 @@ State that must survive refresh, back/forward, and shareable links is encoded in
 
 ## Technology stack & rationale
 
-### At a glance
-
 <p align="center">
   <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-16-000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js 16" /></a>
   <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
   <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.7" /></a>
   <a href="https://sass-lang.com"><img src="https://img.shields.io/badge/Sass-BEM-CC6699?style=for-the-badge&logo=sass&logoColor=white" alt="Sass BEM" /></a>
   <a href="https://jestjs.io"><img src="https://img.shields.io/badge/Jest-30-C21325?style=for-the-badge&logo=jest&logoColor=white" alt="Jest 30" /></a>
-  <a href="https://mswjs.io"><img src="https://img.shields.io/badge/MSW-2.14-FF6B35?style=for-the-badge" alt="MSW 2.14" /></a>
-  <a href="https://sharp.pixelplumbing.com"><img src="https://img.shields.io/badge/Sharp-0.34-99CC00?style=for-the-badge" alt="Sharp 0.34" /></a>
+  <a href="https://playwright.dev"><img src="https://img.shields.io/badge/Playwright-1.61-2EAD33?style=for-the-badge&logo=playwright&logoColor=white" alt="Playwright 1.61" /></a>
   <a href="https://sonarcloud.io"><img src="https://img.shields.io/badge/SonarCloud-enabled-4E9BCD?style=for-the-badge&logo=sonarqubecloud&logoColor=white" alt="SonarCloud" /></a>
 </p>
 
 ```mermaid
 flowchart TB
-  subgraph Client["🌐 Browser"]
-    UI["React 19 components"]
-    IMG["next/image + ProductImage"]
-    MOTION["FLIP · View Transitions · Crossfade"]
+  subgraph Client["Browser"]
+    UI["React 19"]
     CART["CartContext + localStorage"]
   end
 
-  subgraph Next["⚡ Next.js 16 App Router"]
+  subgraph Next["Next.js 16 App Router"]
     RSC["Server Components"]
-    RH["Route Handler<br/>/api/images"]
-    META["Metadata API · SEO"]
+    RH["/api/images"]
   end
 
-  subgraph Server["🔒 Server-only"]
+  subgraph Server["Server-only"]
     API["products.api + Axios"]
-    SHARP["Sharp pipeline<br/>WebP · trim · alpha"]
-    KEY["API_KEY · never in browser"]
+    SHARP["Sharp pipeline"]
   end
 
-  subgraph External["☁️ External"]
-    STORE["Store API<br/>onrender.com"]
+  subgraph External["External"]
+    STORE["Store API"]
   end
 
-  subgraph Quality["✅ Quality gates"]
-    JEST["Jest + RTL + MSW<br/>276 tests"]
-    SONAR["SonarCloud"]
-    CI["GitHub Actions"]
-  end
-
-  UI --> RSC
-  IMG --> RH
-  RSC --> API
-  RH --> SHARP
-  API --> STORE
-  SHARP --> STORE
+  UI --> RSC --> API --> STORE
+  RH --> SHARP --> STORE
   CART --> UI
-  JEST -.-> UI
-  SONAR -.-> JEST
-  CI -.-> SONAR
 ```
 
-| Layer     | Technology                                                                                | Version | Why                                                                                                                         |
-| --------- | ----------------------------------------------------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Framework | [Next.js](https://nextjs.org) App Router                                                  | 16      | SSR, metadata, route handlers, [`next/image`](https://nextjs.org/docs/app/building-your-application/optimizing/images), SEO |
-| UI        | [React](https://react.dev)                                                                | 19      | Components, concurrent rendering, Next.js ecosystem                                                                         |
-| Language  | [TypeScript](https://www.typescriptlang.org) strict                                       | 5.7     | Typed API contract, refactor safety, no `any`                                                                               |
-| Styling   | [Sass](https://sass-lang.com) + BEM + CSS Modules                                         | —       | Scoped styles, [design tokens](./src/scss/_variables.scss), mobile-first                                                    |
-| State     | Context API + reducer                                                                     | —       | Cart only — no Redux for this scope                                                                                         |
-| HTTP      | [Axios](https://axios-http.com)                                                           | 1.18    | Isolated in [`products.api`](./src/shared/services/products.api.ts)                                                         |
-| Images    | [Sharp](https://sharp.pixelplumbing.com) + [`/api/images`](./src/app/api/images/route.ts) | 0.34    | See [Image pipeline](#image-pipeline--optimization)                                                                         |
-| Tests     | [Jest](https://jestjs.io) + [RTL](https://testing-library.com) + [MSW](https://mswjs.io)  | 30      | BDD tests; network at HTTP layer                                                                                            |
-| Lint      | ESLint + Prettier + Stylelint                                                             | 9       | Zero-warning gate                                                                                                           |
-| Hooks     | Husky + lint-staged                                                                       | 9 / 17  | pre-commit + pre-push                                                                                                       |
-| CI        | [GitHub Actions](./.github/workflows/ci.yml) + [SonarCloud](https://sonarcloud.io)        | —       | Every PR fully gated                                                                                                        |
-| E2E       | [Playwright](https://playwright.dev)                                                      | 1.61    | Browser tests in `e2e/` — catalog, detail, cart ([E2E guide](#end-to-end-tests-playwright))                                 |
+| Layer     | Technology                                                                                | Why                                                                 |
+| --------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Framework | [Next.js](https://nextjs.org) 16 App Router                                               | SSR, metadata, route handlers, `next/image`, SEO                    |
+| UI        | [React](https://react.dev) 19                                                             | Components, Next.js ecosystem                                       |
+| Language  | [TypeScript](https://www.typescriptlang.org) strict                                       | Typed API contract, no `any`                                        |
+| Styling   | [Sass](https://sass-lang.com) + BEM + CSS Modules                                         | Scoped styles, [design tokens](./src/scss/_variables.scss)          |
+| State     | Context API + reducer                                                                     | Cart only                                                           |
+| HTTP      | [Axios](https://axios-http.com)                                                           | Isolated in [`products.api`](./src/shared/services/products.api.ts) |
+| Images    | [Sharp](https://sharp.pixelplumbing.com) + [`/api/images`](./src/app/api/images/route.ts) | See [Image pipeline](#image-pipeline--optimization)                 |
+| Tests     | Jest + RTL + MSW                                                                          | BDD; network at HTTP layer                                          |
+| E2E       | [Playwright](https://playwright.dev)                                                      | Browser tests in `e2e/`                                             |
+| CI        | GitHub Actions + SonarCloud                                                               | Every PR gated                                                      |
 
 **Intentionally omitted:** TanStack Query · Redux/Zustand · Tailwind.
-
-Server-only env vars (never `NEXT_PUBLIC_`):
-
-```env
-API_BASE_URL=https://prueba-tecnica-api-tienda-moviles.onrender.com
-API_KEY=your-api-key
-```
-
----
-
-## Image pipeline & optimization
-
-> 🔗 Related: [Technology stack](#technology-stack--rationale) · [Motion & Figma](#motion--figma-fidelity) · [`ProductImage`](./src/shared/components/ProductImage/ProductImage.tsx) · [`imageProcessing.ts`](./src/shared/lib/imageProcessing.ts)
-
-Upstream product images are remote, high-resolution, and often on a white background — bad for LCP, CLS, and the Figma look (transparent hero on grey).
-
-### Why a server proxy (`/api/images`)
-
-| Problem                               | Approach                                                                 |
-| ------------------------------------- | ------------------------------------------------------------------------ |
-| API key must stay server-side         | Browser never calls the store API for raw assets; proxy fetches upstream |
-| SSRF risk                             | Host allowlist + protocol check on every request                         |
-| Repeated Sharp work                   | In-process cache (~200 entries, keyed by url + width + quality)          |
-| Slow onrender.com on every navigation | Cache-Control immutable + warm cache on repeat views                     |
-
-### Pipeline (Sharp)
-
-```mermaid
-flowchart LR
-  A["🖼️ Upstream PNG/WebP<br/>white background"] --> B["🔐 /api/images<br/>SSRF allowlist"]
-  B --> C["📥 fetchRemoteImage"]
-  C --> D["🎨 ensureAlpha"]
-  D --> E["⬜ border flood-fill<br/>→ transparent"]
-  E --> F["✂️ trim + resize"]
-  F --> G["📦 WebP output"]
-  G --> H["💾 cache 200 entries"]
-  H --> I["⚡ next/image<br/>LCP eager"]
-
-  style A fill:#f5f5f5,stroke:#333
-  style G fill:#4ade80,stroke:#166534
-  style I fill:#60a5fa,stroke:#1e40af
-```
-
-| Step                  | Purpose                                                                   |
-| --------------------- | ------------------------------------------------------------------------- |
-| Border flood-fill     | Removes edge-connected white; keeps internal whites (e.g. screen)         |
-| Trim + contain        | Consistent card/hero framing per Figma                                    |
-| WebP                  | Smaller payloads than source PNG/WebP from API                            |
-| Concurrency limit (3) | Sharp stays below libuv thread-pool default — other I/O stays responsive  |
-| Custom loader         | `ProductImage` routes every `src` through `buildProxyUrl` — one code path |
-
-### Client-side (`next/image`)
-
-- Responsive `sizes` per context (grid card vs detail hero vs similar products).
-- Eager loading on above-the-fold catalog cards and detail hero (LCP).
-- Fallback SVG silhouette on missing/broken `src` — crossfade still completes.
-- `useColorVariantPreload` — prefetches other color URLs at 640 / 828 px before the user switches, reducing flash on variant change.
-
-**Tests:** `ProductImage.test.tsx`, `imageProcessing.test.ts`, `app/api/images/route.test.ts`
-
----
-
-## Motion & Figma fidelity
-
-> 🔗 Related: [Image pipeline](#image-pipeline--optimization) · [`globals.scss`](./src/scss/globals.scss) · [Figma spec](https://www.figma.com/design/Nuic7ePgOfUQ0hcBrUUQrb/Labs---Zara-Web-Challenge--Smartphones-)
-
-Animations follow the Figma challenge spec. All respect `prefers-reduced-motion: reduce` where the View Transitions API is used.
-
-| Figma intent                   | Implementation                                                                      | Where                                              |
-| ------------------------------ | ----------------------------------------------------------------------------------- | -------------------------------------------------- |
-| Top loading bar on first paint | CSS animated bar, auto-dismiss ~1.2 s (static on cart page)                         | `Header`                                           |
-| Grid reflow on search/filter   | FLIP technique — exiting cards animate out, entering cards slide from old positions | `useFlipAnimation`, `flip.ts`, `ProductList`       |
-| Catalog → detail shared image  | View Transitions API + `viewTransitionName` on card image and detail hero           | `ProductCard`, `ProductDetailHero`, `globals.scss` |
-| Instant hero while route loads | `loading.tsx` shows catalog preview image during transition                         | `app/products/[id]/loading.tsx`                    |
-| Color change without flash     | Dual-slot opacity crossfade (`useImageCrossfade`)                                   | `ProductDetailHero`                                |
-| Price / color name update      | Text crossfade (`useTextCrossfade`)                                                 | hero + `ColorSelector`                             |
-| Similar products carousel      | Horizontal `ScrollRow` with drag scroll                                             | `SimilarProducts`                                  |
-| Route transition timing        | Custom easing `cubic-bezier(0.22, 1, 0.36, 1)` ~520 ms on shared elements           | `globals.scss`                                     |
-
-Navigation preview state (`productNavigation` store) keeps brand/name/image between catalog click and detail mount so the transition feels continuous.
-
-**Tests:** `useFlipAnimation.test.tsx`, `flip.test.ts`, `useImageCrossfade.test.ts`, `useTextCrossfade.test.ts`, `loading.test.tsx`, `ProductCard.test.tsx`
 
 ---
 
@@ -376,159 +196,226 @@ src/
 
 **Data flow**
 
-- Server components call `products.service` → `products.api` → upstream API with `x-api-key`.
+- Server components → `products.service` → `products.api` → upstream API with `x-api-key`.
 - Route handler `/api/images` proxies and optimizes product images (Sharp).
 - Client search pushes query params; server re-renders with fresh list.
 - Detail selection pushes `color` / `storage` params; no duplicate client-only state.
 
 ---
 
+## Image pipeline & optimization
+
+Upstream product images are remote, high-resolution, and often on a white background — bad for LCP, CLS, and the Figma look (transparent hero on grey).
+
+### Why a server proxy (`/api/images`)
+
+| Problem                       | Approach                                                        |
+| ----------------------------- | --------------------------------------------------------------- |
+| API key must stay server-side | Browser never calls the store API for raw assets                |
+| SSRF risk                     | Host allowlist + protocol check on every request                |
+| Repeated Sharp work           | In-process cache (~200 entries, keyed by url + width + quality) |
+| Slow upstream                 | Cache-Control immutable + warm cache on repeat views            |
+
+### Pipeline (Sharp)
+
+```mermaid
+flowchart LR
+  A["Upstream image"] --> B["/api/images"]
+  B --> C["flood-fill white"]
+  C --> D["trim + WebP"]
+  D --> E["next/image"]
+```
+
+| Step                  | Purpose                                                   |
+| --------------------- | --------------------------------------------------------- |
+| Border flood-fill     | Removes edge-connected white; keeps internal whites       |
+| Trim + contain        | Consistent card/hero framing per Figma                    |
+| WebP                  | Smaller payloads than source                              |
+| Concurrency limit (3) | Keeps libuv thread-pool responsive                        |
+| Custom loader         | `ProductImage` routes every `src` through `buildProxyUrl` |
+
+**Tests:** `ProductImage.test.tsx`, `imageProcessing.test.ts`, `app/api/images/route.test.ts`
+
+---
+
+## Motion & Figma fidelity
+
+Animations follow the [Figma challenge spec](https://www.figma.com/design/Nuic7ePgOfUQ0hcBrUUQrb/Labs---Zara-Web-Challenge--Smartphones-). All respect `prefers-reduced-motion: reduce` where View Transitions API is used.
+
+| Figma intent                  | Implementation          | Where                              |
+| ----------------------------- | ----------------------- | ---------------------------------- |
+| Top loading bar               | CSS animated bar ~1.2 s | `Header`                           |
+| Grid reflow on search         | FLIP technique          | `useFlipAnimation`, `ProductList`  |
+| Catalog → detail shared image | View Transitions API    | `ProductCard`, `ProductDetailHero` |
+| Hero while route loads        | `loading.tsx` preview   | `app/products/[id]/loading.tsx`    |
+| Color change without flash    | Dual-slot crossfade     | `useImageCrossfade`                |
+| Price / color name update     | Text crossfade          | `useTextCrossfade`                 |
+| Similar products carousel     | Horizontal `ScrollRow`  | `SimilarProducts`                  |
+
+**Tests:** `useFlipAnimation.test.tsx`, `flip.test.ts`, `useImageCrossfade.test.ts`, `loading.test.tsx`
+
+---
+
 ## Quality engineering
 
-Quality is a first-class deliverable, not an afterthought.
+### Unit & integration tests
 
-### Test suite
-
-| Metric        | Value                                                                      |
-| ------------- | -------------------------------------------------------------------------- |
-| Runner        | Jest 30 + React Testing Library                                            |
-| Style         | BDD — every `describe` / `it` follows Given → When → Then / And            |
-| Network       | MSW v2 handlers in `src/test-utils/msw/handlers.ts`                        |
-| Fixtures      | `src/test-utils/fixtures/products.fixtures.ts`                             |
-| Suites        | 47 · 276 tests                                                             |
-| Coverage gate | ≥ 85 % lines / functions / statements · ≥ 80 % branches (`jest.config.js`) |
-
-**What we test (examples):**
-
-- Search URL round-trip and debounced navigation
-- Color/storage query param read/write and add-to-cart guard
-- Cart add, remove, persistence, corrupt storage, `syncPrices` total recalculation
-- API image proxy, product id validation, `encodeURIComponent`
-- FLIP animation idempotency, view-transition hooks, image crossfade
-- Accessibility-facing labels, `aria-pressed`, live cart announcements
-
-**Commands:**
+| Metric        | Value                                                   |
+| ------------- | ------------------------------------------------------- |
+| Runner        | Jest 30 + React Testing Library                         |
+| Style         | BDD — Given → When → Then / And                         |
+| Network       | MSW v2 in `src/test-utils/msw/handlers.ts`              |
+| Suites        | 47 · 276 tests                                          |
+| Coverage gate | ≥ 85 % lines / functions / statements · ≥ 80 % branches |
 
 ```bash
 npm run test
 npm run test:coverage
-npm run test:e2e          # Playwright — see [E2E section](#end-to-end-tests-playwright)
 ```
 
-Delivery gate:
+### SonarCloud
 
-```bash
-npm run typecheck && npm run lint && npm run test && npm run build
+| Item     | Detail                                            |
+| -------- | ------------------------------------------------- |
+| Config   | `sonar-project.properties`                        |
+| Coverage | `coverage/lcov.info` from `npm run test:coverage` |
+| CI job   | `SonarCloud analysis` after quality job           |
+| Secret   | `SONAR_TOKEN` in GitHub settings                  |
+
+---
+
+## CI/CD
+
+Every change is gated locally **and** in CI. Merge blocking requires [branch protection](#github-setup).
+
+### Linters
+
+<p align="center">
+  <img src="https://img.shields.io/badge/ESLint-9-4B32C3?style=flat-square&logo=eslint&logoColor=white" alt="ESLint 9" />
+  <img src="https://img.shields.io/badge/Stylelint-17-263238?style=flat-square&logo=stylelint&logoColor=white" alt="Stylelint 17" />
+  <img src="https://img.shields.io/badge/Prettier-3-F7B93E?style=flat-square&logo=prettier&logoColor=black" alt="Prettier 3" />
+  <img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript strict" />
+</p>
+
+| Tool       | Command                | Config                                         |
+| ---------- | ---------------------- | ---------------------------------------------- |
+| ESLint     | `npm run lint`         | `eslint.config.mjs` — `--max-warnings=0`       |
+| Stylelint  | `npm run lint:styles`  | `.stylelintrc` — SCSS BEM, no hardcoded colors |
+| Prettier   | `npm run format:check` | `.prettierrc`                                  |
+| TypeScript | `npm run typecheck`    | `tsconfig.json` — strict mode                  |
+
+| Stage              | What runs                                                           |
+| ------------------ | ------------------------------------------------------------------- |
+| **pre-commit**     | lint-staged → Prettier + ESLint on staged TS/TSX; Stylelint on SCSS |
+| **pre-push**       | typecheck → lint → lint:styles → format:check → test → build        |
+| **GitHub Actions** | Same gates + coverage + E2E + SonarCloud                            |
+
+### GitHub Actions
+
+Workflow: [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) — triggers on **push** and **pull_request** to `main`.
+
+```mermaid
+flowchart TB
+  PR["push / pull_request"] --> Q["Quality<br/>lint · test · build"]
+  Q --> E2E["E2E Playwright"]
+  Q --> SONAR["SonarCloud"]
 ```
 
-### Static analysis — SonarCloud
+| Job                  | Steps                                            | Blocks merge\* |
+| -------------------- | ------------------------------------------------ | -------------- |
+| **Quality**          | lint → typecheck → tests + coverage → build      | ✅             |
+| **E2E (Playwright)** | install browsers → `test:e2e --project=chromium` | ✅             |
+| **SonarCloud**       | coverage → static analysis                       | ✅             |
 
-| Item           | Detail                                                                  |
-| -------------- | ----------------------------------------------------------------------- |
-| Config         | `sonar-project.properties`                                              |
-| Coverage input | `coverage/lcov.info` from `npm run test:coverage`                       |
-| CI job         | `SonarCloud analysis` in `.github/workflows/ci.yml` (after quality job) |
-| Secret         | `SONAR_TOKEN` in GitHub repository settings                             |
-| Scope          | New code on pull requests; full analysis on `main`                      |
+\*Only when branch protection is enabled on `main`.
 
-Sonar runs on every PR alongside ESLint (`--max-warnings=0`), Stylelint, Prettier, typecheck, tests, and production build. Live metrics are in the badge row at the top of this README.
+### Git hooks
 
-### End-to-end tests (Playwright)
+| Hook       | Runs                                                    |
+| ---------- | ------------------------------------------------------- |
+| pre-commit | lint-staged (Prettier + ESLint + Stylelint)             |
+| pre-push   | typecheck, lint, lint:styles, format:check, test, build |
 
-Browser tests in `e2e/` exercise the real app against the live store API (via `.env.local`). They complement Jest/MSW — no axios mocking in E2E.
+---
 
-| Metric         | Value                                                                                        |
-| -------------- | -------------------------------------------------------------------------------------------- |
-| Runner         | [Playwright](https://playwright.dev) 1.61                                                    |
-| Style          | BDD — `Given / When / Then` in every `test()` title                                          |
-| Config         | [`playwright.config.ts`](./playwright.config.ts) — `chromium` + `mobile-chrome` (Pixel 5)    |
-| Specs          | 3 files · **23 scenarios** per project · **46 total** headless runs                          |
-| Shared helpers | [`e2e/helpers.ts`](./e2e/helpers.ts) — dynamic product id from grid, configuration selection |
+## GitHub setup
 
-**Scope by file**
+One-time configuration for a new fork or repository:
 
-| File                  | Tests | Covers                                                                                                                     |
-| --------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------- |
-| `e2e/listing.spec.ts` | 6     | Grid load, card content, search filter / empty / clear, navigate to `/products/[id]`                                       |
-| `e2e/detail.spec.ts`  | 9     | Hero + add button, disabled until color+storage, selectors, price label, quick-selection race, add → `/cart`, back control |
-| `e2e/cart.spec.ts`    | 8     | Empty cart, line items + total, remove, `localStorage` persistence, header logo + cart link                                |
+**1. Secrets** — Settings → Secrets and variables → Actions
 
-Routes under test: `/` · `/products/:id` · `/cart` (not `/phones`).
+| Secret        | Used by                 |
+| ------------- | ----------------------- |
+| `API_KEY`     | Build + E2E (store API) |
+| `SONAR_TOKEN` | SonarCloud job          |
+
+**2. Branch protection** — Settings → Branches → Add rule for `main`
+
+- ✅ Require a pull request before merging
+- ✅ Require status checks to pass before merging
+- Required checks (after CI runs once on a PR):
+  - `Lint · Typecheck · Test · Build`
+  - `E2E (Playwright)`
+  - `SonarCloud analysis`
+
+**3. SonarCloud** — import the repo at [sonarcloud.io](https://sonarcloud.io) and add `SONAR_TOKEN`.
+
+Without branch protection, CI still runs on every PR but merges are not blocked automatically.
+
+---
+
+## End-to-end tests (Playwright)
+
+Browser tests in `e2e/` exercise the real app against the live store API. They complement Jest/MSW — no axios mocking in E2E.
+
+| Metric | Value                                                                           |
+| ------ | ------------------------------------------------------------------------------- |
+| Runner | Playwright 1.61                                                                 |
+| Style  | BDD — `Given / When / Then` in every `test()` title                             |
+| Config | [`playwright.config.ts`](./playwright.config.ts) — `chromium` + `mobile-chrome` |
+| Specs  | 3 files · 23 scenarios per project · 46 total headless runs                     |
+
+| File                  | Tests | Covers                                      |
+| --------------------- | ----- | ------------------------------------------- |
+| `e2e/listing.spec.ts` | 6     | Grid, search, navigate to detail            |
+| `e2e/detail.spec.ts`  | 9     | Selectors, price, add to cart, back control |
+| `e2e/cart.spec.ts`    | 8     | Lines, total, remove, persistence           |
 
 **First-time setup**
 
 ```bash
-npm run playwright:install   # Chromium + headless shell — wait for 100% on both downloads
-cp .env.example .env.local   # API_KEY required for product list and detail
+npm run playwright:install
+cp .env.example .env.local
 ```
 
-`playwright:install` is **not** run by `npm install` — run it once per machine (or after upgrading `@playwright/test`).
+**Commands**
 
-**Which command to use**
+| Goal                     | Command                                        |
+| ------------------------ | ---------------------------------------------- |
+| Full suite (recommended) | `npm run test:e2e`                             |
+| Same as CI               | `npm run test:e2e -- --project=chromium`       |
+| Watch in Chrome          | `npm run test:e2e:headed`                      |
+| One file, step by step   | `npm run test:e2e:debug -- e2e/detail.spec.ts` |
+| Interactive panel        | `npm run test:e2e:ui`                          |
 
-| Goal                         | Command                                        | What you see                                                              |
-| ---------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------- |
-| Fast check (recommended)     | `npm run test:e2e`                             | Headless, parallel — **46 tests** (chromium + mobile-chrome)              |
-| Watch Chrome while tests run | `npm run test:e2e:headed`                      | Headed, 1 worker — **23 chromium tests**; fast flashes between tests      |
-| Step through one file        | `npm run test:e2e:debug -- e2e/detail.spec.ts` | Playwright Inspector + Chrome — see below                                 |
-| Explore / re-run in a panel  | `npm run test:e2e:ui`                          | Playwright Test UI — **does not auto-run**; click ▶ Run all (23 chromium) |
+E2E runs in GitHub Actions but **not** in Husky pre-push — run locally before opening a PR.
 
-**`npm run test:e2e:ui`**
+<details>
+<summary><strong>E2E troubleshooting & debug tips</strong></summary>
 
-1. Starts `npm run dev` on port 3000 (or reuses an existing server).
-2. Opens the Playwright Test UI window (separate from Chrome).
-3. **Click the ▶ triangle** at the top of the left sidebar — nothing runs until you do.
-4. Green = pass, red = fail. Use the Errors tab on failures.
+**UI mode (`test:e2e:ui`)** — click ▶ in the left sidebar; nothing runs until you do. If trace zip fails: `rm -rf test-results playwright-report` and retry.
 
-The npm script sets `PLAYWRIGHT_TRACING_NO_WEBSOCKET_FRAMES=1` (Node 24 UI zip bug). If errors persist: close the UI, `rm -rf test-results playwright-report`, run `npm run test:e2e:ui` again.
+**Debug mode — blank browser?** — expected until you click ▶ Resume in the **Playwright Inspector** (not Chrome). Opens Inspector + Chrome paused at test start.
 
-**`npm run test:e2e:debug` — browser looks blank?**
+**Hydration warnings (`data-pw-cursor`)** — normal in debug mode only; headless and production builds are clean.
 
-Expected until you resume. Debug opens **two** windows:
+| Error                      | Fix                                     |
+| -------------------------- | --------------------------------------- |
+| `Executable doesn't exist` | `npm run playwright:install`            |
+| Port 3000 busy             | `lsof -ti:3000 \| xargs kill -9`        |
+| UI zip / truncated trace   | `rm -rf test-results playwright-report` |
 
-1. **Playwright Inspector** (▶ Resume, Step, Pick locator).
-2. **Chrome** — blank while the test is **paused at the start**.
-
-Click **▶ Resume** (or F8) in the **Inspector**, not in Chrome:
-
-```bash
-npm run test:e2e:debug -- e2e/detail.spec.ts
-```
-
-**Hydration warnings in the terminal (`data-pw-cursor` on `<body>`)**
-
-In `--debug` mode Playwright injects `data-pw-cursor` on `<body>` for the Inspector cursor overlay. React then logs a hydration mismatch in the Next dev server output (`[WebServer] A tree hydrated but...`). This is **expected in debug mode**, not an app bug. Headless `npm run test:e2e` and production builds do not show it. Safe to ignore while stepping through tests.
-
-**Headed feels too fast**
-
-Headed does not slow down for viewing — use UI mode on one test or debug on one file.
-
-**Troubleshooting**
-
-| Error                      | Fix                                                                |
-| -------------------------- | ------------------------------------------------------------------ |
-| `Executable doesn't exist` | `npm run playwright:install` (no trailing dot: not `chromium.`)    |
-| Port 3000 busy             | `lsof -ti:3000 \| xargs kill -9` then re-run                       |
-| UI zip / truncated trace   | `rm -rf test-results playwright-report` then `npm run test:e2e:ui` |
-
-**Extra flags** — after `--` goes to Playwright:
-
-```bash
-npm run test:e2e -- --project=chromium e2e/cart.spec.ts
-```
-
-**CI / hooks:** E2E is **not** in GitHub Actions or Husky pre-push yet. Local gate for E2E:
-
-```bash
-npm run test:e2e
-```
-
-### Local git hooks
-
-| Hook       | Runs                                                         |
-| ---------- | ------------------------------------------------------------ |
-| pre-commit | lint-staged (Prettier + ESLint on TS/TSX, Stylelint on SCSS) |
-| pre-push   | typecheck, lint, lint:styles, format:check, test, build      |
+</details>
 
 ---
 
@@ -540,50 +427,23 @@ npm run test:e2e
 
 ---
 
-## Quick start
-
-**Requirements:** Node.js ≥ 20 · npm ≥ 10
-
-```bash
-npm install
-npm run playwright:install   # first time only — E2E browsers
-cp .env.example .env.local
-npm run dev
-```
-
-Open `http://localhost:3000`.
-
-**Production:**
-
-```bash
-npm run build
-npm run start
-```
-
-Deploy to any Node host or Vercel with the same server-side environment variables.
-
----
-
 ## Scripts reference
 
-| Script                            | Purpose                        |
-| --------------------------------- | ------------------------------ |
-| `npm run dev`                     | Development server             |
-| `npm run build` / `start`         | Production build and serve     |
-| `npm run typecheck`               | `tsc --noEmit`                 |
-| `npm run lint`                    | ESLint, zero warnings allowed  |
-| `npm run lint:styles`             | Stylelint on SCSS              |
-| `npm run format` / `format:check` | Prettier                       |
-| `npm run test`                    | Jest                           |
-| `npm run test:coverage`           | Jest + lcov for SonarCloud     |
-| `npm run playwright:install`      | Download Playwright Chromium   |
-| `npm run test:e2e`                | E2E headless (all projects)    |
-| `npm run test:e2e:headed`         | E2E headed, chromium, 1 worker |
-| `npm run test:e2e:debug`          | E2E with Playwright Inspector  |
-| `npm run test:e2e:ui`             | E2E interactive UI (manual ▶)  |
+| Script                            | Purpose                       |
+| --------------------------------- | ----------------------------- |
+| `npm run dev`                     | Development server            |
+| `npm run build` / `start`         | Production build and serve    |
+| `npm run typecheck`               | `tsc --noEmit`                |
+| `npm run lint` / `lint:styles`    | ESLint / Stylelint            |
+| `npm run format` / `format:check` | Prettier                      |
+| `npm run test` / `test:coverage`  | Jest / Jest + lcov            |
+| `npm run playwright:install`      | Download Playwright Chromium  |
+| `npm run test:e2e`                | E2E headless (all projects)   |
+| `npm run test:e2e:headed`         | E2E headed, chromium          |
+| `npm run test:e2e:debug`          | E2E with Playwright Inspector |
+| `npm run test:e2e:ui`             | E2E interactive UI            |
 
 ---
 
-**Summary:** Next.js for SEO and images · TypeScript strict · Sass + BEM · Context + localStorage cart ·
-Sharp image proxy · Figma-aligned motion (FLIP, view transitions, crossfade) · URL query params ·
-276 BDD tests + SonarCloud · Playwright E2E · accessibility and SEO as core requirements.
+**Summary:** Next.js · TypeScript strict · Sass + BEM · Context + localStorage cart · Sharp image proxy ·
+Figma-aligned motion · URL query params · 276 BDD tests + SonarCloud + Playwright E2E · accessibility and SEO as core requirements.

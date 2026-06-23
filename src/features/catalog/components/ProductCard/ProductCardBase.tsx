@@ -23,6 +23,7 @@ export interface ProductCardBaseProps extends Pick<
   onPointerDown?: (event: PointerEvent<HTMLAnchorElement>) => void
   onClick?: (event: MouseEvent<HTMLAnchorElement>) => void
   onNavigate?: () => void
+  headingLevel?: 2 | 3
 }
 
 const DEFAULT_IMAGE_SIZES =
@@ -44,7 +45,10 @@ export function ProductCardBase({
   onPointerDown,
   onClick,
   onNavigate,
+  headingLevel = 2,
 }: ProductCardBaseProps) {
+  const ProductNameHeading = headingLevel === 3 ? 'h3' : 'h2'
+
   return (
     <Link
       href={href}
@@ -70,7 +74,7 @@ export function ProductCardBase({
       <div className={styles['product-card__info']}>
         <hgroup className={styles['product-card__details']}>
           <p className={styles['product-card__brand']}>{brand}</p>
-          <h3 className={styles['product-card__name']}>{name}</h3>
+          <ProductNameHeading className={styles['product-card__name']}>{name}</ProductNameHeading>
         </hgroup>
         <p className={styles['product-card__price']}>{basePrice} EUR</p>
       </div>

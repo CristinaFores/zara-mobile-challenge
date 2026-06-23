@@ -1,11 +1,11 @@
-import type { Metadata } from 'next'
-
 import { CartView } from '@/features/cart/components/CartView/CartView'
+import { buildPageMetadata } from '@/shared/lib/siteMetadata'
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Cart',
-  description: 'Your shopping cart.',
-}
+  description:
+    'Review the smartphones in your cart, check selected options, and continue shopping.',
+})
 
 export default function CartPage() {
   return <CartView />

@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { FILTER_DEBOUNCE_MS } from '@/shared/constants'
+import { IMAGE_CROSSFADE_MS } from '@/shared/constants'
+import { buildProxyUrl } from '@/shared/utils/imageProxy'
 
 export interface ImageSlot {
   url: string
@@ -30,14 +31,19 @@ function slotStyle(
     return {
       zIndex: 2,
       opacity: incomingReady ? 1 : 0,
-      transition: incomingReady ? `opacity ${FILTER_DEBOUNCE_MS}ms ease` : 'none',
+      transition: incomingReady ? `opacity ${IMAGE_CROSSFADE_MS}ms ease` : 'none',
     }
   }
-  return {
-    zIndex: front === slot && incoming === null ? 2 : 1,
-    opacity: 1,
-    transition: 'none',
+
+  if (incoming === null && front === slot) {
+    return { zIndex: 2, opacity: 1, transition: 'none' }
   }
+
+  if (incoming !== null && front === slot) {
+    return { zIndex: 1, opacity: 1, transition: 'none' }
+  }
+
+  return { zIndex: 1, opacity: 0, transition: 'none' }
 }
 
 export function useImageCrossfade(targetUrl: string): [ImageSlot, ImageSlot] {
@@ -57,21 +63,40 @@ export function useImageCrossfade(targetUrl: string): [ImageSlot, ImageSlot] {
     if (targetUrl === prevUrlRef.current) return
     prevUrlRef.current = targetUrl
 
-    setState((prev) => {
-      const back: 0 | 1 = prev.front === 0 ? 1 : 0
-      const backCurrentUrl = back === 0 ? prev.slot0Url : prev.slot1Url
-      // If the back slot already has the target URL, onLoad won't fire again — skip waiting.
-      const imageLoaded = backCurrentUrl === targetUrl
-      return {
-        ...prev,
-        incoming: back,
-        imageLoaded,
-        incomingReady: false,
-        epoch: prev.epoch + 1,
-        slot0Url: back === 0 ? targetUrl : prev.slot0Url,
-        slot1Url: back === 1 ? targetUrl : prev.slot1Url,
-      }
-    })
+    let cancelled = false
+
+    const startCrossfade = () => {
+      if (cancelled) return
+      setState((prev) => {
+        const back: 0 | 1 = prev.front === 0 ? 1 : 0
+        const backCurrentUrl = back === 0 ? prev.slot0Url : prev.slot1Url
+        return {
+          ...prev,
+          incoming: back,
+          imageLoaded: backCurrentUrl === targetUrl,
+          incomingReady: false,
+          epoch: prev.epoch + 1,
+          slot0Url: back === 0 ? targetUrl : prev.slot0Url,
+          slot1Url: back === 1 ? targetUrl : prev.slot1Url,
+        }
+      })
+    }
+
+    const probe = new globalThis.Image()
+    probe.src = buildProxyUrl(targetUrl, 828)
+
+    if (probe.complete) {
+      startCrossfade()
+    } else {
+      probe.onload = startCrossfade
+      probe.onerror = startCrossfade
+    }
+
+    return () => {
+      cancelled = true
+      probe.onload = null
+      probe.onerror = null
+    }
   }, [targetUrl])
 
   useEffect(() => {
@@ -105,7 +130,7 @@ export function useImageCrossfade(targetUrl: string): [ImageSlot, ImageSlot] {
         imageLoaded: false,
         incomingReady: false,
       }))
-    }, FILTER_DEBOUNCE_MS)
+    }, IMAGE_CROSSFADE_MS)
     return () => clearTimeout(id)
   }, [state.incomingReady, state.incoming])
 

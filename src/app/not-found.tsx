@@ -1,8 +1,14 @@
 import Link from 'next/link'
 
 import { ROUTES } from '@/shared/constants'
+import { buildPageMetadata } from '@/shared/lib/siteMetadata'
 
 import styles from './not-found.module.scss'
+
+export const metadata = buildPageMetadata({
+  title: 'Page not found',
+  description: 'The page you requested was not found. Go back to the smartphone catalog.',
+})
 
 export default function NotFound() {
   return (
