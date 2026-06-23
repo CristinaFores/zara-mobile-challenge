@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import type { CSSProperties } from 'react'
 
 import heroStyles from '@/features/product-detail/components/ProductDetail/ProductDetailHero.module.scss'
@@ -32,6 +32,7 @@ export default function ProductDetailLoading() {
   const preview = useProductPreview(productId)
   const productPreview = preview?.href === getProductDetailHref(productId) ? preview : null
   const hasPreview = productPreview !== null
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   const imageTransitionStyle = productPreview
     ? ({
@@ -49,12 +50,23 @@ export default function ProductDetailLoading() {
       return
     }
 
-    const frame = requestAnimationFrame(() => {
-      resolveProductRouteViewTransition(productId)
+    // Wait until the preview image has loaded and been painted before resolving
+    // the view transition. Without this, the browser captures a blank hero when
+    // taking the "new" snapshot, causing a flash on the shared-element morph.
+    if (!imageLoaded) return
+
+    let r2 = 0
+    const r1 = requestAnimationFrame(() => {
+      r2 = requestAnimationFrame(() => {
+        resolveProductRouteViewTransition(productId)
+      })
     })
 
-    return () => cancelAnimationFrame(frame)
-  }, [productId, productPreview])
+    return () => {
+      cancelAnimationFrame(r1)
+      cancelAnimationFrame(r2)
+    }
+  }, [productId, productPreview, imageLoaded])
 
   return (
     <>
@@ -74,6 +86,7 @@ export default function ProductDetailLoading() {
                   alt={`${productPreview.brand} ${productPreview.name}`}
                   priority
                   sizes="(max-width: 834px) 100vw, 43vw"
+                  onLoad={() => setImageLoaded(true)}
                 />
               </figure>
             ) : null}

@@ -24,6 +24,11 @@
     outline: none;
     min-height: 1.25rem;
 
+    &:focus-visible {
+      outline: 1px solid transparent;
+      outline-offset: 2px;
+    }
+
     &::placeholder {
       color: var(--color-text-placeholder);
       font-size: var(--font-size-md);
@@ -42,6 +47,11 @@
     flex-shrink: 0;
     width: 20px;
     height: 20px;
+
+    &:focus-visible {
+      outline: 1px solid transparent;
+      outline-offset: 1px;
+    }
   }
 
   &__count {

@@ -1,5 +1,7 @@
 import '@testing-library/jest-dom'
 
+jest.mock('server-only', () => ({}))
+
 // Deterministic credentials for the test runtime. The API client reads these at
 // import time and MSW handlers match against the same base URL, so requests are
 // intercepted identically in local and CI runs (with or without a local .env).

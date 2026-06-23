@@ -225,7 +225,7 @@ flowchart TB
 
   subgraph Next["⚡ Next.js 16 App Router"]
     RSC["Server Components"]
-    RH["Route Handlers<br/>/api/products · /api/images"]
+    RH["Route Handler<br/>/api/images"]
     META["Metadata API · SEO"]
   end
 
@@ -377,7 +377,7 @@ src/
 **Data flow**
 
 - Server components call `products.service` → `products.api` → upstream API with `x-api-key`.
-- Route handlers (`/api/products`, `/api/images`) reuse the same API layer.
+- Route handler `/api/images` proxies and optimizes product images (Sharp).
 - Client search pushes query params; server re-renders with fresh list.
 - Detail selection pushes `color` / `storage` params; no duplicate client-only state.
 
@@ -403,7 +403,7 @@ Quality is a first-class deliverable, not an afterthought.
 - Search URL round-trip and debounced navigation
 - Color/storage query param read/write and add-to-cart guard
 - Cart add, remove, persistence, corrupt storage, `syncPrices` total recalculation
-- API route handlers, image proxy, product id validation, `encodeURIComponent`
+- API image proxy, product id validation, `encodeURIComponent`
 - FLIP animation idempotency, view-transition hooks, image crossfade
 - Accessibility-facing labels, `aria-pressed`, live cart announcements
 

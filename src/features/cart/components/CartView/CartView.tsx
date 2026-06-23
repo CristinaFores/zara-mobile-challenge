@@ -19,7 +19,7 @@ export function CartView() {
   }
 
   if (!isHydrated) {
-    return <div className={styles.cart__loading} aria-busy="true" />
+    return <div className={styles['cart-view__loading']} aria-busy="true" />
   }
 
   const heading = `Cart (${cartCount})`
