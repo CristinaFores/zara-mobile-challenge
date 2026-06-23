@@ -90,10 +90,7 @@ test.describe('Feature: Product detail', () => {
   test('Given the detail page, When clicking the back control, Then it returns to the previous page', async ({
     page,
   }) => {
-    await page
-      .getByRole('navigation', { name: /breadcrumb/i })
-      .getByRole('button')
-      .click()
+    await page.getByRole('button', { name: /^back$/i }).click()
     await expect(page).toHaveURL('/')
   })
 })
