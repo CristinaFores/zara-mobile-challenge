@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { flushSync } from 'react-dom'
 
+import { prefersReducedMotion } from '@/shared/lib/browser'
 import {
   beginProductRouteViewTransition,
   getProductDetailHref,
@@ -80,8 +81,7 @@ export function useProductDetailNavigation(
         readonly startViewTransition?: Document['startViewTransition']
       }
       const canUseViewTransition =
-        typeof viewTransitionDocument.startViewTransition === 'function' &&
-        !globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+        typeof viewTransitionDocument.startViewTransition === 'function' && !prefersReducedMotion()
 
       if (!canUseViewTransition) {
         activateNavigation()

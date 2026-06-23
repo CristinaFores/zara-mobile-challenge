@@ -1,5 +1,7 @@
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
+import { prefersReducedMotion, scrollToTop } from '@/shared/lib/browser'
+
 export const CART_ROUTE_CLASS = 'cart-route-view-transition'
 
 function canUseViewTransition(): boolean {
@@ -7,14 +9,11 @@ function canUseViewTransition(): boolean {
     readonly startViewTransition?: Document['startViewTransition']
   }
 
-  return (
-    typeof viewTransitionDocument.startViewTransition === 'function' &&
-    !globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
+  return typeof viewTransitionDocument.startViewTransition === 'function' && !prefersReducedMotion()
 }
 
 export function scrollToPageTop(): void {
-  window.scrollTo({ top: 0, left: 0 })
+  scrollToTop()
 }
 
 function prepareCartRouteTransition(): void {

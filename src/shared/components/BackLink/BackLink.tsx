@@ -5,6 +5,7 @@ import type { MouseEvent } from 'react'
 
 import ArrowAngleIcon from '@/shared/components/ui/icons/ArrowAngleIcon'
 import { ROUTES } from '@/shared/constants'
+import { hasBrowserHistory } from '@/shared/lib/browser'
 import { navigateBackFromProductDetail } from '@/shared/lib/productRouteTransition'
 
 import styles from './BackLink.module.scss'
@@ -26,7 +27,7 @@ export function BackLink({ productId, fallbackHref = ROUTES.HOME, label = 'Back'
       return
     }
 
-    if (typeof window !== 'undefined' && window.history.length > 1) {
+    if (hasBrowserHistory()) {
       router.back()
       return
     }

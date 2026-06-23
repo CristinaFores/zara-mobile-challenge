@@ -1,6 +1,7 @@
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 import { ROUTES } from '@/shared/constants'
+import { hasBrowserHistory, prefersReducedMotion } from '@/shared/lib/browser'
 import {
   beginProductRouteViewTransition,
   setReturningProductId,
@@ -14,10 +15,7 @@ function canUseViewTransition(): boolean {
     readonly startViewTransition?: Document['startViewTransition']
   }
 
-  return (
-    typeof viewTransitionDocument.startViewTransition === 'function' &&
-    !globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
+  return typeof viewTransitionDocument.startViewTransition === 'function' && !prefersReducedMotion()
 }
 
 function prepareProductRouteTransition(productId: string): Promise<void> {
@@ -34,7 +32,7 @@ export function navigateBackFromProductDetail(
   fallbackHref: string = ROUTES.HOME
 ): void {
   const navigate = (): void => {
-    if (typeof window !== 'undefined' && window.history.length > 1) {
+    if (hasBrowserHistory()) {
       router.back()
       return
     }

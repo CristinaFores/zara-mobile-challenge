@@ -50,14 +50,14 @@ export function CartView() {
         {showCheckoutFooter && (
           <>
             <p
-              className={`${styles['cart-view__total']} ${!hasItems ? styles['cart-view__total--hidden'] : ''}`}
+              className={`${styles['cart-view__total']} ${hasItems ? '' : styles['cart-view__total--hidden']}`}
               aria-hidden={!hasItems}
             >
               <span className={styles['cart-view__total-label']}>Total</span>
               <span className={styles['cart-view__total-value']}>{cartTotal} EUR</span>
             </p>
             <Button
-              className={`${styles['cart-view__btn-pay']} ${!hasItems ? styles['cart-view__btn-pay--hidden'] : ''}`}
+              className={`${styles['cart-view__btn-pay']} ${hasItems ? '' : styles['cart-view__btn-pay--hidden']}`}
               disabled={!hasItems}
               aria-hidden={!hasItems}
               tabIndex={hasItems ? 0 : -1}

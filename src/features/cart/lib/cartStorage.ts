@@ -1,4 +1,5 @@
 import { CART_KEY } from '@/shared/constants'
+import { isBrowser } from '@/shared/lib/browser'
 import type { CartItem, ColorOption, StorageOption } from '@/shared/types'
 
 /**
@@ -57,7 +58,7 @@ function parseCartItems(raw: unknown): CartItem[] {
 /** Read/write access to the persisted cart, safe to call during SSR. */
 export const cartStorage = {
   read(): CartItem[] {
-    if (globalThis.window === undefined) return []
+    if (!isBrowser()) return []
     return safeExecute<CartItem[]>(() => {
       const data = localStorage.getItem(CART_KEY)
       if (!data) return []
@@ -66,14 +67,14 @@ export const cartStorage = {
   },
 
   write(items: CartItem[]): void {
-    if (globalThis.window === undefined) return
+    if (!isBrowser()) return
     safeExecute(() => {
       localStorage.setItem(CART_KEY, JSON.stringify(items))
     }, undefined)
   },
 
   clear(): void {
-    if (globalThis.window === undefined) return
+    if (!isBrowser()) return
     safeExecute(() => {
       localStorage.removeItem(CART_KEY)
     }, undefined)

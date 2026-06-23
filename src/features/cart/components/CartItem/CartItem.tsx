@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import { ROUTES } from '@/shared/constants'
+import { cancelScheduledTimeout, scheduleTimeout } from '@/shared/lib/browser'
 import type { CartItem as CartItemType } from '@/shared/types'
 import { buildProxyUrl } from '@/shared/utils/imageProxy'
 
@@ -46,8 +47,8 @@ export function CartItem({ item, onRemove }: CartItemProps) {
   useEffect(() => {
     if (!isRemoving) return
 
-    const timer = window.setTimeout(() => onRemove(item.key), REMOVE_ANIMATION_MS)
-    return () => window.clearTimeout(timer)
+    const timer = scheduleTimeout(() => onRemove(item.key), REMOVE_ANIMATION_MS)
+    return () => cancelScheduledTimeout(timer)
   }, [isRemoving, item.key, onRemove])
 
   const detailHref = `${ROUTES.PRODUCT_DETAIL}/${item.id}?color=${encodeURIComponent(item.selectedColor.name)}&storage=${encodeURIComponent(item.selectedStorage.capacity)}`

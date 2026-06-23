@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from 'react'
 
 import { ROUTES } from '@/shared/constants'
+import { scrollToTop } from '@/shared/lib/browser'
 import type { Product } from '@/shared/types'
 
 export interface ProductPreview extends Pick<
@@ -22,7 +23,7 @@ export function getProductViewTransitionName(productId: string, part: 'image' | 
 }
 
 export function scrollToProductDetailTop(): void {
-  window.scrollTo({ top: 0, left: 0 })
+  scrollToTop()
 }
 
 let currentPreview: ProductPreview | null = null
