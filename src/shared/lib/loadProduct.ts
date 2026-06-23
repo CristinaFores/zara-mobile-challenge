@@ -1,9 +1,9 @@
 import { isAxiosError } from 'axios'
-import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
 import { HTTP_STATUS } from '@/shared/constants'
+import { buildPageMetadata } from '@/shared/lib/siteMetadata'
 import { ProductNotFoundError } from '@/shared/services/products.api'
 import { getProductById } from '@/shared/services/products.service'
 import type { ProductDetail } from '@/shared/types'
@@ -24,9 +24,11 @@ export const loadProductDetail = cache(async (id: string): Promise<ProductDetail
   }
 })
 
-export function buildProductDetailMetadata(product: ProductDetail): Metadata {
-  return {
-    title: `${product.name} - ${product.brand}`,
-    description: product.description,
-  }
+export function buildProductDetailMetadata(product: ProductDetail) {
+  const title = `${product.name} - ${product.brand}`
+  const description =
+    product.description.trim() ||
+    `Buy ${product.name} by ${product.brand}. Compare color and storage options, specs, and price.`
+
+  return buildPageMetadata({ title, description })
 }
