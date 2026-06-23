@@ -36,7 +36,7 @@ export function BackLink({ productId, fallbackHref = ROUTES.HOME, label = 'Back'
   }
 
   return (
-    <nav className={styles['back-link']} aria-label="Breadcrumb">
+    <nav className={styles['back-link']} aria-label="Back navigation">
       <button type="button" onClick={handleClick} className={styles['back-link__anchor']}>
         <ArrowAngleIcon />
         {label}

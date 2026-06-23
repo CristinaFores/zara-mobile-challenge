@@ -37,9 +37,9 @@ describe('Given a ProductImage', () => {
   })
 
   describe('When src is undefined', () => {
-    it('Then it renders the fallback instead of an img element', () => {
+    it('Then it renders the fallback with the given alt text', () => {
       render(<ProductImage src={undefined} alt={ALT} />)
-      expect(screen.queryByRole('img')).not.toBeInTheDocument()
+      expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
     })
 
     it('Then onLoad is called so crossfade completes', () => {
@@ -50,20 +50,20 @@ describe('Given a ProductImage', () => {
   })
 
   describe('When src is an empty string', () => {
-    it('Then it renders the fallback', () => {
+    it('Then it renders the fallback with the given alt text', () => {
       render(<ProductImage src="" alt={ALT} />)
-      expect(screen.queryByRole('img')).not.toBeInTheDocument()
+      expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
     })
   })
 
   describe('When the image fires an error event', () => {
-    it('Then it hides the img and shows the fallback', () => {
+    it('Then it shows the fallback with the given alt text', () => {
       render(<ProductImage src={SRC} alt={ALT} />)
       const img = screen.getByRole('img', { name: ALT })
       act(() => {
         img.dispatchEvent(new Event('error', { bubbles: true }))
       })
-      expect(screen.queryByRole('img')).not.toBeInTheDocument()
+      expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
     })
 
     it('Then onLoad is called after the error so crossfade completes', () => {
@@ -85,7 +85,7 @@ describe('Given a ProductImage', () => {
       act(() => {
         img.dispatchEvent(new Event('error', { bubbles: true }))
       })
-      expect(screen.queryByRole('img')).not.toBeInTheDocument()
+      expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
 
       act(() => {
         rerender(<ProductImage src={NEW_SRC} alt={ALT} />)

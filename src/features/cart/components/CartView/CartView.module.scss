@@ -8,6 +8,11 @@ $cart-footer-btn-width: 15.625rem;
   flex-direction: column;
   gap: 3.125rem;
 
+  &__loading {
+    flex: 1;
+    min-height: 12rem;
+  }
+
   &__heading {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-thin);

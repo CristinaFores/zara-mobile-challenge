@@ -1,7 +1,8 @@
 @use '@/scss/_mixins' as *;
 
 $gallery-width: 42.5%;
-$info-max-width: max(25rem, $gallery-width);
+$info-max-width-tablet: max(23.75rem, $gallery-width);
+$info-max-width-desktop: max(25rem, $gallery-width);
 $info-top-offset: 5.5rem;
 $gallery-height: 28.75rem;
 $heading-gap: 0.6875rem;
@@ -9,10 +10,17 @@ $heading-gap: 0.6875rem;
 .product-detail-hero {
   display: grid;
   align-items: center;
-  gap: 5rem;
+
+  min-height: calc(100vh - 2.75rem - 5.3125rem - 3.5rem);
 
   @include breakpoint(tablet) {
+    gap: 1rem;
     grid-template-columns: $gallery-width auto;
+    min-height: calc(100vh - 5.3125rem - 5.3125rem - 7.5rem);
+  }
+  @include breakpoint(desktop) {
+    gap: 0;
+    grid-template-columns: 42.5% minmax($info-max-width-desktop, auto);
   }
 
   &__gallery {
@@ -26,7 +34,6 @@ $heading-gap: 0.6875rem;
     img {
       object-position: left;
       transform: scale(1);
-      // transform-origin: center top;
     }
 
     @include breakpoint(tablet) {
@@ -58,11 +65,14 @@ $heading-gap: 0.6875rem;
     gap: 2.5rem;
 
     @include breakpoint(tablet) {
-      min-width: $info-max-width;
-      margin-top: auto;
-      align-self: flex-end;
+      min-width: $info-max-width-tablet;
       justify-self: flex-end;
-      gap: 4rem;
+      display: grid;
+      align-content: space-between;
+    }
+    @include breakpoint(desktop) {
+      min-height: 460px;
+      margin-left: auto;
     }
   }
 

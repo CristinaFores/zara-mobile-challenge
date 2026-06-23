@@ -1,5 +1,4 @@
-import { isAxiosError } from 'axios'
-import { NextResponse } from 'next/server'
+import 'server-only'
 
 import { API_ENDPOINTS, HTTP_STATUS, PRODUCTS_LIMIT } from '@/shared/constants'
 import type { Product, ProductDetail } from '@/shared/types'
@@ -38,14 +37,4 @@ export async function fetchProductById(id: string): Promise<ProductDetail> {
     `${API_ENDPOINTS.PRODUCTS}/${encodeURIComponent(id)}`
   )
   return data
-}
-
-export function productsErrorResponse(error: unknown): NextResponse {
-  if (error instanceof ProductNotFoundError) {
-    return NextResponse.json({ message: error.message }, { status: error.status })
-  }
-  if (isAxiosError(error) && error.response) {
-    return NextResponse.json(error.response.data, { status: error.response.status })
-  }
-  return NextResponse.json({ message: 'Internal server error' }, { status: 500 })
 }

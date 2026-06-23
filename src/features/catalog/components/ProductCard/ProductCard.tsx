@@ -1,9 +1,8 @@
 'use client'
 
-import Link from 'next/link'
 import { memo, useLayoutEffect } from 'react'
 
-import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
+import { ProductCardBase } from '@/features/catalog/components/ProductCard/ProductCardBase'
 import { useProductDetailNavigation } from '@/shared/hooks/useProductDetailNavigation'
 import {
   getProductViewTransitionName,
@@ -57,35 +56,22 @@ export const ProductCard = memo(function ProductCard({
       ref={cardRef ? (element) => cardRef(element) : undefined}
       className={[styles['product-card'], className].filter(Boolean).join(' ')}
     >
-      <Link
+      <ProductCardBase
+        brand={brand}
+        name={name}
+        basePrice={basePrice}
+        imageUrl={imageUrl}
         href={href}
-        className={styles['product-card__link']}
-        aria-label={`${brand} ${name}, ${basePrice} EUR`}
         prefetch={prefetchFull || priority ? true : 'auto'}
-        transitionTypes={['product-detail']}
+        imageTransitionStyle={imageTransitionStyle}
+        priority={priority}
         onMouseEnter={warmRoute}
         onFocus={warmRoute}
         onTouchStart={warmRoute}
         onPointerDown={activatePointerNavigation}
         onClick={navigateWithViewTransition}
         onNavigate={activateNavigation}
-      >
-        <span className={styles['product-card__image-wrapper']} style={imageTransitionStyle}>
-          <ProductImage
-            src={imageUrl}
-            alt={`${brand} ${name}`}
-            sizes="(max-width: 479px) 100vw, (max-width: 767px) 50vw, (max-width: 1023px) 33vw, 25vw"
-            priority={priority}
-          />
-        </span>
-        <div className={styles['product-card__info']}>
-          <hgroup className={styles['product-card__details']}>
-            <p className={styles['product-card__brand']}>{brand}</p>
-            <h3 className={styles['product-card__name']}>{name}</h3>
-          </hgroup>
-          <p className={styles['product-card__price']}>{basePrice} EUR</p>
-        </div>
-      </Link>
+      />
     </li>
   )
 })

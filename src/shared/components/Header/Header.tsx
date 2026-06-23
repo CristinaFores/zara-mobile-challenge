@@ -1,46 +1,32 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState, type MouseEvent } from 'react'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState, type ReactNode } from 'react'
 
-import { useCart } from '@/features/cart/context/CartContext'
 import { ROUTES } from '@/shared/constants'
-import { navigateToCart } from '@/shared/lib/cartRouteTransition'
 
-import CartIcon from '../ui/icons/CartIcon'
 import Logo from '../ui/Logo'
 
 import styles from './Header.module.scss'
 
 const LOADING_BAR_DURATION_MS = 1200
 
-function getCartAriaLabel(isHydrated: boolean, cartCount: number): string {
-  if (!isHydrated || cartCount <= 0) return 'Cart'
-  const itemLabel = cartCount === 1 ? 'item' : 'items'
-  return `Cart, ${cartCount} ${itemLabel}`
+interface HeaderProps {
+  cartLink: ReactNode
 }
 
-export function Header() {
-  const { cartCount, isHydrated } = useCart()
+export function Header({ cartLink }: HeaderProps) {
   const pathname = usePathname()
-  const router = useRouter()
-  const hasItems = cartCount > 0
   const isCart = pathname === ROUTES.CART
 
   const [showLoadingBar, setShowLoadingBar] = useState(true)
 
   useEffect(() => {
-    if (isCart) return // stays fixed on cart page
+    if (isCart) return
     const timer = setTimeout(() => setShowLoadingBar(false), LOADING_BAR_DURATION_MS)
     return () => clearTimeout(timer)
   }, [isCart])
-
-  const handleCartClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (isCart) return
-    event.preventDefault()
-    navigateToCart(router, ROUTES.CART)
-  }
 
   return (
     <header className={styles.header}>
@@ -54,22 +40,7 @@ export function Header() {
         <Link href={ROUTES.HOME} className={styles.header__logo} aria-label="Zara">
           <Logo />
         </Link>
-        <Link
-          href={ROUTES.CART}
-          className={styles.header__cart}
-          aria-label={getCartAriaLabel(isHydrated, cartCount)}
-          transitionTypes={['cart']}
-          onClick={handleCartClick}
-        >
-          <CartIcon mode={isHydrated && hasItems ? 'full' : 'empty'} aria-hidden="true" />
-          <span
-            className={styles.header__badge}
-            aria-hidden="true"
-            style={{ visibility: isHydrated ? 'visible' : 'hidden' }}
-          >
-            {cartCount}
-          </span>
-        </Link>
+        {cartLink}
       </div>
     </header>
   )

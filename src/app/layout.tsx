@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
 import { CartProvider } from '@/features/cart/context/CartContext'
-import { Header } from '@/shared/components/Header/Header'
+
+import { AppHeader } from './AppHeader'
 
 import '@/scss/globals.scss'
 import styles from './layout.module.scss'
@@ -20,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body>
         <CartProvider>
-          <Header />
+          <AppHeader />
           <main className={styles.main}>{children}</main>
         </CartProvider>
       </body>

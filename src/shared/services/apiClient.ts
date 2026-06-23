@@ -1,3 +1,5 @@
+import 'server-only'
+
 import axios, { type AxiosInstance } from 'axios'
 
 /**

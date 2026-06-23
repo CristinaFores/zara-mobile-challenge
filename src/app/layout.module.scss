@@ -11,7 +11,7 @@
   }
 
   @include breakpoint(desktop) {
-    padding: 6.25rem 3.75rem;
+    padding: 3.125rem 6.25rem;
   }
 
   &:has([data-page='product-detail']) {

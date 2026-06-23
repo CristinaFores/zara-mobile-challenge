@@ -15,15 +15,14 @@ interface ProductImageProps {
   onLoad?: () => void
 }
 
-// WIP
 function sharpLoader({ src, width, quality }: ImageLoaderProps): string {
   return buildProxyUrl(src, width, quality)
 }
 
-function ImageFallback() {
+function ImageFallback({ alt }: { alt: string }) {
   return (
-    <span className={styles['image-fallback']} aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <span className={styles['image-fallback']} role="img" aria-label={alt}>
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <rect x="14" y="4" width="20" height="40" rx="4" stroke="currentColor" strokeWidth="1.5" />
         <line
           x1="21"
@@ -65,7 +64,7 @@ export const ProductImage = memo(function ProductImage({
   }, [showFallback, onLoad])
 
   if (showFallback) {
-    return <ImageFallback />
+    return <ImageFallback alt={alt} />
   }
 
   return (
