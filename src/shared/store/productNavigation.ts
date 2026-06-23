@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from 'react'
 
 import { ROUTES } from '@/shared/constants'
+import { scrollToTop } from '@/shared/lib/browser'
 import type { Product } from '@/shared/types'
 
 export interface ProductPreview extends Pick<
@@ -22,7 +23,7 @@ export function getProductViewTransitionName(productId: string, part: 'image' | 
 }
 
 export function scrollToProductDetailTop(): void {
-  window.scrollTo({ top: 0, left: 0 })
+  scrollToTop()
 }
 
 let currentPreview: ProductPreview | null = null
@@ -89,4 +90,27 @@ export function beginProductRouteViewTransition(productId: string): Promise<void
 export function resolveProductRouteViewTransition(productId: string): void {
   if (pendingRouteTransition?.productId !== productId) return
   pendingRouteTransition.resolve()
+}
+
+let returningProductId: string | null = null
+const returningListeners = new Set<() => void>()
+
+function subscribeToReturning(listener: () => void): () => void {
+  returningListeners.add(listener)
+  return () => {
+    returningListeners.delete(listener)
+  }
+}
+
+export function setReturningProductId(productId: string | null): void {
+  returningProductId = productId
+  returningListeners.forEach((fn) => fn())
+}
+
+export function useReturningProductTransitionTarget(productId: string): boolean {
+  return useSyncExternalStore(
+    subscribeToReturning,
+    () => returningProductId === productId,
+    () => false
+  )
 }

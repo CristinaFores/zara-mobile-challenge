@@ -2,13 +2,16 @@
 
 import Image, { type ImageLoaderProps } from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import { ROUTES } from '@/shared/constants'
+import { cancelScheduledTimeout, scheduleTimeout } from '@/shared/lib/browser'
 import type { CartItem as CartItemType } from '@/shared/types'
 import { buildProxyUrl } from '@/shared/utils/imageProxy'
 
 import styles from './CartItem.module.scss'
+
+const REMOVE_ANIMATION_MS = 720
 
 function cartLoader({ src, width, quality }: ImageLoaderProps) {
   return buildProxyUrl(src, width, quality)
@@ -20,12 +23,50 @@ interface CartItemProps {
 }
 
 export function CartItem({ item, onRemove }: CartItemProps) {
+  const itemRef = useRef<HTMLLIElement>(null)
   const [imgError, setImgError] = useState(false)
+  const [isRemoving, setIsRemoving] = useState(false)
+
+  useLayoutEffect(() => {
+    if (!isRemoving || !itemRef.current) return
+
+    const element = itemRef.current
+    let innerFrame = 0
+    const outerFrame = requestAnimationFrame(() => {
+      innerFrame = requestAnimationFrame(() => {
+        element.style.height = '0'
+      })
+    })
+
+    return () => {
+      cancelAnimationFrame(outerFrame)
+      cancelAnimationFrame(innerFrame)
+    }
+  }, [isRemoving])
+
+  useEffect(() => {
+    if (!isRemoving) return
+
+    const timer = scheduleTimeout(() => onRemove(item.key), REMOVE_ANIMATION_MS)
+    return () => cancelScheduledTimeout(timer)
+  }, [isRemoving, item.key, onRemove])
 
   const detailHref = `${ROUTES.PRODUCT_DETAIL}/${item.id}?color=${encodeURIComponent(item.selectedColor.name)}&storage=${encodeURIComponent(item.selectedStorage.capacity)}`
 
+  const handleRemove = () => {
+    const element = itemRef.current
+    if (isRemoving || !element) return
+
+    element.style.height = `${element.offsetHeight}px`
+    element.style.overflow = 'hidden'
+    setIsRemoving(true)
+  }
+
   return (
-    <li className={styles['cart-item']}>
+    <li
+      ref={itemRef}
+      className={`${styles['cart-item']} ${isRemoving ? styles['cart-item--removing'] : ''}`}
+    >
       <Link
         href={detailHref}
         className={styles['cart-item__image']}
@@ -56,7 +97,8 @@ export function CartItem({ item, onRemove }: CartItemProps) {
         <button
           type="button"
           className={styles['cart-item__remove']}
-          onClick={() => onRemove(item.key)}
+          onClick={handleRemove}
+          disabled={isRemoving}
           aria-label={`Remove ${item.brand} ${item.name} from cart`}
         >
           Remove

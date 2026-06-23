@@ -15,6 +15,11 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:e2e": "env -u PLAYWRIGHT_BROWSERS_PATH playwright test",
+    "test:e2e:headed": "env -u PLAYWRIGHT_BROWSERS_PATH playwright test --headed --workers=1 --project=chromium",
+    "test:e2e:debug": "env -u PLAYWRIGHT_BROWSERS_PATH playwright test --debug --workers=1 --project=chromium",
+    "test:e2e:ui": "rm -rf test-results playwright-report && env -u PLAYWRIGHT_BROWSERS_PATH E2E_UI=1 PLAYWRIGHT_TRACING_NO_WEBSOCKET_FRAMES=1 playwright test --ui --project=chromium",
+    "playwright:install": "env -u PLAYWRIGHT_BROWSERS_PATH playwright install chromium",
     "prepare": "husky"
   },
   "dependencies": {
@@ -28,6 +33,7 @@
     "@emnapi/core": "^1.11.1",
     "@emnapi/runtime": "^1.11.1",
     "@eslint/js": "^9.39.0",
+    "@playwright/test": "^1.61.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -57,7 +63,11 @@
     "undici": "^6.27.0"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": [
+    "{src,e2e}/**/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix --max-warnings=0"
+    ],
+    "*.{ts,tsx}": [
       "prettier --write",
       "eslint --fix --max-warnings=0"
     ],

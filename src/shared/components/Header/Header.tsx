@@ -1,11 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState, type MouseEvent } from 'react'
 
 import { useCart } from '@/features/cart/context/CartContext'
 import { ROUTES } from '@/shared/constants'
+import { navigateToCart } from '@/shared/lib/cartRouteTransition'
 
 import CartIcon from '../ui/icons/CartIcon'
 import Logo from '../ui/Logo'
@@ -23,6 +24,7 @@ function getCartAriaLabel(isHydrated: boolean, cartCount: number): string {
 export function Header() {
   const { cartCount, isHydrated } = useCart()
   const pathname = usePathname()
+  const router = useRouter()
   const hasItems = cartCount > 0
   const isCart = pathname === ROUTES.CART
 
@@ -33,6 +35,12 @@ export function Header() {
     const timer = setTimeout(() => setShowLoadingBar(false), LOADING_BAR_DURATION_MS)
     return () => clearTimeout(timer)
   }, [isCart])
+
+  const handleCartClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (isCart) return
+    event.preventDefault()
+    navigateToCart(router, ROUTES.CART)
+  }
 
   return (
     <header className={styles.header}>
@@ -50,6 +58,8 @@ export function Header() {
           href={ROUTES.CART}
           className={styles.header__cart}
           aria-label={getCartAriaLabel(isHydrated, cartCount)}
+          transitionTypes={['cart']}
+          onClick={handleCartClick}
         >
           <CartIcon mode={isHydrated && hasItems ? 'full' : 'empty'} aria-hidden="true" />
           <span

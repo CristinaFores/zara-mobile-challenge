@@ -61,6 +61,12 @@ describe('Given CartView', () => {
       render(<CartView />)
       expect(screen.queryByRole('list')).not.toBeInTheDocument()
     })
+
+    it('Then the checkout actions are not rendered', () => {
+      render(<CartView />)
+      expect(screen.queryByRole('button', { name: /pay/i })).not.toBeInTheDocument()
+      expect(screen.queryByText(/^total$/i)).not.toBeInTheDocument()
+    })
   })
 
   describe('When the cart has one item', () => {
@@ -109,12 +115,21 @@ describe('Given CartView', () => {
       expect(screen.queryByText(/qty/i)).not.toBeInTheDocument()
     })
 
-    it('Then clicking Remove calls removeFromCart with the item key', async () => {
+    it('Then clicking Remove calls removeFromCart with the item key after the exit animation', async () => {
+      jest.useFakeTimers()
+      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime })
+
       render(<CartView />)
-      await userEvent.click(
+      await user.click(
         screen.getByRole('button', { name: /remove samsung galaxy s24 ultra from cart/i })
       )
+
+      expect(mockRemoveFromCart).not.toHaveBeenCalled()
+
+      jest.advanceTimersByTime(720)
+
       expect(mockRemoveFromCart).toHaveBeenCalledWith('smg-s24-ultra::titanium-violet::256GB')
+      jest.useRealTimers()
     })
   })
 

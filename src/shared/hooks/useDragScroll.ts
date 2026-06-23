@@ -24,7 +24,6 @@ export function useDragScroll<T extends HTMLElement>({
     startX.current = event.clientX
     startScrollLeft.current = node.scrollLeft
     moved.current = false
-    setIsDragging(true)
     node.setPointerCapture(event.pointerId)
   }, [])
 
@@ -34,8 +33,11 @@ export function useDragScroll<T extends HTMLElement>({
       if (!node || pointerId.current !== event.pointerId) return
 
       const delta = event.clientX - startX.current
-      if (Math.abs(delta) > dragThreshold) {
+      if (Math.abs(delta) <= dragThreshold) return
+
+      if (!moved.current) {
         moved.current = true
+        setIsDragging(true)
       }
 
       node.scrollLeft = startScrollLeft.current - delta

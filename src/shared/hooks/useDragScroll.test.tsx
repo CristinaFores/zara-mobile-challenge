@@ -39,11 +39,12 @@ describe('Given useDragScroll', () => {
       act(() => {
         result.current.handlers.onPointerDown(createPointerEvent(node, { clientX: 100 }))
       })
-      expect(result.current.isDragging).toBe(true)
+      expect(result.current.isDragging).toBe(false)
 
       act(() => {
         result.current.handlers.onPointerMove(createPointerEvent(node, { clientX: 60 }))
       })
+      expect(result.current.isDragging).toBe(true)
       expect(node.scrollLeft).toBe(40)
 
       act(() => {
@@ -71,6 +72,26 @@ describe('Given useDragScroll', () => {
 
       expect(jest.mocked(clickEvent.preventDefault)).toHaveBeenCalled()
       expect(jest.mocked(clickEvent.stopPropagation)).toHaveBeenCalled()
+    })
+  })
+
+  describe('When the user clicks without dragging', () => {
+    it('Then the click is not suppressed', () => {
+      const { result } = renderHook(() => useDragScroll<HTMLDivElement>())
+      const node = document.createElement('div')
+      node.setPointerCapture = jest.fn()
+      node.releasePointerCapture = jest.fn()
+      result.current.ref.current = node
+      const clickEvent = createClickEvent()
+
+      act(() => {
+        result.current.handlers.onPointerDown(createPointerEvent(node, { clientX: 100 }))
+        result.current.handlers.onPointerUp(createPointerEvent(node, { clientX: 100 }))
+        result.current.handlers.onClickCapture(clickEvent as unknown as MouseEvent<HTMLDivElement>)
+      })
+
+      expect(jest.mocked(clickEvent.preventDefault)).not.toHaveBeenCalled()
+      expect(jest.mocked(clickEvent.stopPropagation)).not.toHaveBeenCalled()
     })
   })
 })
