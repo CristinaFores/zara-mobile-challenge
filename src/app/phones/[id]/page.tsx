@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
-import { PhoneDetailView } from '@/components/ProductDetail/PhoneDetailView'
-import { buildPhoneDetailMetadata, loadPhoneDetail } from '@/lib/loadPhone'
+import { PhoneDetailView } from '@/features/product-detail/components/ProductDetail/PhoneDetailView'
+import { buildPhoneDetailMetadata, loadPhoneDetail } from '@/shared/lib/loadPhone'
 
 interface PhoneDetailPageProps {
   params: Promise<{ id: string }>

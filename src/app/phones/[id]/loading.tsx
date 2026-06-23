@@ -4,18 +4,18 @@ import { useParams } from 'next/navigation'
 import { useLayoutEffect } from 'react'
 import type { CSSProperties } from 'react'
 
-import { BackLink } from '@/components/BackLink/BackLink'
-import detailStyles from '@/components/ProductDetail/PhoneDetailView.module.scss'
-import heroStyles from '@/components/ProductDetail/ProductDetailHero.module.scss'
-import { ProductImage } from '@/components/ProductImage/ProductImage'
-import { ROUTES } from '@/constants'
+import detailStyles from '@/features/product-detail/components/ProductDetail/PhoneDetailView.module.scss'
+import heroStyles from '@/features/product-detail/components/ProductDetail/ProductDetailHero.module.scss'
+import { BackLink } from '@/shared/components/BackLink/BackLink'
+import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
+import { ROUTES } from '@/shared/constants'
 import {
   getProductDetailHref,
   getProductViewTransitionName,
   resolveProductRouteViewTransition,
   scrollToProductDetailTop,
   useProductPreview,
-} from '@/store/productNavigation'
+} from '@/shared/store/productNavigation'
 
 import styles from './loading.module.scss'
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
-import { PhoneCatalog } from '@/components/PhoneCatalog/PhoneCatalog'
-import { getPhones } from '@/services/phones.service'
+import { PhoneCatalog } from '@/features/catalog/components/PhoneCatalog/PhoneCatalog'
+import { getPhones } from '@/shared/services/phones.service'
 
 export const metadata: Metadata = {
   title: 'Smartphones',

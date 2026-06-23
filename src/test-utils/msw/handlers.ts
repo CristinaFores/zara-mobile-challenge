@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw'
 
-import { API_ENDPOINTS } from '@/constants'
+import { API_ENDPOINTS } from '@/shared/constants'
 import { phoneDetailFixture, phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
 
 const productsUrl = `https://api.test${API_ENDPOINTS.PRODUCTS}`

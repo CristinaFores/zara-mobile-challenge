@@ -1,4 +1,4 @@
-import type { Phone, PhoneDetail } from '@/types'
+import type { Phone, PhoneDetail } from '@/shared/types'
 
 export const phoneListFixture: Phone[] = [
   {

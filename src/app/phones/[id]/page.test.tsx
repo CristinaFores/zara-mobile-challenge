@@ -4,7 +4,7 @@ import { phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
 
 import PhoneDetailPage, { generateMetadata } from './page'
 
-jest.mock('@/lib/loadPhone', () => ({
+jest.mock('@/shared/lib/loadPhone', () => ({
   loadPhoneDetail: jest.fn().mockResolvedValue(phoneDetailFixture),
   buildPhoneDetailMetadata: jest.fn().mockReturnValue({
     title: 'Galaxy S24 Ultra | Mobile Catalog',
@@ -12,7 +12,7 @@ jest.mock('@/lib/loadPhone', () => ({
   }),
 }))
 
-jest.mock('@/components/ProductDetail/PhoneDetailView', () => ({
+jest.mock('@/features/product-detail/components/ProductDetail/PhoneDetailView', () => ({
   PhoneDetailView: ({ phone }: { phone: { name: string } }) => (
     <main data-testid="phone-detail-view">{phone.name}</main>
   ),
@@ -30,7 +30,7 @@ describe('Given PhoneDetailPage', () => {
     })
 
     it('Then it calls loadPhoneDetail with the correct id', async () => {
-      const { loadPhoneDetail } = jest.requireMock('@/lib/loadPhone') as {
+      const { loadPhoneDetail } = jest.requireMock('@/shared/lib/loadPhone') as {
         loadPhoneDetail: jest.Mock
       }
       await PhoneDetailPage({ params })
@@ -48,7 +48,7 @@ describe('Given PhoneDetailPage', () => {
     })
 
     it('Then it calls loadPhoneDetail with the correct id', async () => {
-      const { loadPhoneDetail } = jest.requireMock('@/lib/loadPhone') as {
+      const { loadPhoneDetail } = jest.requireMock('@/shared/lib/loadPhone') as {
         loadPhoneDetail: jest.Mock
       }
       loadPhoneDetail.mockClear()

@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw'
 
-import { API_ENDPOINTS } from '@/constants'
+import { API_ENDPOINTS } from '@/shared/constants'
 import { apiErrorFixtures, phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
 import { server } from '@/test-utils/msw/server'
 
@@ -31,6 +31,24 @@ describe('Given GET /api/products/[id]', () => {
 
       expect(res.status).toBe(404)
       expect((await res.json()).message).toBe(message)
+    })
+  })
+
+  describe('When called with a malformed id', () => {
+    it('Then it returns 404 without calling the external API', async () => {
+      let requestCount = 0
+      server.use(
+        http.get(`${PRODUCTS_URL}/:id`, () => {
+          requestCount += 1
+          return HttpResponse.json(phoneDetailFixture)
+        })
+      )
+
+      const res = await callGET('foo/bar')
+
+      expect(res.status).toBe(404)
+      expect((await res.json()).message).toBe('Product not found')
+      expect(requestCount).toBe(0)
     })
   })
 

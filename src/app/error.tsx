@@ -1,6 +1,6 @@
 'use client'
 
-import { ErrorState } from '@/components/UI/ErrorState/ErrorState'
+import { ErrorState } from '@/shared/components/ui/ErrorState/ErrorState'
 
 interface ErrorProps {
   error: Error & { digest?: string }

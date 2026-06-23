@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 
-import * as productNavigation from '@/store/productNavigation'
+import * as productNavigation from '@/shared/store/productNavigation'
 import { phoneListFixture } from '@/test-utils/fixtures/phones.fixtures'
 
 import PhoneDetailLoading from './loading'
@@ -14,11 +14,11 @@ jest.mock('next/navigation', () => ({
   useParams: () => useParamsMock(),
 }))
 
-jest.mock('@/components/BackLink/BackLink', () => ({
+jest.mock('@/shared/components/BackLink/BackLink', () => ({
   BackLink: ({ href }: { href: string }) => <a href={href}>Back</a>,
 }))
 
-jest.mock('@/components/ProductImage/ProductImage', () => ({
+jest.mock('@/shared/components/ProductImage/ProductImage', () => ({
   ProductImage: ({ alt }: { alt: string }) => <span role="img" aria-label={alt} />,
 }))
 
