@@ -15,7 +15,7 @@ jest.mock('next/navigation', () => ({
 }))
 
 jest.mock('@/shared/components/BackLink/BackLink', () => ({
-  BackLink: ({ href }: { href: string }) => <a href={href}>Back</a>,
+  BackLink: () => <button type="button">Back</button>,
 }))
 
 jest.mock('@/shared/components/ProductImage/ProductImage', () => ({

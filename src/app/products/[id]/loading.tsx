@@ -10,7 +10,6 @@ import specsStyles from '@/features/product-detail/components/SpecsTable/SpecsTa
 import rowStyles from '@/features/product-detail/components/SpecsTable/SpecsTableRow.module.scss'
 import { BackLink } from '@/shared/components/BackLink/BackLink'
 import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
-import { ROUTES } from '@/shared/constants'
 import {
   getProductDetailHref,
   getProductViewTransitionName,
@@ -59,7 +58,7 @@ export default function ProductDetailLoading() {
 
   return (
     <>
-      <BackLink href={ROUTES.HOME} />
+      <BackLink />
       <article className={detailStyles['product-detail-view']} data-page="product-detail">
         <section className={heroStyles['product-detail-hero']} aria-label="Loading product">
           <div

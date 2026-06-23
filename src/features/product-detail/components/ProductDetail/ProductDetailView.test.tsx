@@ -4,11 +4,8 @@ import { productDetailFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { ProductDetailView } from './ProductDetailView'
 
-jest.mock('next/link', () => ({
-  __esModule: true,
-  default: ({ href, children }: { href: string; children: React.ReactNode }) => (
-    <a href={href}>{children}</a>
-  ),
+jest.mock('@/shared/components/BackLink/BackLink', () => ({
+  BackLink: () => <button type="button">Back</button>,
 }))
 
 jest.mock('./ProductDetailHero', () => ({
@@ -36,8 +33,8 @@ jest.mock('@/features/product-detail/components/SimilarProducts/SimilarProducts'
 describe('Given ProductDetailView', () => {
   beforeEach(() => render(<ProductDetailView product={productDetailFixture} />))
 
-  it('Then it renders the back link to the catalog', () => {
-    expect(screen.getByRole('link')).toHaveAttribute('href', '/')
+  it('Then it renders the back control', () => {
+    expect(screen.getByRole('button', { name: /back/i })).toBeInTheDocument()
   })
 
   it('Then it renders the product name via the hero', () => {

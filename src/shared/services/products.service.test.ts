@@ -30,7 +30,7 @@ function captureProductsRequest() {
 
 describe('Given the catalog page is loaded', () => {
   describe('When getProducts is called', () => {
-    it('Then it over-fetches by one so duplicates can be removed before capping the catalog', async () => {
+    it('Then it requests 21 products and returns at most 20 for the catalog', async () => {
       const captured = captureProductsRequest()
 
       await getProducts()

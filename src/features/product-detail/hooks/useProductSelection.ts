@@ -1,10 +1,11 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 import { useCart } from '@/features/cart/context/CartContext'
 import { ROUTES } from '@/shared/constants'
+import { navigateToCart } from '@/shared/lib/cartRouteTransition'
 import type { ColorOption, Product, ProductDetail, StorageOption } from '@/shared/types'
 
 export interface ProductSelection {
@@ -34,22 +35,34 @@ export function useProductSelection(product: ProductDetail): ProductSelection {
   const selectedStorage =
     product.storageOptions.find((s) => s.capacity === searchParams.get('storage')) ?? null
 
-  const setSelectedColor = useCallback(
-    (color: ColorOption) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set('color', color.name)
+  // router.replace is async: searchParams only updates once the navigation commits.
+  // Two quick selections would each start from the same stale snapshot, so the
+  // second would drop the first. We merge updates into a pending ref synchronously
+  // and reset it when searchParams actually reflects the change.
+  const pendingParamsRef = useRef<URLSearchParams | null>(null)
+
+  useEffect(() => {
+    pendingParamsRef.current = null
+  }, [searchParams])
+
+  const updateSelectionParam = useCallback(
+    (key: 'color' | 'storage', value: string) => {
+      const params = pendingParamsRef.current ?? new URLSearchParams(searchParams.toString())
+      params.set(key, value)
+      pendingParamsRef.current = params
       router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     },
     [pathname, router, searchParams]
   )
 
+  const setSelectedColor = useCallback(
+    (color: ColorOption) => updateSelectionParam('color', color.name),
+    [updateSelectionParam]
+  )
+
   const setSelectedStorage = useCallback(
-    (storage: StorageOption) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set('storage', storage.capacity)
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
-    },
-    [pathname, router, searchParams]
+    (storage: StorageOption) => updateSelectionParam('storage', storage.capacity),
+    [updateSelectionParam]
   )
 
   const imageUrl = selectedColor?.imageUrl ?? product.colorOptions[0]?.imageUrl ?? ''
@@ -68,8 +81,9 @@ export function useProductSelection(product: ProductDetail): ProductSelection {
       basePrice: product.basePrice,
       imageUrl: selectedColor.imageUrl,
     }
-    addToCart(productForCart, selectedColor, selectedStorage)
-    router.push(ROUTES.CART)
+    navigateToCart(router, ROUTES.CART, () => {
+      addToCart(productForCart, selectedColor, selectedStorage)
+    })
   }, [product, selectedColor, selectedStorage, addToCart, router])
 
   return {

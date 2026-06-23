@@ -1,7 +1,6 @@
 import { SimilarProducts } from '@/features/product-detail/components/SimilarProducts/SimilarProducts'
 import { SpecsTable } from '@/features/product-detail/components/SpecsTable/SpecsTable'
 import { BackLink } from '@/shared/components/BackLink/BackLink'
-import { ROUTES } from '@/shared/constants'
 import type { ProductDetail } from '@/shared/types'
 
 import { ProductDetailHero } from './ProductDetailHero'
@@ -31,7 +30,7 @@ function buildSpecRows(product: ProductDetail) {
 export function ProductDetailView({ product }: ProductDetailViewProps) {
   return (
     <>
-      <BackLink href={ROUTES.HOME} />
+      <BackLink />
       <article className={styles['product-detail-view']} data-page="product-detail">
         <ProductDetailHero product={product} />
         <SpecsTable rows={buildSpecRows(product)} />

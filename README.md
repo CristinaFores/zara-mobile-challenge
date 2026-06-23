@@ -124,6 +124,7 @@ flowchart TB
 | ✨  | [Motion & Figma fidelity](#motion--figma-fidelity)                |
 | 🏗️  | [Architecture](#architecture)                                     |
 | ✅  | [Quality engineering](#quality-engineering)                       |
+| 🎭  | [End-to-end tests (Playwright)](#end-to-end-tests-playwright)     |
 | ♿  | [Accessibility & SEO](#accessibility--seo)                        |
 | ⚡  | [Quick start](#quick-start)                                       |
 | 📜  | [Scripts reference](#scripts-reference)                           |
@@ -269,7 +270,7 @@ flowchart TB
 | Lint      | ESLint + Prettier + Stylelint                                                             | 9       | Zero-warning gate                                                                                                           |
 | Hooks     | Husky + lint-staged                                                                       | 9 / 17  | pre-commit + pre-push                                                                                                       |
 | CI        | [GitHub Actions](./.github/workflows/ci.yml) + [SonarCloud](https://sonarcloud.io)        | —       | Every PR fully gated                                                                                                        |
-| E2E       | —                                                                                         | **WIP** | [Separate branch →](#e2e-tests--wip)                                                                                        |
+| E2E       | [Playwright](https://playwright.dev)                                                      | 1.61    | Browser tests in `e2e/` — catalog, detail, cart ([E2E guide](#end-to-end-tests-playwright))                                 |
 
 **Intentionally omitted:** TanStack Query · Redux/Zustand · Tailwind.
 
@@ -411,6 +412,7 @@ Quality is a first-class deliverable, not an afterthought.
 ```bash
 npm run test
 npm run test:coverage
+npm run test:e2e          # Playwright — see [E2E section](#end-to-end-tests-playwright)
 ```
 
 Delivery gate:
@@ -431,18 +433,95 @@ npm run typecheck && npm run lint && npm run test && npm run build
 
 Sonar runs on every PR alongside ESLint (`--max-warnings=0`), Stylelint, Prettier, typecheck, tests, and production build. Live metrics are in the badge row at the top of this README.
 
-### E2E tests — WIP
+### End-to-end tests (Playwright)
 
-End-to-end tests are **planned on a separate branch** (not merged yet). See also [Test suite](#test-suite) · [SonarCloud](#static-analysis--sonarcloud).
+Browser tests in `e2e/` exercise the real app against the live store API (via `.env.local`). They complement Jest/MSW — no axios mocking in E2E.
 
-| Planned scope                                        | Tool (TBD)            |
-| ---------------------------------------------------- | --------------------- |
-| Search → results update                              | Playwright or Cypress |
-| Pick color + storage → add to cart → cart total      | —                     |
-| Cart remove + persist after reload                   | —                     |
-| Deep link with `?color=&storage=` restores selection | —                     |
+| Metric         | Value                                                                                        |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| Runner         | [Playwright](https://playwright.dev) 1.61                                                    |
+| Style          | BDD — `Given / When / Then` in every `test()` title                                          |
+| Config         | [`playwright.config.ts`](./playwright.config.ts) — `chromium` + `mobile-chrome` (Pixel 5)    |
+| Specs          | 3 files · **23 scenarios** per project · **46 total** headless runs                          |
+| Shared helpers | [`e2e/helpers.ts`](./e2e/helpers.ts) — dynamic product id from grid, configuration selection |
 
-Current coverage is **unit + integration** (Jest/RTL/MSW, 276 tests). E2E will complement — not replace — the existing suite.
+**Scope by file**
+
+| File                  | Tests | Covers                                                                                                                     |
+| --------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------- |
+| `e2e/listing.spec.ts` | 6     | Grid load, card content, search filter / empty / clear, navigate to `/products/[id]`                                       |
+| `e2e/detail.spec.ts`  | 9     | Hero + add button, disabled until color+storage, selectors, price label, quick-selection race, add → `/cart`, back control |
+| `e2e/cart.spec.ts`    | 8     | Empty cart, line items + total, remove, `localStorage` persistence, header logo + cart link                                |
+
+Routes under test: `/` · `/products/:id` · `/cart` (not `/phones`).
+
+**First-time setup**
+
+```bash
+npm run playwright:install   # Chromium + headless shell — wait for 100% on both downloads
+cp .env.example .env.local   # API_KEY required for product list and detail
+```
+
+`playwright:install` is **not** run by `npm install` — run it once per machine (or after upgrading `@playwright/test`).
+
+**Which command to use**
+
+| Goal                         | Command                                        | What you see                                                              |
+| ---------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------- |
+| Fast check (recommended)     | `npm run test:e2e`                             | Headless, parallel — **46 tests** (chromium + mobile-chrome)              |
+| Watch Chrome while tests run | `npm run test:e2e:headed`                      | Headed, 1 worker — **23 chromium tests**; fast flashes between tests      |
+| Step through one file        | `npm run test:e2e:debug -- e2e/detail.spec.ts` | Playwright Inspector + Chrome — see below                                 |
+| Explore / re-run in a panel  | `npm run test:e2e:ui`                          | Playwright Test UI — **does not auto-run**; click ▶ Run all (23 chromium) |
+
+**`npm run test:e2e:ui`**
+
+1. Starts `npm run dev` on port 3000 (or reuses an existing server).
+2. Opens the Playwright Test UI window (separate from Chrome).
+3. **Click the ▶ triangle** at the top of the left sidebar — nothing runs until you do.
+4. Green = pass, red = fail. Use the Errors tab on failures.
+
+The npm script sets `PLAYWRIGHT_TRACING_NO_WEBSOCKET_FRAMES=1` (Node 24 UI zip bug). If errors persist: close the UI, `rm -rf test-results playwright-report`, run `npm run test:e2e:ui` again.
+
+**`npm run test:e2e:debug` — browser looks blank?**
+
+Expected until you resume. Debug opens **two** windows:
+
+1. **Playwright Inspector** (▶ Resume, Step, Pick locator).
+2. **Chrome** — blank while the test is **paused at the start**.
+
+Click **▶ Resume** (or F8) in the **Inspector**, not in Chrome:
+
+```bash
+npm run test:e2e:debug -- e2e/detail.spec.ts
+```
+
+**Hydration warnings in the terminal (`data-pw-cursor` on `<body>`)**
+
+In `--debug` mode Playwright injects `data-pw-cursor` on `<body>` for the Inspector cursor overlay. React then logs a hydration mismatch in the Next dev server output (`[WebServer] A tree hydrated but...`). This is **expected in debug mode**, not an app bug. Headless `npm run test:e2e` and production builds do not show it. Safe to ignore while stepping through tests.
+
+**Headed feels too fast**
+
+Headed does not slow down for viewing — use UI mode on one test or debug on one file.
+
+**Troubleshooting**
+
+| Error                      | Fix                                                                |
+| -------------------------- | ------------------------------------------------------------------ |
+| `Executable doesn't exist` | `npm run playwright:install` (no trailing dot: not `chromium.`)    |
+| Port 3000 busy             | `lsof -ti:3000 \| xargs kill -9` then re-run                       |
+| UI zip / truncated trace   | `rm -rf test-results playwright-report` then `npm run test:e2e:ui` |
+
+**Extra flags** — after `--` goes to Playwright:
+
+```bash
+npm run test:e2e -- --project=chromium e2e/cart.spec.ts
+```
+
+**CI / hooks:** E2E is **not** in GitHub Actions or Husky pre-push yet. Local gate for E2E:
+
+```bash
+npm run test:e2e
+```
 
 ### Local git hooks
 
@@ -467,6 +546,7 @@ Current coverage is **unit + integration** (Jest/RTL/MSW, 276 tests). E2E will c
 
 ```bash
 npm install
+npm run playwright:install   # first time only — E2E browsers
 cp .env.example .env.local
 npm run dev
 ```
@@ -486,19 +566,24 @@ Deploy to any Node host or Vercel with the same server-side environment variable
 
 ## Scripts reference
 
-| Script                            | Purpose                       |
-| --------------------------------- | ----------------------------- |
-| `npm run dev`                     | Development server            |
-| `npm run build` / `start`         | Production build and serve    |
-| `npm run typecheck`               | `tsc --noEmit`                |
-| `npm run lint`                    | ESLint, zero warnings allowed |
-| `npm run lint:styles`             | Stylelint on SCSS             |
-| `npm run format` / `format:check` | Prettier                      |
-| `npm run test`                    | Jest                          |
-| `npm run test:coverage`           | Jest + lcov for SonarCloud    |
+| Script                            | Purpose                        |
+| --------------------------------- | ------------------------------ |
+| `npm run dev`                     | Development server             |
+| `npm run build` / `start`         | Production build and serve     |
+| `npm run typecheck`               | `tsc --noEmit`                 |
+| `npm run lint`                    | ESLint, zero warnings allowed  |
+| `npm run lint:styles`             | Stylelint on SCSS              |
+| `npm run format` / `format:check` | Prettier                       |
+| `npm run test`                    | Jest                           |
+| `npm run test:coverage`           | Jest + lcov for SonarCloud     |
+| `npm run playwright:install`      | Download Playwright Chromium   |
+| `npm run test:e2e`                | E2E headless (all projects)    |
+| `npm run test:e2e:headed`         | E2E headed, chromium, 1 worker |
+| `npm run test:e2e:debug`          | E2E with Playwright Inspector  |
+| `npm run test:e2e:ui`             | E2E interactive UI (manual ▶)  |
 
 ---
 
 **Summary:** Next.js for SEO and images · TypeScript strict · Sass + BEM · Context + localStorage cart ·
 Sharp image proxy · Figma-aligned motion (FLIP, view transitions, crossfade) · URL query params ·
-276 BDD tests + SonarCloud · E2E WIP on separate branch · accessibility and SEO as core requirements.
+276 BDD tests + SonarCloud · Playwright E2E · accessibility and SEO as core requirements.

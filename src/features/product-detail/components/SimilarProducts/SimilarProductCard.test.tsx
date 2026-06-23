@@ -5,6 +5,18 @@ import { productListFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { SimilarProductCard } from './SimilarProductCard'
 
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ push: jest.fn(), prefetch: jest.fn() }),
+}))
+
+jest.mock('@/shared/store/productNavigation', () => ({
+  beginProductRouteViewTransition: jest.fn(() => Promise.resolve()),
+  getProductDetailHref: (id: string) => `/products/${id}`,
+  getProductViewTransitionName: (id: string, part: string) => `product-${part}-${id}`,
+  scrollToProductDetailTop: jest.fn(),
+  setProductPreview: jest.fn(),
+}))
+
 jest.mock('@/shared/components/ProductImage/ProductImage', () => ({
   ProductImage: ({ alt }: { alt: string }) => <span role="img" aria-label={alt} />,
 }))

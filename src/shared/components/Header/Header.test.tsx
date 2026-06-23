@@ -7,6 +7,15 @@ import { Header } from './Header'
 
 import styles from './Header.module.scss'
 
+jest.mock('next/navigation', () => ({
+  usePathname: () => '/',
+  useRouter: () => ({ push: jest.fn() }),
+}))
+
+jest.mock('@/shared/lib/cartRouteTransition', () => ({
+  navigateToCart: jest.fn(),
+}))
+
 jest.mock('@/features/cart/context/CartContext')
 
 const mockUseCart = jest.mocked(useCart)

@@ -1,12 +1,22 @@
+'use client'
+
 import Link from 'next/link'
 
 import cardStyles from '@/features/catalog/components/ProductCard/ProductCard.module.scss'
 import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
-import { getProductDetailHref } from '@/shared/store/productNavigation'
+import { useProductDetailNavigation } from '@/shared/hooks/useProductDetailNavigation'
 import type { Product } from '@/shared/types'
 
 export function SimilarProductCard({ id, brand, name, basePrice, imageUrl }: Product) {
-  const href = getProductDetailHref(id)
+  const {
+    href,
+    prefetchFull,
+    imageTransitionStyle,
+    warmRoute,
+    activatePointerNavigation,
+    navigateWithViewTransition,
+    activateNavigation,
+  } = useProductDetailNavigation({ id, brand, name, basePrice, imageUrl })
 
   return (
     <li className={cardStyles['product-card']}>
@@ -14,8 +24,16 @@ export function SimilarProductCard({ id, brand, name, basePrice, imageUrl }: Pro
         href={href}
         className={cardStyles['product-card__link']}
         aria-label={`${brand} ${name}, ${basePrice} EUR`}
+        prefetch={prefetchFull ? true : 'auto'}
+        transitionTypes={['product-detail']}
+        onMouseEnter={warmRoute}
+        onFocus={warmRoute}
+        onTouchStart={warmRoute}
+        onPointerDown={activatePointerNavigation}
+        onClick={navigateWithViewTransition}
+        onNavigate={activateNavigation}
       >
-        <span className={cardStyles['product-card__image-wrapper']}>
+        <span className={cardStyles['product-card__image-wrapper']} style={imageTransitionStyle}>
           <ProductImage
             src={imageUrl}
             alt={`${brand} ${name}`}
