@@ -8,7 +8,7 @@ import {
   ImageFetchError,
   MAX_WIDTH,
   normalizeImage,
-} from '@/lib/imageProcessing'
+} from '@/shared/lib/imageProcessing'
 
 const ALLOWED_IMAGE_HOSTS = new Set(['prueba-tecnica-api-tienda-moviles.onrender.com'])
 const ALLOWED_PROTOCOLS = new Set(['http:', 'https:'])

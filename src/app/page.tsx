@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
-import { PhoneCatalog } from '@/components/PhoneCatalog/PhoneCatalog'
-import { getPhones } from '@/services/phones.service'
+import { ProductCatalog } from '@/features/catalog/components/ProductCatalog/ProductCatalog'
+import { getProducts } from '@/shared/services/products.service'
 
 export const metadata: Metadata = {
   title: 'Smartphones',
@@ -14,7 +14,7 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const { search = '' } = await searchParams
-  const phones = await getPhones(search || undefined)
+  const products = await getProducts(search || undefined)
 
-  return <PhoneCatalog phones={phones} initialSearch={search} />
+  return <ProductCatalog products={products} initialSearch={search} />
 }

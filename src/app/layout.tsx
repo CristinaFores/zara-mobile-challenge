@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-import { Header } from '@/components/Header/Header'
-import { CartProvider } from '@/context/cart/CartContext'
+import { CartProvider } from '@/features/cart/context/CartContext'
+import { Header } from '@/shared/components/Header/Header'
 
 import '@/scss/globals.scss'
 import styles from './layout.module.scss'

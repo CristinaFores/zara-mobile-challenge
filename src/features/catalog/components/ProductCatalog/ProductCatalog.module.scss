@@ -1,0 +1,11 @@
+@use '@/scss/_mixins' as *;
+
+.product-catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 4.375rem;
+
+  @include breakpoint(tablet) {
+    gap: 4.0625rem;
+  }
+}

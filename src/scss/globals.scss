@@ -40,11 +40,11 @@ body {
   }
 
   html.product-route-view-transition::view-transition-old(root) {
-    animation-duration: 90ms;
+    animation-duration: 150ms;
   }
 
   html.product-route-view-transition::view-transition-new(root) {
-    animation-duration: 120ms;
+    animation-duration: 300ms;
   }
 }
 

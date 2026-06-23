@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { ROUTES } from '@/constants'
+import { ROUTES } from '@/shared/constants'
 
 import styles from './not-found.module.scss'
 

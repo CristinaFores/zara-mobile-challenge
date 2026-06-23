@@ -1,0 +1,32 @@
+.similar-products {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  min-width: 0;
+
+  &__heading {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-thin);
+    text-transform: uppercase;
+  }
+
+  &__row {
+    padding-bottom: 1px;
+
+    > li {
+      margin-bottom: 0;
+      border-bottom: none;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: auto 0 0 0;
+        border-top: 0.5px solid var(--color-text-primary);
+        pointer-events: none;
+        z-index: calc(var(--z-card) + 1);
+      }
+    }
+  }
+}

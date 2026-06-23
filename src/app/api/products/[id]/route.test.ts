@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw'
 
-import { API_ENDPOINTS } from '@/constants'
-import { apiErrorFixtures, phoneDetailFixture } from '@/test-utils/fixtures/phones.fixtures'
+import { API_ENDPOINTS } from '@/shared/constants'
+import { apiErrorFixtures, productDetailFixture } from '@/test-utils/fixtures/products.fixtures'
 import { server } from '@/test-utils/msw/server'
 
 import { GET } from './route'
@@ -14,11 +14,11 @@ function callGET(id: string) {
 }
 
 describe('Given GET /api/products/[id]', () => {
-  describe('When called with a valid phone id', () => {
-    it('Then it returns the phone detail from the external API', async () => {
-      const res = await callGET(phoneDetailFixture.id)
+  describe('When called with a valid product id', () => {
+    it('Then it returns the product detail from the external API', async () => {
+      const res = await callGET(productDetailFixture.id)
       expect(res.status).toBe(200)
-      expect(await res.json()).toEqual(phoneDetailFixture)
+      expect(await res.json()).toEqual(productDetailFixture)
     })
   })
 
@@ -34,12 +34,30 @@ describe('Given GET /api/products/[id]', () => {
     })
   })
 
+  describe('When called with a malformed id', () => {
+    it('Then it returns 404 without calling the external API', async () => {
+      let requestCount = 0
+      server.use(
+        http.get(`${PRODUCTS_URL}/:id`, () => {
+          requestCount += 1
+          return HttpResponse.json(productDetailFixture)
+        })
+      )
+
+      const res = await callGET('foo/bar')
+
+      expect(res.status).toBe(404)
+      expect((await res.json()).message).toBe('Product not found')
+      expect(requestCount).toBe(0)
+    })
+  })
+
   describe('When the API key is invalid', () => {
     it('Then it proxies the 401 status', async () => {
       const { status, message } = apiErrorFixtures.unauthorized
       server.use(http.get(`${PRODUCTS_URL}/:id`, () => HttpResponse.json({ message }, { status })))
 
-      const res = await callGET(phoneDetailFixture.id)
+      const res = await callGET(productDetailFixture.id)
 
       expect(res.status).toBe(401)
     })
@@ -49,7 +67,7 @@ describe('Given GET /api/products/[id]', () => {
     it('Then it returns 500', async () => {
       server.use(http.get(`${PRODUCTS_URL}/:id`, () => HttpResponse.error()))
 
-      const res = await callGET(phoneDetailFixture.id)
+      const res = await callGET(productDetailFixture.id)
 
       expect(res.status).toBe(500)
     })

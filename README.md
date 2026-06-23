@@ -1,6 +1,6 @@
 # Zara Mobile Catalog
 
-A web application to browse, search and manage a catalog of mobile phones, built for the
+A web application to browse, search and manage a catalog of mobile products, built for the
 Zara Challenge. It covers a phone listing with real-time search, a phone detail view with
 color/storage selectors, and a persistent shopping cart.
 
@@ -92,7 +92,7 @@ src/
 ├── lib/                # cartStorage: safe localStorage access
 ├── scss/               # Global styles: design tokens, reset, mixins
 ├── services/           # Axios client + phones service (isolated API layer)
-├── types/              # Domain types (Phone, PhoneDetail, CartItem, ...)
+├── types/              # Domain types (Product, ProductDetail, CartItem, ...)
 ├── utils/              # Small pure helpers (buildKey)
 └── __mocks__/          # axios mock + fixtures for tests
 ```
@@ -118,7 +118,7 @@ src/
 
 Tests use Jest + React Testing Library and follow a BDD **Given-When-Then / And** structure.
 The network layer (`axios`) is mocked in `src/__mocks__/axios.ts` with fixtures from
-`src/__mocks__/phones.fixtures.ts`; mocks are typed via `jest.mocked()`.
+`src/__mocks__/products.fixtures.ts`; mocks are typed via `jest.mocked()`.
 
 ```bash
 npm run test

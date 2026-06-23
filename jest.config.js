@@ -24,10 +24,17 @@ const config = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/app/layout.tsx',
-    '!src/app/page.tsx',
-    '!src/types/**',
+    '!src/shared/types/**',
     '!src/test-utils/**',
   ],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 85,
+      lines: 85,
+      statements: 85,
+    },
+  },
 }
 
 // MSW v2 and several of its deps ship as ESM, which Jest does not transform by

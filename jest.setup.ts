@@ -5,7 +5,6 @@ import '@testing-library/jest-dom'
 // intercepted identically in local and CI runs (with or without a local .env).
 process.env.API_BASE_URL = 'https://api.test'
 process.env.API_KEY = 'test-api-key'
-process.env.APP_URL = 'http://localhost:3000'
 
 // jsdom does not yet implement the <search> landmark element (HTML Living Standard
 // since 2023). Suppress the false-positive "unrecognized tag" error so it does not
@@ -17,6 +16,22 @@ console.error = (...args: Parameters<typeof console.error>) => {
     return
   originalError(...args)
 }
+
+// jsdom stubs browser APIs that our components use but the test environment lacks.
+Object.defineProperty(window, 'scrollTo', { value: jest.fn(), writable: true })
+
+// jsdom throws on full-page navigation triggered by <a> clicks. Client-side routing
+// (Next.js Link) never performs a document navigation in the browser, so prevent the
+// default action unless the click handler already did (e.g. view-transition path).
+// Bubble phase so React onClick handlers run first.
+document.addEventListener('click', (event) => {
+  if (event.defaultPrevented) return
+  const anchor = (event.target as Element | null)?.closest('a[href]')
+  if (!anchor) return
+  const href = anchor.getAttribute('href')
+  if (!href || href.startsWith('#')) return
+  event.preventDefault()
+})
 
 import { server } from '@/test-utils/msw/server'
 
