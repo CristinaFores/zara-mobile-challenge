@@ -6,6 +6,8 @@ import { useProductSelection } from './useProductSelection'
 
 const mockReplace = jest.fn()
 const mockAddToCart = jest.fn()
+const mockReplaceSearchParamsInHistory = jest.fn()
+const mockReadBrowserSearchParams = jest.fn((): URLSearchParams | null => null)
 
 let mockParams: Record<string, string | null> = {}
 
@@ -25,6 +27,16 @@ jest.mock('@/features/cart/context/CartContext', () => ({
   useCart: () => ({ addToCart: mockAddToCart }),
 }))
 
+jest.mock('@/shared/lib/browser', () => {
+  const actual = jest.requireActual<typeof import('@/shared/lib/browser')>('@/shared/lib/browser')
+
+  return {
+    ...actual,
+    readBrowserSearchParams: () => mockReadBrowserSearchParams(),
+    replaceSearchParamsInHistory: (...args: unknown[]) => mockReplaceSearchParamsInHistory(...args),
+  }
+})
+
 function setup(params: Record<string, string | null> = {}) {
   mockParams = params
   return renderHook(() => useProductSelection(productDetailFixture))
@@ -33,6 +45,8 @@ function setup(params: Record<string, string | null> = {}) {
 beforeEach(() => {
   mockReplace.mockClear()
   mockAddToCart.mockClear()
+  mockReplaceSearchParamsInHistory.mockClear()
+  mockReadBrowserSearchParams.mockReturnValue(null)
   mockParams = {}
 })
 
@@ -104,16 +118,20 @@ describe('Given useProductSelection', () => {
       expect(result.current.selectedColor).toEqual(color)
     })
 
-    it('Then it calls router.replace with the color in the URL', () => {
+    it('Then it updates the URL with history.replaceState without router.replace', () => {
       const { result } = setup()
       const color = productDetailFixture.colorOptions[0]
 
       act(() => result.current.setSelectedColor(color))
 
-      expect(mockReplace).toHaveBeenCalledWith(
-        expect.stringContaining(new URLSearchParams({ color: color.name }).toString()),
-        { scroll: false }
+      expect(mockReplaceSearchParamsInHistory).toHaveBeenCalledWith(
+        '/products/SMG-S24U',
+        expect.objectContaining({
+          get: expect.any(Function),
+        })
       )
+      expect(mockReplaceSearchParamsInHistory.mock.calls[0][1].get('color')).toBe(color.name)
+      expect(mockReplace).not.toHaveBeenCalled()
     })
   })
 
@@ -127,16 +145,22 @@ describe('Given useProductSelection', () => {
       expect(result.current.selectedStorage).toEqual(storage)
     })
 
-    it('Then it calls router.replace with the storage in the URL', () => {
+    it('Then it updates the URL with history.replaceState without router.replace', () => {
       const { result } = setup()
       const storage = productDetailFixture.storageOptions[0]
 
       act(() => result.current.setSelectedStorage(storage))
 
-      expect(mockReplace).toHaveBeenCalledWith(
-        expect.stringContaining(new URLSearchParams({ storage: storage.capacity }).toString()),
-        { scroll: false }
+      expect(mockReplaceSearchParamsInHistory).toHaveBeenCalledWith(
+        '/products/SMG-S24U',
+        expect.objectContaining({
+          get: expect.any(Function),
+        })
       )
+      expect(mockReplaceSearchParamsInHistory.mock.calls[0][1].get('storage')).toBe(
+        storage.capacity
+      )
+      expect(mockReplace).not.toHaveBeenCalled()
     })
   })
 

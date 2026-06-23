@@ -22,6 +22,14 @@ describe('Given a ProductImage', () => {
     })
   })
 
+  describe('When fixedProxyWidth is set', () => {
+    it('Then the src uses that width so preloads and hero share one cache key', () => {
+      render(<ProductImage src={SRC} alt={ALT} fixedProxyWidth={828} />)
+      const img = screen.getByRole('img', { name: ALT })
+      expect(img).toHaveAttribute('src', expect.stringContaining('w=828'))
+    })
+  })
+
   describe('When priority is true', () => {
     it('Then the image does not have loading="lazy"', () => {
       render(<ProductImage src={SRC} alt={ALT} priority />)

@@ -21,4 +21,10 @@ export const SEARCH_DEBOUNCE_MS = 300
 export const FILTER_DEBOUNCE_MS = 450
 export const IMAGE_CROSSFADE_MS = 300
 
+/** Shared proxy width for detail hero + color preloads — one URL per source image. */
+export const DETAIL_HERO_IMAGE_WIDTH = 828
+
+/** Shared `sizes` for detail hero layout hints (width is fixed via DETAIL_HERO_IMAGE_WIDTH). */
+export const DETAIL_HERO_IMAGE_SIZES = '(max-width: 834px) 100vw, 43vw'
+
 export const CART_KEY = 'CART'

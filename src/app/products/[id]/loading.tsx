@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
-import { useLayoutEffect, useState } from 'react'
+import { useLayoutEffect } from 'react'
 import type { CSSProperties } from 'react'
 
 import heroStyles from '@/features/product-detail/components/ProductDetail/ProductDetailHero.module.scss'
@@ -10,6 +10,7 @@ import specsStyles from '@/features/product-detail/components/SpecsTable/SpecsTa
 import rowStyles from '@/features/product-detail/components/SpecsTable/SpecsTableRow.module.scss'
 import { BackLink } from '@/shared/components/BackLink/BackLink'
 import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
+import { DETAIL_HERO_IMAGE_SIZES, DETAIL_HERO_IMAGE_WIDTH } from '@/shared/constants'
 import {
   getProductDetailHref,
   getProductViewTransitionName,
@@ -32,7 +33,6 @@ export default function ProductDetailLoading() {
   const preview = useProductPreview(productId)
   const productPreview = preview?.href === getProductDetailHref(productId) ? preview : null
   const hasPreview = productPreview !== null
-  const [imageLoaded, setImageLoaded] = useState(false)
 
   const imageTransitionStyle = productPreview
     ? ({
@@ -44,29 +44,8 @@ export default function ProductDetailLoading() {
     if (!productId) return
 
     scrollToProductDetailTop()
-
-    if (!productPreview) {
-      resolveProductRouteViewTransition(productId)
-      return
-    }
-
-    // Wait until the preview image has loaded and been painted before resolving
-    // the view transition. Without this, the browser captures a blank hero when
-    // taking the "new" snapshot, causing a flash on the shared-element morph.
-    if (!imageLoaded) return
-
-    let r2 = 0
-    const r1 = requestAnimationFrame(() => {
-      r2 = requestAnimationFrame(() => {
-        resolveProductRouteViewTransition(productId)
-      })
-    })
-
-    return () => {
-      cancelAnimationFrame(r1)
-      cancelAnimationFrame(r2)
-    }
-  }, [productId, productPreview, imageLoaded])
+    resolveProductRouteViewTransition(productId)
+  }, [productId])
 
   return (
     <>
@@ -85,8 +64,8 @@ export default function ProductDetailLoading() {
                   src={productPreview.imageUrl}
                   alt={`${productPreview.brand} ${productPreview.name}`}
                   priority
-                  sizes="(max-width: 834px) 100vw, 43vw"
-                  onLoad={() => setImageLoaded(true)}
+                  sizes={DETAIL_HERO_IMAGE_SIZES}
+                  fixedProxyWidth={DETAIL_HERO_IMAGE_WIDTH}
                 />
               </figure>
             ) : null}

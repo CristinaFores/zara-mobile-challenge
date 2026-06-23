@@ -2,17 +2,19 @@
 
 |                                                                                         CI                                                                                          |                                                                              Sonar                                                                               |                                                     Tests                                                      |                                              Coverage gate                                              |                                                       TypeScript                                                       |                                                      ESLint                                                      |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------: |
-| [![CI](https://github.com/CristinaFores/zara-mobile-challenge/actions/workflows/ci.yml/badge.svg)](https://github.com/CristinaFores/zara-mobile-challenge/actions/workflows/ci.yml) | [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | ![tests](https://img.shields.io/badge/tests-276%20passing-success?style=flat-square&logo=jest&logoColor=white) | ![coverage gate](https://img.shields.io/badge/coverage%20gate-%E2%89%A585%25-success?style=flat-square) | ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white) | ![ESLint](https://img.shields.io/badge/ESLint-0%20warnings-4B32C3?style=flat-square&logo=eslint&logoColor=white) |
+| [![CI](https://github.com/CristinaFores/zara-mobile-challenge/actions/workflows/ci.yml/badge.svg)](https://github.com/CristinaFores/zara-mobile-challenge/actions/workflows/ci.yml) | [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | ![tests](https://img.shields.io/badge/tests-270%20passing-success?style=flat-square&logo=jest&logoColor=white) | ![coverage gate](https://img.shields.io/badge/coverage%20gate-%E2%89%A585%25-success?style=flat-square) | ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white) | ![ESLint](https://img.shields.io/badge/ESLint-0%20warnings-4B32C3?style=flat-square&logo=eslint&logoColor=white) |
 
 |                                                                                            Quality gate                                                                                             |                                                                                                  Coverage                                                                                                  |                                                                                                Bugs                                                                                                |                                                                                                   Code smells                                                                                                    |                                                                                                          Duplicated lines                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | [![Quality Gate](https://sonarcloud.io/api/project_badges/quality_gate?project=CristinaFores_zara-mobile-challenge)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=coverage)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=bugs)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) | [![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=CristinaFores_zara-mobile-challenge&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=CristinaFores_zara-mobile-challenge) |
 
-Production-grade mobile phone catalog for the Zara / Inditex technical challenge.
+Production-grade smartphone catalog for the [Napptilus Tech Labs](https://www.napptilus.com/) frontend challenge — **Zara Web Challenge**.
 Browse, search, configure variants, and manage a persistent cart — with strict linters,
 GitHub Actions CI, SonarCloud, and Playwright E2E on every pull request.
 
-**Languages:** [English](./README.md) · [Español](./README.es.md)
+**Live:** [App](https://zara-mobile-challenge.vercel.app/) · [Delivery page](https://zara-mobile-challenge.vercel.app/entrega)
+
+**Languages:** [English](./README.md) · [Español](./README.es.md) · [AGENTS.md](./AGENTS.md) · [DESIGN.md](./DESIGN.md)
 
 ---
 
@@ -20,6 +22,7 @@ GitHub Actions CI, SonarCloud, and Playwright E2E on every pull request.
 
 |                     |                                                                                                                                                  |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Live**            | [App](https://zara-mobile-challenge.vercel.app/) · [Delivery page](https://zara-mobile-challenge.vercel.app/entrega)                             |
 | **Getting started** | [Quick start](#quick-start) · [GitHub setup](#github-setup) · [Scripts](#scripts-reference)                                                      |
 | **Application**     | [Product scope](#product-scope) · [URL state](#url-driven-state-query-params) · [Cart](#cart-integrity)                                          |
 | **Architecture**    | [Stack](#technology-stack--rationale) · [Structure](#architecture) · [Images](#image-pipeline--optimization) · [Motion](#motion--figma-fidelity) |
@@ -248,11 +251,11 @@ Animations follow the [Figma challenge spec](https://www.figma.com/design/Nuic7e
 | Grid reflow on search         | FLIP technique          | `useFlipAnimation`, `ProductList`  |
 | Catalog → detail shared image | View Transitions API    | `ProductCard`, `ProductDetailHero` |
 | Hero while route loads        | `loading.tsx` preview   | `app/products/[id]/loading.tsx`    |
-| Color change without flash    | Dual-slot crossfade     | `useImageCrossfade`                |
+| Color change without flash    | Stacked color layers    | `ProductDetailHero`                |
 | Price / color name update     | Text crossfade          | `useTextCrossfade`                 |
 | Similar products carousel     | Horizontal `ScrollRow`  | `SimilarProducts`                  |
 
-**Tests:** `useFlipAnimation.test.tsx`, `flip.test.ts`, `useImageCrossfade.test.ts`, `loading.test.tsx`
+**Tests:** `useFlipAnimation.test.tsx`, `flip.test.ts`, `loading.test.tsx`
 
 ---
 
@@ -265,7 +268,7 @@ Animations follow the [Figma challenge spec](https://www.figma.com/design/Nuic7e
 | Runner        | Jest 30 + React Testing Library                         |
 | Style         | BDD — Given → When → Then / And                         |
 | Network       | MSW v2 in `src/test-utils/msw/handlers.ts`              |
-| Suites        | 47 · 276 tests                                          |
+| Suites        | 48 · 270 tests                                          |
 | Coverage gate | ≥ 85 % lines / functions / statements · ≥ 80 % branches |
 
 ```bash
@@ -446,4 +449,4 @@ E2E runs in GitHub Actions but **not** in Husky pre-push — run locally before 
 ---
 
 **Summary:** Next.js · TypeScript strict · Sass + BEM · Context + localStorage cart · Sharp image proxy ·
-Figma-aligned motion · URL query params · 276 BDD tests + SonarCloud + Playwright E2E · accessibility and SEO as core requirements.
+Figma-aligned motion · URL query params · 270 BDD tests + SonarCloud + Playwright E2E · accessibility and SEO as core requirements.

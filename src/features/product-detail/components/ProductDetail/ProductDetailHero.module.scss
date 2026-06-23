@@ -49,6 +49,13 @@ $heading-gap: 0.6875rem;
     inset: 0;
   }
 
+  &__route-cover {
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-sticky);
+    pointer-events: none;
+  }
+
   &__selectors {
     display: flex;
     flex-direction: column;

@@ -15,6 +15,7 @@ export function useDragScroll<T extends HTMLElement>({
   const startX = useRef(0)
   const startScrollLeft = useRef(0)
   const moved = useRef(false)
+  const captured = useRef(false)
 
   const handlePointerDown = useCallback((event: React.PointerEvent<T>) => {
     const node = ref.current
@@ -24,7 +25,7 @@ export function useDragScroll<T extends HTMLElement>({
     startX.current = event.clientX
     startScrollLeft.current = node.scrollLeft
     moved.current = false
-    node.setPointerCapture(event.pointerId)
+    captured.current = false
   }, [])
 
   const handlePointerMove = useCallback(
@@ -38,8 +39,11 @@ export function useDragScroll<T extends HTMLElement>({
       if (!moved.current) {
         moved.current = true
         setIsDragging(true)
+        node.setPointerCapture(event.pointerId)
+        captured.current = true
       }
 
+      event.preventDefault()
       node.scrollLeft = startScrollLeft.current - delta
     },
     [dragThreshold]
@@ -49,7 +53,11 @@ export function useDragScroll<T extends HTMLElement>({
     const node = ref.current
     if (!node || pointerId.current !== event.pointerId) return
 
-    node.releasePointerCapture(event.pointerId)
+    if (captured.current) {
+      node.releasePointerCapture(event.pointerId)
+      captured.current = false
+    }
+
     pointerId.current = null
     setIsDragging(false)
   }, [])

@@ -1,13 +1,17 @@
 'use client'
 
-import { useLayoutEffect, useMemo } from 'react'
+import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 
 import { ColorSelector } from '@/features/product-detail/components/ColorSelector/ColorSelector'
 import { StorageSelector } from '@/features/product-detail/components/StorageSelector/StorageSelector'
 import { useAfterProductRouteTransition } from '@/features/product-detail/hooks/useAfterProductRouteTransition'
-import { useColorVariantPreload } from '@/features/product-detail/hooks/useColorVariantPreload'
 import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
 import { Button } from '@/shared/components/ui/Button/Button'
+import {
+  DETAIL_HERO_IMAGE_SIZES,
+  DETAIL_HERO_IMAGE_WIDTH,
+  IMAGE_CROSSFADE_MS,
+} from '@/shared/constants'
 import { useTextCrossfade } from '@/shared/hooks/useTextCrossfade'
 import {
   getProductViewTransitionName,
@@ -17,7 +21,6 @@ import {
 } from '@/shared/store/productNavigation'
 import type { ProductDetail } from '@/shared/types'
 
-import { useImageCrossfade } from '../../hooks/useImageCrossfade'
 import { useProductSelection } from '../../hooks/useProductSelection'
 
 import styles from './ProductDetailHero.module.scss'
@@ -26,25 +29,44 @@ interface ProductDetailHeroProps {
   product: ProductDetail
 }
 
-function getImageSlotKey(routeTransitionDone: boolean, index: number): string {
-  if (!routeTransitionDone) {
-    return 'route-image'
-  }
+function uniqueColorImageUrls(colorOptions: ProductDetail['colorOptions']): string[] {
+  const seen = new Set<string>()
 
-  return index === 0 ? 'image-slot-a' : 'image-slot-b'
+  return colorOptions
+    .map(({ imageUrl }) => imageUrl)
+    .filter((imageUrl): imageUrl is string => {
+      if (!imageUrl || seen.has(imageUrl)) return false
+      seen.add(imageUrl)
+      return true
+    })
 }
 
 export function ProductDetailHero({ product }: ProductDetailHeroProps) {
   const routeTransitionDone = useAfterProductRouteTransition()
   const preview = useProductPreview(product.id)
   const selection = useProductSelection(product)
-  const routeImageUrl = preview?.imageUrl ?? selection.imageUrl
-  const [imageSlot0, imageSlot1] = useImageCrossfade(
-    routeTransitionDone ? selection.imageUrl : routeImageUrl
+  const colorImageUrls = useMemo(
+    () => uniqueColorImageUrls(product.colorOptions),
+    [product.colorOptions]
   )
-  useColorVariantPreload(product.colorOptions, selection.imageUrl)
+  const activeImageUrl = selection.imageUrl
+  const routeImageUrl = preview?.imageUrl ?? activeImageUrl
+  const [handoffComplete, setHandoffComplete] = useState(false)
+  const [prevRouteTransitionDone, setPrevRouteTransitionDone] = useState(routeTransitionDone)
   const [priceSlot0, priceSlot1] = useTextCrossfade(selection.priceLabel)
   const imageAlt = `${product.brand} ${product.name}`
+
+  if (prevRouteTransitionDone !== routeTransitionDone) {
+    setPrevRouteTransitionDone(routeTransitionDone)
+    if (!routeTransitionDone) setHandoffComplete(false)
+  }
+
+  const completeHandoff = useCallback(() => {
+    setHandoffComplete(true)
+  }, [])
+
+  const showRouteCover =
+    routeTransitionDone && preview !== null && !handoffComplete && routeImageUrl !== activeImageUrl
 
   const imageTransitionStyle = useMemo(() => {
     if (routeTransitionDone) return undefined
@@ -56,23 +78,52 @@ export function ProductDetailHero({ product }: ProductDetailHeroProps) {
     resolveProductRouteViewTransition(product.id)
   }, [product.id])
 
-  const imageSlots = routeTransitionDone
-    ? [imageSlot0, imageSlot1]
-    : [{ url: routeImageUrl, opacity: 1, zIndex: 1, transition: 'none', onLoad: () => {} }]
-
   return (
     <section className={styles['product-detail-hero']} aria-label={imageAlt}>
       <div className={styles['product-detail-hero__gallery']} style={imageTransitionStyle}>
-        {imageSlots.map((slot, i) => (
-          <figure
-            key={getImageSlotKey(routeTransitionDone, i)}
-            className={styles['product-detail-hero__image']}
-            style={{ zIndex: slot.zIndex, opacity: slot.opacity, transition: slot.transition }}
-            aria-hidden={slot.opacity === 0}
-          >
-            <ProductImage src={slot.url} alt={imageAlt} priority onLoad={slot.onLoad} />
+        {colorImageUrls.map((imageUrl) => {
+          const isActive = imageUrl === activeImageUrl
+          const isRoutePreview = imageUrl === routeImageUrl
+          const shouldMountImage = routeTransitionDone || isRoutePreview
+          const isVisible = routeTransitionDone ? isActive : isRoutePreview
+
+          return (
+            <figure
+              key={imageUrl}
+              className={styles['product-detail-hero__image']}
+              style={{
+                zIndex: isVisible ? 2 : 1,
+                opacity: isVisible ? 1 : 0,
+                transition: routeTransitionDone ? `opacity ${IMAGE_CROSSFADE_MS}ms ease` : 'none',
+              }}
+              aria-hidden={!isVisible}
+            >
+              {shouldMountImage ? (
+                <ProductImage
+                  src={imageUrl}
+                  alt={isVisible ? imageAlt : ''}
+                  sizes={DETAIL_HERO_IMAGE_SIZES}
+                  fixedProxyWidth={DETAIL_HERO_IMAGE_WIDTH}
+                  priority={isRoutePreview}
+                  eager={routeTransitionDone && !isActive && !isRoutePreview}
+                  onLoad={isActive && routeTransitionDone ? completeHandoff : undefined}
+                />
+              ) : null}
+            </figure>
+          )
+        })}
+
+        {showRouteCover ? (
+          <figure className={styles['product-detail-hero__route-cover']} aria-hidden="true">
+            <ProductImage
+              src={routeImageUrl}
+              alt=""
+              sizes={DETAIL_HERO_IMAGE_SIZES}
+              fixedProxyWidth={DETAIL_HERO_IMAGE_WIDTH}
+              priority
+            />
           </figure>
-        ))}
+        ) : null}
       </div>
 
       <div className={styles['product-detail-hero__info']}>

@@ -19,9 +19,6 @@ import {
   setProductPreview,
 } from '@/shared/store/productNavigation'
 import type { Product } from '@/shared/types'
-import { buildProxyUrl } from '@/shared/utils/imageProxy'
-
-const DETAIL_PRELOAD_WIDTHS = [640, 828]
 interface ViewTransitionStyle extends CSSProperties {
   readonly viewTransitionName?: string
 }
@@ -58,15 +55,7 @@ export function useProductDetailNavigation(
     rememberProduct()
     setPrefetchFull(true)
     router.prefetch(href)
-    // Preload the image at detail-hero sizes so the view-transition new-state
-    // snapshot has the image already painted (avoids the blank flash).
-    if (imageUrl) {
-      DETAIL_PRELOAD_WIDTHS.forEach((w) => {
-        const img = new globalThis.Image()
-        img.src = buildProxyUrl(imageUrl, w)
-      })
-    }
-  }, [href, imageUrl, rememberProduct, router])
+  }, [href, rememberProduct, router])
 
   const activateNavigation = useCallback(() => {
     rememberProduct()

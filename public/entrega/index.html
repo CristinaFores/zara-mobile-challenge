@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <base href="/entrega/" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Entrega — Zara Web Challenge | Napptilus Tech Labs</title>
+  <style>
+    :root {
+      --mbst-ink: #000000;
+      --mbst-ink-soft: #1b1a18;
+      --mbst-surface: #ffffff;
+      --mbst-muted: #79736d;
+      --mbst-rule: #cccccc;
+      --mbst-rule-strong: #000000;
+      --mbst-disabled-bg: #f3f2f2;
+      --font-sans: Helvetica, Arial, sans-serif;
+      --sidebar-width: 276px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--mbst-surface);
+      color: var(--mbst-ink);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    a {
+      color: inherit;
+      text-underline-offset: 0.16em;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid var(--mbst-rule);
+      padding: 40px 24px;
+    }
+
+    .brand {
+      display: block;
+      margin-bottom: 40px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .nav p {
+      margin: 0 0 24px;
+      color: var(--mbst-muted);
+      font-size: 12px;
+    }
+
+    .nav ul {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--mbst-muted);
+      font-size: 12px;
+    }
+
+    .nav li {
+      border-left: 1px solid transparent;
+      padding-left: 10px;
+      margin-left: -11px;
+    }
+
+    .nav li:has(a[aria-current='location']) {
+      border-left-color: var(--mbst-ink);
+    }
+
+    .nav a {
+      text-decoration: none;
+    }
+
+    .nav a[aria-current='location'] {
+      color: var(--mbst-ink);
+    }
+
+    .content {
+      width: min(1200px, calc(100vw - var(--sidebar-width) - 80px));
+      padding: 48px 0 80px 64px;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--mbst-muted);
+      font-size: 10px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-weight: 300;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 720px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.12;
+    }
+
+    h2 {
+      margin-top: 72px;
+      padding-top: 24px;
+      border-top: 1px solid var(--mbst-rule);
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 20px 0 0;
+      color: var(--mbst-muted);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .project-details {
+      display: grid;
+      gap: 6px;
+      margin-top: 18px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .project-details p {
+      margin: 0;
+    }
+
+    .project-details span {
+      color: var(--mbst-muted);
+    }
+
+    .meta-grid,
+    .cards,
+    .evidence-grid {
+      display: grid;
+      gap: 1px;
+      margin-top: 28px;
+      background: var(--mbst-rule);
+      border: 1px solid var(--mbst-rule);
+    }
+
+    .meta-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card,
+    .metric,
+    .evidence {
+      background: var(--mbst-surface);
+      padding: 20px;
+    }
+
+    .metric span,
+    .card span,
+    .evidence span {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--mbst-muted);
+      font-size: 10px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 1.2;
+    }
+
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .extension-cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card p,
+    .evidence p {
+      margin: 10px 0 0;
+      color: var(--mbst-muted);
+      font-size: 12px;
+    }
+
+    .demo-panel {
+      --demo-scale: 0.82;
+      margin-top: 28px;
+      border: 1px solid var(--mbst-rule);
+      background: var(--mbst-surface);
+    }
+
+    .demo-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--mbst-rule);
+      padding: 14px 16px;
+    }
+
+    .demo-toolbar span {
+      color: var(--mbst-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .demo-link {
+      border: 1px solid var(--mbst-rule-strong);
+      padding: 10px 16px;
+      color: var(--mbst-ink);
+      font-size: 12px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .demo-frame {
+      display: block;
+      width: calc(100% / var(--demo-scale));
+      height: calc(min(720px, 70vh) / var(--demo-scale));
+      border: 0;
+      background: var(--mbst-surface);
+      transform: scale(var(--demo-scale));
+      transform-origin: top left;
+    }
+
+    .demo-frame-shell {
+      height: min(720px, 70vh);
+      overflow: hidden;
+    }
+
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 28px;
+      border: 1px solid var(--mbst-rule);
+      background: var(--mbst-rule);
+    }
+
+    figure {
+      margin: 0;
+      background: var(--mbst-surface);
+      padding: 14px;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: min(260px, 30vw);
+      border: 1px solid var(--mbst-rule);
+      background: var(--mbst-surface);
+      object-fit: contain;
+    }
+
+    figcaption {
+      margin-top: 10px;
+      color: var(--mbst-muted);
+      font-size: 11px;
+    }
+
+    .evidence-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    table {
+      width: 100%;
+      margin-top: 28px;
+      border-collapse: collapse;
+      background: var(--mbst-surface);
+      font-size: 12px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--mbst-rule);
+      padding: 14px 16px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--mbst-muted);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    code {
+      border: 1px solid var(--mbst-rule);
+      background: var(--mbst-disabled-bg);
+      padding: 0.08em 0.35em;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.9em;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checklist li {
+      border-top: 1px solid var(--mbst-rule);
+      padding-top: 10px;
+    }
+
+    .footer {
+      margin-top: 72px;
+      padding-top: 24px;
+      border-top: 1px solid var(--mbst-rule);
+      color: var(--mbst-muted);
+      font-size: 12px;
+    }
+
+    details.compact-section {
+      margin-top: 48px;
+      border-top: 1px solid var(--mbst-rule);
+    }
+
+    details.compact-section>summary {
+      display: flex;
+      min-height: 58px;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 300;
+      list-style: none;
+    }
+
+    details.compact-section>summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.compact-section>summary::after {
+      content: '+';
+      color: var(--mbst-muted);
+      font-size: 20px;
+    }
+
+    details.compact-section[open]>summary::after {
+      content: '-';
+    }
+
+    .compact-section .section-label {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--mbst-rule);
+    }
+
+    .compact-section .section-label:first-of-type {
+      margin-top: 20px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .compact-section .section-note {
+      margin: 12px 0 0;
+      color: var(--mbst-muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        display: block;
+      }
+
+      .nav {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--mbst-rule);
+        padding: 24px 20px;
+      }
+
+      .brand {
+        margin-bottom: 18px;
+      }
+
+      .content {
+        width: 100%;
+        padding: 32px 16px 64px;
+      }
+
+      .meta-grid,
+      .cards,
+      .extension-cards,
+      .evidence-grid,
+      .screenshot-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h2 {
+        margin-top: 56px;
+      }
+
+      .demo-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .demo-panel {
+        --demo-scale: 0.72;
+      }
+
+      .demo-link {
+        text-align: center;
+      }
+
+      img {
+        height: auto;
+        max-height: 280px;
+      }
+
+      table,
+      thead,
+      tbody,
+      tr,
+      th,
+      td {
+        display: block;
+        width: 100%;
+      }
+
+      thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+
+      tr {
+        margin-top: 12px;
+        border: 1px solid var(--mbst-rule);
+        background: var(--mbst-surface);
+      }
+
+      td {
+        border: 0;
+        border-top: 1px solid var(--mbst-rule);
+      }
+
+      td:first-child {
+        border-top: 0;
+      }
+
+      td::before {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--mbst-muted);
+        font-size: 10px;
+        text-transform: uppercase;
+      }
+
+      td:nth-child(1)::before {
+        content: 'Paso';
+      }
+
+      td:nth-child(2)::before {
+        content: 'Artefacto';
+      }
+
+      td:nth-child(3)::before {
+        content: 'Propósito';
+      }
+
+      .url-table td:nth-child(1)::before {
+        content: 'Dónde';
+      }
+
+      .url-table td:nth-child(2)::before {
+        content: 'Parámetro';
+      }
+
+      .url-table td:nth-child(3)::before {
+        content: 'Para qué';
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <aside class="nav" aria-label="Navegación de entrega">
+      <span class="brand">Zara Web Challenge</span>
+      <p>Napptilus Tech Labs · prueba frontend.</p>
+      <ul>
+        <li><a href="#resumen">Resumen</a></li>
+        <li><a href="#demos">Demo</a></li>
+        <li><a href="#features">Funciones</a></li>
+        <li><a href="#comportamiento">Comportamiento</a></li>
+        <li><a href="#proceso">Proceso</a></li>
+        <li><a href="#criterios">Criterios</a></li>
+        <li><a href="#decisiones">Decisiones</a></li>
+        <li><a href="#extension">Extender</a></li>
+        <li><a href="#capturas">Capturas</a></li>
+      </ul>
+    </aside>
+
+    <main class="content">
+      <section id="resumen">
+        <p class="eyebrow">Entrega · Napptilus Tech Labs · 23 junio 2026</p>
+        <h1>Zara Web Challenge — Mobile Catalog</h1>
+        <p class="lead">
+          Catálogo de smartphones desarrollado para la prueba frontend de
+          <a href="https://www.napptilus.com/">Napptilus Tech Labs</a> en el marco del Zara Web
+          Challenge: búsqueda en tiempo real, configuración de color y almacenamiento, carrito
+          persistente y capa de calidad con tests automatizados, CI y análisis estático.
+        </p>
+        <div class="project-details" aria-label="Datos de entrega">
+          <p><span>Nombre:</span> Cristina Fores</p>
+          <p><span>Proyecto:</span> Zara Web Challenge</p>
+          <p>
+            <span>Repositorio:</span>
+            <a
+              href="https://github.com/CristinaFores/zara-mobile-challenge">github.com/CristinaFores/zara-mobile-challenge</a>
+          </p>
+        </div>
+
+        <div class="meta-grid" aria-label="Resumen técnico">
+          <div class="metric">
+            <span>Framework</span>
+            <strong>Next.js 16 · React 19</strong>
+          </div>
+          <div class="metric">
+            <span>Tests</span>
+            <strong>270 · cobertura ≥85%</strong>
+          </div>
+          <div class="metric">
+            <span>Calidad</span>
+            <strong>CI · SonarCloud · E2E</strong>
+          </div>
+        </div>
+      </section>
+
+      <section id="demos">
+        <h2>Demo</h2>
+        <p class="lead">
+          La aplicación se puede probar aquí mismo. El botón abre la tienda a pantalla completa en
+          otra pestaña.
+        </p>
+
+        <div class="demo-panel">
+          <div class="demo-toolbar">
+            <span>Demo embebida</span>
+            <a class="demo-link" href="/" target="_blank" rel="noreferrer">Abrir en pantalla completa</a>
+          </div>
+          <div class="demo-frame-shell">
+            <iframe class="demo-frame" src="/" title="Demo — Zara Web Challenge" loading="eager"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section id="features">
+        <h2>Funciones</h2>
+        <div class="cards">
+          <article class="card">
+            <span>Catálogo</span>
+            <h3>Listado en servidor</h3>
+            <p>
+              Home con los 20 primeros smartphones desde la API real, con reordenación animada al
+              filtrar resultados.
+            </p>
+          </article>
+          <article class="card">
+            <span>Búsqueda</span>
+            <h3>Estado en la URL</h3>
+            <p>
+              El término de búsqueda vive en <code>?search=</code>, con debounce de 300 ms. El
+              enlace es compartible y el historial del navegador funciona con atrás/adelante.
+            </p>
+          </article>
+          <article class="card">
+            <span>Detalle</span>
+            <h3>Configurador de producto</h3>
+            <p>
+              Selectores de color y almacenamiento, precio según la variante elegida, ficha
+              técnica, productos similares y botón de añadir al carrito bloqueado hasta completar
+              la selección.
+            </p>
+          </article>
+          <article class="card">
+            <span>Animaciones</span>
+            <h3>Transiciones de producto</h3>
+            <p>
+              Continuidad visual entre catálogo y detalle, fundido al cambiar de color y animación
+              de la rejilla al actualizar resultados.
+            </p>
+          </article>
+          <article class="card">
+            <span>Imágenes</span>
+            <h3>Optimización en servidor</h3>
+            <p>
+              El proxy <code>/api/images</code> recorta fondo, redimensiona y cachea las fotos de
+              la API sin exponer la clave al navegador.
+            </p>
+          </article>
+          <article class="card">
+            <span>Calidad</span>
+            <h3>Pipeline de revisión</h3>
+            <p>
+              GitHub Actions en cada PR, SonarCloud, tests unitarios con Jest y Playwright en
+              <code>e2e/</code> para los flujos principales.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <details id="comportamiento" class="compact-section" open>
+        <summary>Comportamiento</summary>
+        <p class="lead">
+          Detalle de qué controla cada parte de la URL, cómo se optimizan las imágenes y qué
+          garantías tiene el carrito — incluido lo que está cubierto por tests.
+        </p>
+
+        <h3 class="section-label">Estado en la URL — qué parámetro hace qué</h3>
+        <p class="section-note">
+          Nada de configuración vive solo en memoria del cliente: todo lo compartible va en la
+          ruta o en query params.
+        </p>
+        <table class="url-table">
+          <thead>
+            <tr>
+              <th>Dónde</th>
+              <th>Parámetro</th>
+              <th>Para qué sirve</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>/</code></td>
+              <td><code>?search=</code></td>
+              <td>
+                Filtra el catálogo contra la API (no solo en cliente). Debounce de 300 ms. El
+                enlace es compartible y atrás/adelante restaura la búsqueda.
+              </td>
+            </tr>
+            <tr>
+              <td><code>/products/[id]</code></td>
+              <td><code>[id]</code> en la ruta</td>
+              <td>
+                Identifica el móvil concreto. Si no existe en la API, la app responde con página
+                404.
+              </td>
+            </tr>
+            <tr>
+              <td><code>/products/[id]</code></td>
+              <td><code>?color=</code></td>
+              <td>
+                Nombre del color elegido. Cambia la imagen del hero y forma parte de la clave al
+                añadir al carrito. Actualiza la URL con <code>history.replaceState</code> (sin
+                refetch del RSC). Sin valor válido, el botón de compra sigue deshabilitado.
+              </td>
+            </tr>
+            <tr>
+              <td><code>/products/[id]</code></td>
+              <td><code>?storage=</code></td>
+              <td>
+                Capacidad elegida (p. ej. <code>256 GB</code>). Fija el precio mostrado y la
+                variante que se guarda en el carrito. Actualiza la URL con
+                <code>history.replaceState</code> (sin refetch del RSC). Sin valor válido, el
+                botón de compra sigue deshabilitado.
+              </td>
+            </tr>
+            <tr>
+              <td><code>/cart</code></td>
+              <td>—</td>
+              <td>
+                El carrito no usa query params: persiste en <code>localStorage</code>. Cada línea
+                enlaza de vuelta al detalle con los mismos <code>color</code> y
+                <code>storage</code>.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="section-label">Imágenes optimizadas en servidor</h3>
+        <p class="section-note">
+          Las fotos de la API llegan grandes y con fondo blanco. El navegador nunca pide la imagen
+          cruda con credenciales.
+        </p>
+        <ul class="checklist">
+          <li>
+            <strong>Proxy <code>/api/images</code>.</strong>
+            El cliente pide <code>/api/images?url=…&amp;w=…&amp;q=…</code>; el servidor descarga
+            la foto, la procesa y devuelve WebP con cabeceras de caché.
+          </li>
+          <li>
+            <strong>Recorte de fondo con Sharp.</strong>
+            Flood-fill desde los bordes: el blanco exterior pasa a transparente; el blanco
+            interior (pantalla del móvil) se conserva.
+          </li>
+          <li>
+            <strong>Redimensionado y caché.</strong>
+            Ancho máximo 1200 px, calidad configurable y caché en memoria (~200 entradas) para no
+            repetir trabajo Sharp en cada visita.
+          </li>
+          <li>
+            <strong>Seguridad.</strong>
+            Solo se aceptan URLs del host de la API del reto; protocolo http/https. Cubierto en
+            <code>imageProcessing.test.ts</code> y <code>api/images/route.test.ts</code>.
+          </li>
+        </ul>
+
+        <h3 class="section-label">Carrito — identidad, persistencia y precios</h3>
+        <p class="section-note">
+          Cada línea es una configuración completa (móvil + color + almacenamiento), no solo el id
+          del producto.
+        </p>
+        <div class="evidence-grid">
+          <article class="evidence">
+            <span>Sync de precios</span>
+            <h3>Reconciliación preparada</h3>
+            <p>
+              Existe <code>syncPrices(mapa)</code> en el reducer: actualiza precios por clave y
+              recalcula el total sin tocar color, imagen ni nombre. Testeado; listo para conectar
+              si la API expusiera cambios de precio en vivo.
+            </p>
+          </article>
+          <article class="evidence">
+            <span>Identidad</span>
+            <h3>Clave única por variante</h3>
+            <p>
+              Clave <code>id::color::capacidad</code>. El mismo móvil en dos colores o dos
+              memorias genera dos líneas distintas. Repetir la misma configuración no duplica la
+              línea.
+            </p>
+          </article>
+          <article class="evidence">
+            <span>Persistencia</span>
+            <h3>localStorage seguro</h3>
+            <p>
+              Hidratación solo en cliente. Al leer, se valida el JSON y se descartan entradas
+              corruptas. Tests en
+              <code>cartStorage.test.ts</code> y E2E de recarga en <code>e2e/cart.spec.ts</code>.
+            </p>
+          </article>
+          <article class="evidence">
+            <span>Precio al añadir</span>
+            <h3>Snapshot en el momento de compra</h3>
+            <p>
+              Al pulsar añadir, la línea guarda el precio de la variante elegida. El total del
+              carrito se recalcula desde esas líneas. Cubierto en
+              <code>CartContext.test.tsx</code>.
+            </p>
+          </article>
+          <article class="evidence">
+            <span>Producto inexistente</span>
+            <h3>404 en detalle</h3>
+            <p>
+              Un id inválido en <code>/products/[id]</code> dispara <code>notFound()</code>. La
+              API del reto no expone stock: el carrito no elimina líneas automáticamente si un
+              producto desaparece del catálogo.
+            </p>
+          </article>
+          <article class="evidence">
+            <span>Tests E2E</span>
+            <h3>Flujos reales</h3>
+            <p>
+              Playwright cubre carrito vacío, añadir con configuración, ver total, eliminar línea
+              y persistencia tras recargar la página.
+            </p>
+          </article>
+        </div>
+      </details>
+
+      <details id="proceso" class="compact-section" open>
+        <summary>Proceso</summary>
+        <table>
+          <thead>
+            <tr>
+              <th>Paso</th>
+              <th>Artefacto</th>
+              <th>Propósito</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Contrato técnico</td>
+              <td>
+                <a href="https://github.com/CristinaFores/zara-mobile-challenge/blob/main/AGENTS.md">AGENTS.md</a>
+              </td>
+              <td>
+                Reglas de arquitectura, API, testing, accesibilidad y convenciones del
+                repositorio.
+              </td>
+            </tr>
+            <tr>
+              <td>Diseño</td>
+              <td>
+                <a href="https://github.com/CristinaFores/zara-mobile-challenge/blob/main/DESIGN.md">DESIGN.md</a>
+              </td>
+              <td>
+                Contrato visual generado desde el Figma del reto vía MCP Figma; tokens en
+                <code>_variables.scss</code>, layout y copy canónica para agentes UI.
+              </td>
+            </tr>
+            <tr>
+              <td>Documentación</td>
+              <td>
+                <a href="https://github.com/CristinaFores/zara-mobile-challenge/blob/main/README.es.md">README.es.md</a>
+                ·
+                <a href="https://github.com/CristinaFores/zara-mobile-challenge/blob/main/README.md">README.md</a>
+              </td>
+              <td>
+                Stack, arquitectura por features, pipeline de imágenes, CI/CD y guía de ejecución.
+              </td>
+            </tr>
+            <tr>
+              <td>Código</td>
+              <td><code>src/features/</code> + <code>src/shared/</code></td>
+              <td>
+                Dominios separados — catálogo, detalle y carrito — con servicios y componentes
+                compartidos aislados.
+              </td>
+            </tr>
+            <tr>
+              <td>Tests unitarios</td>
+              <td><code>src/**/*.test.ts(x)</code></td>
+              <td>
+                270 tests en formato BDD; la red se simula en la capa HTTP, no se mockea la lógica
+                de negocio.
+              </td>
+            </tr>
+            <tr>
+              <td>Tests E2E</td>
+              <td>
+                <a href="https://github.com/CristinaFores/zara-mobile-challenge/tree/main/e2e">e2e/</a>
+              </td>
+              <td>Playwright sobre listado, detalle y carrito en Chromium.</td>
+            </tr>
+            <tr>
+              <td>CI</td>
+              <td>
+                <a
+                  href="https://github.com/CristinaFores/zara-mobile-challenge/blob/main/.github/workflows/ci.yml">ci.yml</a>
+                ·
+                <a
+                  href="https://github.com/CristinaFores/zara-mobile-challenge/blob/main/sonar-project.properties">sonar-project.properties</a>
+              </td>
+              <td>En cada PR: typecheck, lint, tests, build, E2E y análisis SonarCloud.</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details id="criterios" class="compact-section" open>
+        <summary>Criterios</summary>
+        <p class="lead">
+          Resumen de cumplimiento del enunciado. El detalle técnico está en el README y en
+          AGENTS.md.
+        </p>
+
+        <div class="evidence-grid">
+          <article class="evidence">
+            <span>Catálogo</span>
+            <h3>Listado y búsqueda</h3>
+            <p>
+              Rejilla de 20 productos, búsqueda contra la API con debounce, contador de
+              resultados, estados de carga/error/vacío y navegación al detalle.
+            </p>
+          </article>
+          <article class="evidence">
+            <span>Detalle</span>
+            <h3>Configuración y similares</h3>
+            <p>
+              Imagen principal, selectores de color y almacenamiento, precio según variante,
+              especificaciones, productos similares y botón deshabilitado hasta elegir ambas
+              opciones.
+            </p>
+          </article>
+          <article class="evidence">
+            <span>Carrito</span>
+            <h3>Persistencia</h3>
+            <p>
+              Guardado en <code>localStorage</code> sin romper el SSR, identidad por producto +
+              color + almacenamiento, eliminar líneas, total, contador en cabecera y volver al
+              catálogo.
+            </p>
+          </article>
+          <article class="evidence">
+            <span>API</span>
+            <h3>Seguridad</h3>
+            <p>
+              La clave <code>API_KEY</code> solo existe en servidor. Las peticiones con
+              credenciales pasan por route handlers o server components, nunca por variables
+              <code>NEXT_PUBLIC_</code>.
+            </p>
+          </article>
+          <article class="evidence">
+            <span>UI</span>
+            <h3>Visual y responsive</h3>
+            <p>
+              Sass + BEM + CSS Modules, Helvetica, bordes de 1 px, diseño mobile-first,
+              <code>next/image</code> y tokens en <code>_variables.scss</code>.
+            </p>
+          </article>
+          <article class="evidence">
+            <span>Entrega</span>
+            <h3>Calidad y documentación</h3>
+            <p>
+              TypeScript strict, HTML semántico, metadata SEO, consola sin errores, README
+              bilingüe y esta página de entrega con demo embebida.
+            </p>
+          </article>
+        </div>
+      </details>
+
+      <details id="decisiones" class="compact-section" open>
+        <summary>Decisiones</summary>
+        <ul class="checklist">
+          <li>
+            <strong>Next.js App Router frente a una SPA pura.</strong>
+            Renderizado en servidor para catálogo y detalle, metadata dinámica por producto, route
+            handlers para credenciales e imágenes optimizadas con <code>next/image</code>.
+          </li>
+          <li>
+            <strong>Estado en la URL, no en un store global.</strong>
+            Búsqueda (<code>?search=</code>) navega con el router de Next. Color y almacenamiento
+            (<code>?color=</code>, <code>?storage=</code>) actualizan la barra de direcciones con
+            <code>history.replaceState</code> para enlaces profundos, atrás/adelante y refresh sin
+            volver a ejecutar el RSC ni remontar imágenes del detalle.
+          </li>
+          <li>
+            <strong>Optimización de assets con proxy Sharp.</strong>
+            Las imágenes de la API no tenían tamaños ni crops consistentes. El route handler
+            <code>/api/images</code> normaliza fondo y encuadre en servidor, sirve WebP con caché
+            y evita upscale agresivo. La clave de la API no llega al navegador.
+          </li>
+          <li>
+            <strong>Contrato visual desde Figma vía MCP.</strong>
+            El archivo del reto se leyó con MCP Figma; medidas, paddings, gaps, tipografía y
+            frames de referencia se consolidaron en <code>DESIGN.md</code> y en los tokens de
+            <code>src/scss/_variables.scss</code>.
+          </li>
+          <li>
+            <strong>Motion fuera del mínimo funcional.</strong>
+            Transición visual catálogo → detalle con View Transitions API, reorder del grid al
+            buscar con FLIP y fundido entre capas de color precargadas en el hero. Todo respeta
+            <code>prefers-reduced-motion</code>.
+          </li>
+          <li>
+            <strong>Validación visual de entrega.</strong>
+            Capturas en <code>public/entrega/screenshots/</code> tomadas sobre el deploy real para
+            contrastar catálogo, detalle, carrito y mobile con el Figma del challenge.
+          </li>
+          <li>
+            <strong>Context API solo para el carrito.</strong>
+            Sin Redux ni TanStack Query: el carrito es el único estado compartido en cliente; el
+            resto es server-first o depende de la URL.
+          </li>
+          <li>
+            <strong>Calidad integrada en el flujo de trabajo.</strong>
+            CI en cada PR, SonarCloud, tests con simulación HTTP y E2E con Playwright. El README
+            actúa como contrato de revisión, no como anexo posterior.
+          </li>
+        </ul>
+      </details>
+
+      <details id="extension" class="compact-section" open>
+        <summary>Extender</summary>
+        <p class="lead">
+          El repositorio está preparado para evolucionar sin romper la arquitectura por features
+          ni los gates de calidad.
+        </p>
+        <div class="cards extension-cards">
+          <article class="card">
+            <span>Cambio visual</span>
+            <h3>Leer el contrato antes de tocar estilos</h3>
+            <p>
+              Empezar por <code>DESIGN.md</code> y <code>AGENTS.md</code>, los tokens en
+              <code>src/scss/_variables.scss</code> y la convención BEM en CSS Modules.
+            </p>
+          </article>
+          <article class="card">
+            <span>Nueva feature</span>
+            <h3>Slice pequeño con tests</h3>
+            <p>
+              Ejemplo — filtros por marca: tipos en <code>src/shared/types</code>, lógica en
+              <code>features/catalog</code>, test unitario y spec E2E antes del merge.
+            </p>
+          </article>
+          <article class="card">
+            <span>Regresiones</span>
+            <h3>Gates automáticos</h3>
+            <p>
+              Localmente:
+              <code>npm run typecheck && npm run lint && npm run test && npm run build</code>. La
+              CI añade E2E y SonarCloud encima del mismo gate.
+            </p>
+          </article>
+        </div>
+      </details>
+
+      <details id="capturas" class="compact-section" open>
+        <summary>Capturas</summary>
+        <div class="screenshot-grid">
+          <figure>
+            <img src="screenshots/01-catalog-search.png" alt="Catálogo con búsqueda activa" />
+            <figcaption>Catálogo filtrado por búsqueda en tiempo real.</figcaption>
+          </figure>
+          <figure>
+            <img src="screenshots/02-detail-config.png" alt="Detalle con color y almacenamiento seleccionados" />
+            <figcaption>Detalle con configuración completa y precio actualizado.</figcaption>
+          </figure>
+          <figure>
+            <img src="screenshots/03-cart.png" alt="Carrito con líneas configuradas" />
+            <figcaption>Carrito persistente con total y opciones visibles.</figcaption>
+          </figure>
+          <figure>
+            <img src="screenshots/04-mobile-detail.png" alt="Detalle en viewport móvil" />
+            <figcaption>Detalle responsive en viewport móvil.</figcaption>
+          </figure>
+        </div>
+      </details>
+
+      <p class="footer">
+        Esta página es el resumen de entrega para el evaluador. La documentación técnica completa,
+        los tests y la CI viven en el repositorio.
+      </p>
+    </main>
+  </div>
+  <script>
+    ; (() => {
+      const links = [...document.querySelectorAll('.nav a[href^="#"]')]
+      const blocks = links.map((a) => document.getElementById(a.hash.slice(1))).filter(Boolean)
+
+      const mark = () => {
+        const line = scrollY + innerHeight * 0.3
+        let id = blocks[0]?.id
+        for (const block of blocks) if (block.offsetTop <= line) id = block.id
+        links.forEach((a) => {
+          if (a.hash === `#${id}`) a.setAttribute('aria-current', 'location')
+          else a.removeAttribute('aria-current')
+        })
+      }
+
+      mark()
+      addEventListener('scroll', mark, { passive: true })
+    })()
+  </script>
+</body>
+
+</html>

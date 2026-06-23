@@ -5,7 +5,7 @@ import { useDragScroll } from './useDragScroll'
 
 function createPointerEvent(
   node: HTMLDivElement,
-  init: { clientX: number; pointerId?: number }
+  init: { clientX: number; pointerId?: number; target?: EventTarget | null }
 ): ReactPointerEvent<HTMLDivElement> {
   return {
     button: 0,
@@ -13,6 +13,8 @@ function createPointerEvent(
     pointerId: init.pointerId ?? 1,
     clientX: init.clientX,
     currentTarget: node,
+    target: init.target ?? node,
+    preventDefault: jest.fn(),
   } as ReactPointerEvent<HTMLDivElement>
 }
 
@@ -28,7 +30,7 @@ function createClickEvent(): Pick<
 
 describe('Given useDragScroll', () => {
   describe('When the user drags horizontally with the mouse', () => {
-    it('Then the row scrolls and releases on pointer up', () => {
+    it('Then capture starts after the threshold and the row scrolls', () => {
       const { result } = renderHook(() => useDragScroll<HTMLDivElement>())
       const node = document.createElement('div')
       Object.defineProperty(node, 'scrollLeft', { writable: true, value: 0 })
@@ -39,11 +41,13 @@ describe('Given useDragScroll', () => {
       act(() => {
         result.current.handlers.onPointerDown(createPointerEvent(node, { clientX: 100 }))
       })
+      expect(node.setPointerCapture).not.toHaveBeenCalled()
       expect(result.current.isDragging).toBe(false)
 
       act(() => {
         result.current.handlers.onPointerMove(createPointerEvent(node, { clientX: 60 }))
       })
+      expect(node.setPointerCapture).toHaveBeenCalledWith(1)
       expect(result.current.isDragging).toBe(true)
       expect(node.scrollLeft).toBe(40)
 
@@ -72,6 +76,45 @@ describe('Given useDragScroll', () => {
 
       expect(jest.mocked(clickEvent.preventDefault)).toHaveBeenCalled()
       expect(jest.mocked(clickEvent.stopPropagation)).toHaveBeenCalled()
+    })
+  })
+
+  describe('When pointer down starts on a link inside the row', () => {
+    it('Then a click without movement navigates and a drag still scrolls', () => {
+      const { result } = renderHook(() => useDragScroll<HTMLDivElement>())
+      const node = document.createElement('div')
+      const link = document.createElement('a')
+      node.appendChild(link)
+      Object.defineProperty(node, 'scrollLeft', { writable: true, value: 0 })
+      node.setPointerCapture = jest.fn()
+      node.releasePointerCapture = jest.fn()
+      result.current.ref.current = node
+      const clickEvent = createClickEvent()
+
+      act(() => {
+        result.current.handlers.onPointerDown(
+          createPointerEvent(node, { clientX: 100, target: link })
+        )
+        result.current.handlers.onPointerUp(
+          createPointerEvent(node, { clientX: 100, target: link })
+        )
+        result.current.handlers.onClickCapture(clickEvent as unknown as MouseEvent<HTMLDivElement>)
+      })
+
+      expect(node.setPointerCapture).not.toHaveBeenCalled()
+      expect(jest.mocked(clickEvent.preventDefault)).not.toHaveBeenCalled()
+
+      act(() => {
+        result.current.handlers.onPointerDown(
+          createPointerEvent(node, { clientX: 100, target: link })
+        )
+        result.current.handlers.onPointerMove(
+          createPointerEvent(node, { clientX: 40, target: link })
+        )
+      })
+
+      expect(node.setPointerCapture).toHaveBeenCalledWith(1)
+      expect(node.scrollLeft).toBe(60)
     })
   })
 
