@@ -5,9 +5,14 @@ import { BackLink } from './BackLink'
 
 const backMock = jest.fn()
 const pushMock = jest.fn()
+const navigateBackMock = jest.fn()
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({ back: backMock, push: pushMock }),
+}))
+
+jest.mock('@/shared/lib/productRouteTransition', () => ({
+  navigateBackFromProductDetail: (...args: unknown[]) => navigateBackMock(...args),
 }))
 
 describe('Given BackLink', () => {
@@ -28,6 +33,20 @@ describe('Given BackLink', () => {
     it('Then it shows the default label "Back"', () => {
       render(<BackLink />)
       expect(screen.getByRole('button', { name: /back/i })).toBeInTheDocument()
+    })
+  })
+
+  describe('When the user clicks back with a product id', () => {
+    it('Then it uses the product route transition', async () => {
+      render(<BackLink productId="SMG-S24U" />)
+      await userEvent.click(screen.getByRole('button', { name: /back/i }))
+      expect(navigateBackMock).toHaveBeenCalledWith(
+        expect.objectContaining({ back: backMock, push: pushMock }),
+        'SMG-S24U',
+        '/'
+      )
+      expect(backMock).not.toHaveBeenCalled()
+      expect(pushMock).not.toHaveBeenCalled()
     })
   })
 

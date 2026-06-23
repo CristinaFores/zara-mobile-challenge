@@ -90,3 +90,26 @@ export function resolveProductRouteViewTransition(productId: string): void {
   if (pendingRouteTransition?.productId !== productId) return
   pendingRouteTransition.resolve()
 }
+
+let returningProductId: string | null = null
+const returningListeners = new Set<() => void>()
+
+function subscribeToReturning(listener: () => void): () => void {
+  returningListeners.add(listener)
+  return () => {
+    returningListeners.delete(listener)
+  }
+}
+
+export function setReturningProductId(productId: string | null): void {
+  returningProductId = productId
+  returningListeners.forEach((fn) => fn())
+}
+
+export function useReturningProductTransitionTarget(productId: string): boolean {
+  return useSyncExternalStore(
+    subscribeToReturning,
+    () => returningProductId === productId,
+    () => false
+  )
+}

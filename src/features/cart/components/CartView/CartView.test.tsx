@@ -126,7 +126,7 @@ describe('Given CartView', () => {
 
       expect(mockRemoveFromCart).not.toHaveBeenCalled()
 
-      jest.advanceTimersByTime(350)
+      jest.advanceTimersByTime(720)
 
       expect(mockRemoveFromCart).toHaveBeenCalledWith('smg-s24-ultra::titanium-violet::256GB')
       jest.useRealTimers()

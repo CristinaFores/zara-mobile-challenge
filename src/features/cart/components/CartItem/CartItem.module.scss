@@ -1,26 +1,25 @@
 @use '@/scss/_mixins' as *;
 
-@keyframes cart-item-remove {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateX(-1.5rem);
-  }
-}
-
 .cart-item {
   display: grid;
   grid-template-columns: 8.75rem 1fr;
   gap: 1.5rem;
   align-items: center;
 
+  &:not(:last-child) {
+    margin-bottom: 2.5rem;
+  }
+
   &--removing {
     pointer-events: none;
-    animation: cart-item-remove 0.35s ease forwards;
+    margin-bottom: 0;
+    opacity: 0;
+    transform: translateX(-0.75rem);
+    transition:
+      opacity 0.3s ease-out,
+      transform 0.35s cubic-bezier(0.33, 1, 0.68, 1),
+      height 0.55s cubic-bezier(0.33, 1, 0.68, 1) 0.17s,
+      margin-bottom 0.55s cubic-bezier(0.33, 1, 0.68, 1) 0.17s;
   }
 
   @include breakpoint(tablet) {
@@ -75,7 +74,6 @@
     margin: 1.25rem 0 0;
   }
 
-  // wip
   &__remove {
     background: none;
     border: none;
@@ -99,7 +97,8 @@
 @media (prefers-reduced-motion: reduce) {
   .cart-item {
     &--removing {
-      animation: none;
+      transition: none;
+      height: 0 !important;
       opacity: 0;
     }
   }

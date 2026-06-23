@@ -58,7 +58,7 @@ export default function ProductDetailLoading() {
 
   return (
     <>
-      <BackLink />
+      <BackLink productId={productId} />
       <article className={detailStyles['product-detail-view']} data-page="product-detail">
         <section className={heroStyles['product-detail-hero']} aria-label="Loading product">
           <div

@@ -39,12 +39,9 @@ body {
     isolation: auto;
   }
 
-  html.product-route-view-transition::view-transition-old(root) {
-    animation-duration: 150ms;
-  }
-
+  html.product-route-view-transition::view-transition-old(root),
   html.product-route-view-transition::view-transition-new(root) {
-    animation-duration: 300ms;
+    animation: none;
   }
 
   html.cart-route-view-transition main {

@@ -1,10 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { memo } from 'react'
+import { memo, useLayoutEffect } from 'react'
 
 import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
 import { useProductDetailNavigation } from '@/shared/hooks/useProductDetailNavigation'
+import {
+  getProductViewTransitionName,
+  resolveProductRouteViewTransition,
+  useReturningProductTransitionTarget,
+} from '@/shared/store/productNavigation'
 import type { Product } from '@/shared/types'
 
 import styles from './ProductCard.module.scss'
@@ -28,12 +33,24 @@ export const ProductCard = memo(function ProductCard({
   const {
     href,
     prefetchFull,
-    imageTransitionStyle,
+    imageTransitionStyle: forwardImageTransitionStyle,
     warmRoute,
     activatePointerNavigation,
     navigateWithViewTransition,
     activateNavigation,
   } = useProductDetailNavigation({ id, brand, name, basePrice, imageUrl }, { priority })
+  const isBackTransitionTarget = useReturningProductTransitionTarget(id)
+
+  useLayoutEffect(() => {
+    if (!isBackTransitionTarget) return
+    resolveProductRouteViewTransition(id)
+  }, [id, isBackTransitionTarget])
+
+  const imageTransitionStyle =
+    forwardImageTransitionStyle ??
+    (isBackTransitionTarget
+      ? { viewTransitionName: getProductViewTransitionName(id, 'image') }
+      : undefined)
 
   return (
     <li

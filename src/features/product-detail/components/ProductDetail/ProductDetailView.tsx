@@ -30,7 +30,7 @@ function buildSpecRows(product: ProductDetail) {
 export function ProductDetailView({ product }: ProductDetailViewProps) {
   return (
     <>
-      <BackLink />
+      <BackLink productId={product.id} />
       <article className={styles['product-detail-view']} data-page="product-detail">
         <ProductDetailHero product={product} />
         <SpecsTable rows={buildSpecRows(product)} />

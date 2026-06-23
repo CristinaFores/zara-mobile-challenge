@@ -22,6 +22,8 @@ jest.mock('@/shared/store/productNavigation', () => ({
   getProductViewTransitionName: (id: string, part: string) => `product-${part}-${id}`,
   scrollToProductDetailTop: jest.fn(),
   setProductPreview: jest.fn(),
+  resolveProductRouteViewTransition: jest.fn(),
+  useReturningProductTransitionTarget: jest.fn(() => false),
 }))
 
 jest.mock('@/shared/components/ProductImage/ProductImage', () => ({

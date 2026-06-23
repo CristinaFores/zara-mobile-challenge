@@ -8,7 +8,9 @@ import {
   resolveProductRouteViewTransition,
   scrollToProductDetailTop,
   setProductPreview,
+  setReturningProductId,
   useProductPreview,
+  useReturningProductTransitionTarget,
 } from '@/shared/store/productNavigation'
 import { productListFixture } from '@/test-utils/fixtures/products.fixtures'
 
@@ -116,6 +118,18 @@ describe('Given productNavigation', () => {
       })
 
       await expect(transition).resolves.toBeUndefined()
+    })
+  })
+
+  describe('When a returning product id is set', () => {
+    it('Then useReturningProductTransitionTarget matches only that product', () => {
+      setReturningProductId('SMG-S24U')
+
+      const { result: matching } = renderHook(() => useReturningProductTransitionTarget('SMG-S24U'))
+      const { result: other } = renderHook(() => useReturningProductTransitionTarget('other-id'))
+
+      expect(matching.current).toBe(true)
+      expect(other.current).toBe(false)
     })
   })
 })
