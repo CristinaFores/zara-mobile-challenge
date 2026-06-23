@@ -46,10 +46,10 @@ export function ProductDetailHero({ product }: ProductDetailHeroProps) {
   const [priceSlot0, priceSlot1] = useTextCrossfade(selection.priceLabel)
   const imageAlt = `${product.brand} ${product.name}`
 
-  const imageTransitionStyle = useMemo(
-    () => ({ viewTransitionName: getProductViewTransitionName(product.id, 'image') }),
-    [product.id]
-  )
+  const imageTransitionStyle = useMemo(() => {
+    if (routeTransitionDone) return undefined
+    return { viewTransitionName: getProductViewTransitionName(product.id, 'image') }
+  }, [product.id, routeTransitionDone])
 
   useLayoutEffect(() => {
     scrollToProductDetailTop()

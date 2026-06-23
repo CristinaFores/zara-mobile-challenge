@@ -8,9 +8,21 @@ const URL_B = 'https://example.com/image-b.webp'
 describe('Given useImageCrossfade', () => {
   beforeEach(() => {
     jest.useFakeTimers()
+    jest.spyOn(globalThis, 'Image').mockImplementation(() => {
+      const img = {
+        complete: true,
+        onload: null as (() => void) | null,
+        onerror: null as (() => void) | null,
+        set src(_value: string) {
+          queueMicrotask(() => img.onload?.())
+        },
+      }
+      return img as unknown as HTMLImageElement
+    })
   })
 
   afterEach(() => {
+    jest.restoreAllMocks()
     act(() => {
       jest.runOnlyPendingTimers()
     })
@@ -24,16 +36,12 @@ describe('Given useImageCrossfade', () => {
       expect(result.current[1].url).toBe(URL_A)
     })
 
-    it('Then slot0 is front (zIndex 2) and slot1 is back (zIndex 1)', () => {
+    it('Then slot0 is front (zIndex 2) and slot1 is hidden (opacity 0)', () => {
       const { result } = renderHook(() => useImageCrossfade(URL_A))
       expect(result.current[0].zIndex).toBe(2)
-      expect(result.current[1].zIndex).toBe(1)
-    })
-
-    it('Then both slots are fully opaque', () => {
-      const { result } = renderHook(() => useImageCrossfade(URL_A))
       expect(result.current[0].opacity).toBe(1)
-      expect(result.current[1].opacity).toBe(1)
+      expect(result.current[1].zIndex).toBe(1)
+      expect(result.current[1].opacity).toBe(0)
     })
 
     it('Then both slots expose an onLoad callback', () => {

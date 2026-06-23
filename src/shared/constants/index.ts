@@ -19,5 +19,6 @@ export const PRODUCTS_FETCH_LIMIT = 21
 
 export const SEARCH_DEBOUNCE_MS = 300
 export const FILTER_DEBOUNCE_MS = 450
+export const IMAGE_CROSSFADE_MS = 300
 
 export const CART_KEY = 'CART'
