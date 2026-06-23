@@ -57,7 +57,7 @@ function parseCartItems(raw: unknown): CartItem[] {
 /** Read/write access to the persisted cart, safe to call during SSR. */
 export const cartStorage = {
   read(): CartItem[] {
-    if (typeof window === 'undefined') return []
+    if (typeof globalThis.window === 'undefined') return []
     return safeExecute<CartItem[]>(() => {
       const data = localStorage.getItem(CART_KEY)
       if (!data) return []
@@ -66,14 +66,14 @@ export const cartStorage = {
   },
 
   write(items: CartItem[]): void {
-    if (typeof window === 'undefined') return
+    if (typeof globalThis.window === 'undefined') return
     safeExecute(() => {
       localStorage.setItem(CART_KEY, JSON.stringify(items))
     }, undefined)
   },
 
   clear(): void {
-    if (typeof window === 'undefined') return
+    if (typeof globalThis.window === 'undefined') return
     safeExecute(() => {
       localStorage.removeItem(CART_KEY)
     }, undefined)

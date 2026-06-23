@@ -13,7 +13,7 @@ export function useColorVariantPreload(colorOptions: ColorOption[], activeUrl: s
     colorOptions.forEach(({ imageUrl }) => {
       if (!imageUrl || imageUrl === activeUrl) return
       PRELOAD_WIDTHS.forEach((w) => {
-        const img = new window.Image()
+        const img = new globalThis.Image()
         img.src = buildProxyUrl(imageUrl, w)
       })
     })

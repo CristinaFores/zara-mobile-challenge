@@ -5,31 +5,31 @@ export const MAX_WIDTH = 1200
 export const DEFAULT_QUALITY = 75
 export const CACHE_MAX_AGE = 31_536_000
 
-const PADDING_RATIO = 0
-const TRANSPARENT = { r: 0, g: 0, b: 0, alpha: 0 } as const
+const CANVAS_PADDING_RATIO = 0
+const TRANSPARENT_RGBA = { r: 0, g: 0, b: 0, alpha: 0 } as const
 
 /** Keeps Sharp work below libuv's default thread-pool size so other I/O stays responsive. */
-const MAX_CONCURRENT_SHARP = 3
-let activeSharp = 0
-const sharpQueue: Array<() => void> = []
+const SHARP_CONCURRENCY_LIMIT = 3
+let runningSharpJobs = 0
+const waitingSharpJobs: Array<() => void> = []
 
 const acquireSharpSlot = (): Promise<void> =>
   new Promise((resolve) => {
-    if (activeSharp < MAX_CONCURRENT_SHARP) {
-      activeSharp++
+    if (runningSharpJobs < SHARP_CONCURRENCY_LIMIT) {
+      runningSharpJobs++
       resolve()
     } else {
-      sharpQueue.push(() => {
-        activeSharp++
+      waitingSharpJobs.push(() => {
+        runningSharpJobs++
         resolve()
       })
     }
   })
 
 const releaseSharpSlot = (): void => {
-  activeSharp--
-  const next = sharpQueue.shift()
-  if (next) next()
+  runningSharpJobs--
+  const runNextJob = waitingSharpJobs.shift()
+  if (runNextJob) runNextJob()
 }
 
 /**
@@ -63,12 +63,12 @@ export async function fetchRemoteImage(url: string): Promise<Buffer> {
   return Buffer.from(await response.arrayBuffer())
 }
 
-interface NormalizeOptions {
+interface ProcessImageOptions {
   width: number
   quality: number
 }
 
-const BACKGROUND_THRESHOLD = 240
+const NEAR_WHITE_RGB_THRESHOLD = 240
 
 /**
  * Flood-fill from the image borders: edge-connected near-white pixels become
@@ -76,42 +76,48 @@ const BACKGROUND_THRESHOLD = 240
  * not reachable from the border.
  */
 export function removeWhiteBackground(
-  data: Buffer,
-  width: number,
-  height: number,
-  threshold = BACKGROUND_THRESHOLD
+  rgbaBuffer: Buffer,
+  imageWidth: number,
+  imageHeight: number,
+  nearWhiteThreshold = NEAR_WHITE_RGB_THRESHOLD
 ): Buffer {
-  const pixels = new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength)
-  const visited = new Uint8Array(width * height)
+  const pixels = new Uint8ClampedArray(
+    rgbaBuffer.buffer,
+    rgbaBuffer.byteOffset,
+    rgbaBuffer.byteLength
+  )
+  const visited = new Uint8Array(imageWidth * imageHeight)
 
-  const isBackground = (pos: number): boolean => {
-    const i = pos * 4
-    return pixels[i] >= threshold && pixels[i + 1] >= threshold && pixels[i + 2] >= threshold
+  const isNearWhitePixel = (pixelIndex: number): boolean => {
+    const channelIndex = pixelIndex * 4
+    return (
+      pixels[channelIndex] >= nearWhiteThreshold &&
+      pixels[channelIndex + 1] >= nearWhiteThreshold &&
+      pixels[channelIndex + 2] >= nearWhiteThreshold
+    )
   }
 
-  const queue: number[] = []
-  for (let x = 0; x < width; x++) {
-    queue.push(x)
-    queue.push((height - 1) * width + x)
+  const borderFillQueue: number[] = []
+  for (let x = 0; x < imageWidth; x++) {
+    borderFillQueue.push(x, (imageHeight - 1) * imageWidth + x)
   }
-  for (let y = 1; y < height - 1; y++) {
-    queue.push(y * width)
-    queue.push(y * width + (width - 1))
+  for (let y = 1; y < imageHeight - 1; y++) {
+    borderFillQueue.push(y * imageWidth, y * imageWidth + (imageWidth - 1))
   }
 
-  while (queue.length > 0) {
-    const pos = queue.pop()
-    if (pos === undefined || visited[pos] || !isBackground(pos)) continue
+  while (borderFillQueue.length > 0) {
+    const pixelIndex = borderFillQueue.pop()
+    if (pixelIndex === undefined || visited[pixelIndex] || !isNearWhitePixel(pixelIndex)) continue
 
-    visited[pos] = 1
-    pixels[pos * 4 + 3] = 0
+    visited[pixelIndex] = 1
+    pixels[pixelIndex * 4 + 3] = 0
 
-    const x = pos % width
-    const y = Math.floor(pos / width)
-    if (x > 0) queue.push(pos - 1)
-    if (x < width - 1) queue.push(pos + 1)
-    if (y > 0) queue.push(pos - width)
-    if (y < height - 1) queue.push(pos + width)
+    const x = pixelIndex % imageWidth
+    const y = Math.floor(pixelIndex / imageWidth)
+    if (x > 0) borderFillQueue.push(pixelIndex - 1)
+    if (x < imageWidth - 1) borderFillQueue.push(pixelIndex + 1)
+    if (y > 0) borderFillQueue.push(pixelIndex - imageWidth)
+    if (y < imageHeight - 1) borderFillQueue.push(pixelIndex + imageWidth)
   }
 
   return Buffer.from(pixels.buffer, pixels.byteOffset, pixels.byteLength)
@@ -119,33 +125,37 @@ export function removeWhiteBackground(
 
 /** Trims whitespace, fits the image onto a transparent square and re-encodes it as WebP. */
 export async function normalizeImage(
-  source: Buffer,
-  { width, quality }: NormalizeOptions
+  sourceBuffer: Buffer,
+  { width: outputWidth, quality }: ProcessImageOptions
 ): Promise<Buffer> {
   await acquireSharpSlot()
 
   try {
-    const { data, info } = await sharp(source)
+    const { data: rawRgba, info: sourceMetadata } = await sharp(sourceBuffer)
       .ensureAlpha()
       .raw()
       .toBuffer({ resolveWithObject: true })
 
-    const cleaned = removeWhiteBackground(data, info.width, info.height)
+    const rgbaWithoutBackground = removeWhiteBackground(
+      rawRgba,
+      sourceMetadata.width,
+      sourceMetadata.height
+    )
 
-    const padding = Math.round(width * PADDING_RATIO)
-    const inner = width - padding * 2
+    const canvasPadding = Math.round(outputWidth * CANVAS_PADDING_RATIO)
+    const drawableSize = outputWidth - canvasPadding * 2
 
-    return sharp(cleaned, {
-      raw: { width: info.width, height: info.height, channels: 4 },
+    return sharp(rgbaWithoutBackground, {
+      raw: { width: sourceMetadata.width, height: sourceMetadata.height, channels: 4 },
     })
       .trim({ threshold: 40 })
-      .resize(inner, inner, { fit: 'contain', background: TRANSPARENT })
+      .resize(drawableSize, drawableSize, { fit: 'contain', background: TRANSPARENT_RGBA })
       .extend({
-        top: padding,
-        bottom: padding,
-        left: padding,
-        right: padding,
-        background: TRANSPARENT,
+        top: canvasPadding,
+        bottom: canvasPadding,
+        left: canvasPadding,
+        right: canvasPadding,
+        background: TRANSPARENT_RGBA,
       })
       .webp({ quality })
       .toBuffer()

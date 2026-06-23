@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   useState,
   type ReactNode,
@@ -63,16 +64,19 @@ function useCartProviderValue(): CartContextValue {
   const cartTotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
-  return {
-    cartItems,
-    cartTotal,
-    cartCount,
-    isHydrated,
-    addToCart,
-    removeFromCart,
-    clearCart,
-    syncPrices,
-  }
+  return useMemo(
+    () => ({
+      cartItems,
+      cartTotal,
+      cartCount,
+      isHydrated,
+      addToCart,
+      removeFromCart,
+      clearCart,
+      syncPrices,
+    }),
+    [cartItems, cartTotal, cartCount, isHydrated, addToCart, removeFromCart, clearCart, syncPrices]
+  )
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -85,7 +89,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(timer)
   }, [announcement])
 
-  const { addToCart: originalAddToCart, ...rest } = cartValue
+  const { addToCart: originalAddToCart } = cartValue
   const addToCart = useCallback<CartContextValue['addToCart']>(
     (product, selectedColor, selectedStorage) => {
       originalAddToCart(product, selectedColor, selectedStorage)
@@ -94,8 +98,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [originalAddToCart]
   )
 
+  const contextValue = useMemo(() => ({ ...cartValue, addToCart }), [cartValue, addToCart])
+
   return (
-    <CartContext.Provider value={{ ...rest, addToCart }}>
+    <CartContext.Provider value={contextValue}>
       {children}
       <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
         {announcement}

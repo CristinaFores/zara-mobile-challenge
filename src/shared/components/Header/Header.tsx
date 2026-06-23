@@ -14,6 +14,12 @@ import styles from './Header.module.scss'
 
 const LOADING_BAR_DURATION_MS = 1200
 
+function getCartAriaLabel(isHydrated: boolean, cartCount: number): string {
+  if (!isHydrated || cartCount <= 0) return 'Cart'
+  const itemLabel = cartCount === 1 ? 'item' : 'items'
+  return `Cart, ${cartCount} ${itemLabel}`
+}
+
 export function Header() {
   const { cartCount, isHydrated } = useCart()
   const pathname = usePathname()
@@ -43,7 +49,7 @@ export function Header() {
         <Link
           href={ROUTES.CART}
           className={styles.header__cart}
-          aria-label={`Cart${isHydrated && cartCount > 0 ? `, ${cartCount} ${cartCount === 1 ? 'item' : 'items'}` : ''}`}
+          aria-label={getCartAriaLabel(isHydrated, cartCount)}
         >
           <CartIcon mode={isHydrated && hasItems ? 'full' : 'empty'} aria-hidden="true" />
           <span

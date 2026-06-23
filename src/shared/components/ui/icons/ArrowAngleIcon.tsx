@@ -2,7 +2,7 @@ interface ArrowAngleIconProps {
   width?: number
   height?: number
   className?: string
-  fill?: string | 'currentColor'
+  fill?: string
   direction?: 'left' | 'right' | 'up' | 'down'
 }
 
