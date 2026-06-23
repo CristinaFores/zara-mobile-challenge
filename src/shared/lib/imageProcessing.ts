@@ -51,7 +51,10 @@ export class ImageFetchError extends Error {
 export async function fetchRemoteImage(url: string): Promise<Buffer> {
   let response: Response
   try {
-    response = await fetch(url)
+    const apiKey = process.env.API_KEY
+    response = await fetch(url, {
+      ...(apiKey ? { headers: { 'x-api-key': apiKey } } : {}),
+    })
   } catch {
     throw new ImageFetchError(502, 'Network error fetching image')
   }

@@ -1,10 +1,15 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 
 import { useCart } from '@/features/cart/context/CartContext'
 import { ROUTES } from '@/shared/constants'
+import {
+  getBrowserSearchParamsSnapshot,
+  replaceSearchParamsInHistory,
+  subscribeToPopstate,
+} from '@/shared/lib/browser'
 import { navigateToCart } from '@/shared/lib/cartRouteTransition'
 import type { ColorOption, Product, ProductDetail, StorageOption } from '@/shared/types'
 
@@ -28,13 +33,26 @@ export function useProductSelection(product: ProductDetail): ProductSelection {
   const router = useRouter()
   const pathname = usePathname()
   const { addToCart } = useCart()
+  const [baselineParams] = useState(() => new URLSearchParams(searchParams.toString()))
   const [optimisticParams, setOptimisticParams] = useState<URLSearchParams | null>(null)
 
-  if (optimisticParams !== null && optimisticParams.toString() === searchParams.toString()) {
-    setOptimisticParams(null)
-  }
+  useEffect(() => subscribeToPopstate(() => setOptimisticParams(null)), [])
 
-  const selectionParams = optimisticParams ?? new URLSearchParams(searchParams.toString())
+  const searchSnapshot = useSyncExternalStore(
+    subscribeToPopstate,
+    getBrowserSearchParamsSnapshot,
+    () => null
+  )
+
+  const browserParams = useMemo(() => {
+    if (searchSnapshot === null) return null
+    return new URLSearchParams(searchSnapshot)
+  }, [searchSnapshot])
+
+  const selectionParams = useMemo(() => {
+    if (optimisticParams) return optimisticParams
+    return browserParams ?? baselineParams
+  }, [optimisticParams, browserParams, baselineParams])
 
   const selectedColor =
     product.colorOptions.find((c) => c.name === selectionParams.get('color')) ?? null
@@ -44,12 +62,12 @@ export function useProductSelection(product: ProductDetail): ProductSelection {
 
   const updateSelectionParam = useCallback(
     (key: 'color' | 'storage', value: string) => {
-      const params = new URLSearchParams((optimisticParams ?? searchParams).toString())
+      const params = new URLSearchParams(selectionParams.toString())
       params.set(key, value)
       setOptimisticParams(params)
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+      replaceSearchParamsInHistory(pathname, params)
     },
-    [optimisticParams, pathname, router, searchParams]
+    [pathname, selectionParams]
   )
 
   const setSelectedColor = useCallback(

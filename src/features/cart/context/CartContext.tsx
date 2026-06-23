@@ -24,7 +24,6 @@ export interface CartContextValue {
   addToCart: (product: Product, selectedColor: ColorOption, selectedStorage: StorageOption) => void
   removeFromCart: (key: string) => void
   clearCart: () => void
-  syncPrices: (updates: Record<string, number>) => void
 }
 
 const CartContext = createContext<CartContextValue | undefined>(undefined)
@@ -56,11 +55,6 @@ function useCartProviderValue(): CartContextValue {
 
   const clearCart = useCallback(() => dispatch({ type: 'CLEAR' }), [])
 
-  const syncPrices = useCallback<CartContextValue['syncPrices']>(
-    (updates) => dispatch({ type: 'SYNC_PRICES', payload: updates }),
-    []
-  )
-
   const cartTotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
@@ -73,9 +67,8 @@ function useCartProviderValue(): CartContextValue {
       addToCart,
       removeFromCart,
       clearCart,
-      syncPrices,
     }),
-    [cartItems, cartTotal, cartCount, isHydrated, addToCart, removeFromCart, clearCart, syncPrices]
+    [cartItems, cartTotal, cartCount, isHydrated, addToCart, removeFromCart, clearCart]
   )
 }
 

@@ -232,42 +232,6 @@ describe('Given two items are in the cart', () => {
   })
 })
 
-describe('Given an item in the cart whose catalog price has changed since it was added', () => {
-  describe('When syncPrices is called with the updated price map', () => {
-    it('Then the cart item reflects the new price', async () => {
-      const result = await renderCart()
-
-      act(() => {
-        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
-      })
-      const { key } = result.current.cartItems[0]
-
-      act(() => {
-        result.current.syncPrices({ [key]: 1199 })
-      })
-
-      expect(result.current.cartItems[0].price).toBe(1199)
-      expect(result.current.cartTotal).toBe(1199)
-    })
-
-    it('And items not present in the price map are left unchanged', async () => {
-      const result = await renderCart()
-
-      act(() => {
-        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
-        result.current.addToCart(PRODUCT, COLOR_BLACK, STORAGE_512)
-      })
-      const keyViolet = result.current.cartItems[0].key
-
-      act(() => {
-        result.current.syncPrices({ [keyViolet]: 1199 })
-      })
-
-      expect(result.current.cartItems[1].price).toBe(STORAGE_512.price)
-    })
-  })
-})
-
 describe('Given the user had items saved in localStorage from a previous session', () => {
   describe('When CartProvider mounts', () => {
     it('Then the saved cart is restored so the user continues from where they left off', async () => {
@@ -302,29 +266,6 @@ describe('Given useCart is invoked outside of CartProvider', () => {
         'useCart must be used within a CartProvider'
       )
     })
-  })
-})
-
-describe('Given syncPrices updates the price of a cart item', () => {
-  it('Then only the price changes — imageUrl, name, brand and selectedColor are untouched', async () => {
-    const result = await renderCart()
-
-    act(() => {
-      result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
-    })
-
-    const before = result.current.cartItems[0]
-
-    act(() => {
-      result.current.syncPrices({ [before.key]: 9999 })
-    })
-
-    const after = result.current.cartItems[0]
-    expect(after.price).toBe(9999)
-    expect(after.imageUrl).toBe(before.imageUrl)
-    expect(after.name).toBe(before.name)
-    expect(after.brand).toBe(before.brand)
-    expect(after.selectedColor).toBe(before.selectedColor)
   })
 })
 

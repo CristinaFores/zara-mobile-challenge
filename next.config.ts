@@ -6,6 +6,16 @@ const nextConfig: NextConfig = {
   experimental: {
     viewTransition: true,
   },
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/entrega',
+          destination: '/entrega/index.html',
+        },
+      ],
+    }
+  },
   turbopack: {
     root: path.resolve(__dirname),
   },

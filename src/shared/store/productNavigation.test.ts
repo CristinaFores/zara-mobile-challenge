@@ -22,8 +22,8 @@ describe('Given productNavigation', () => {
   })
 
   describe('When getProductViewTransitionName is called', () => {
-    it('Then it returns a safe view-transition name for the part', () => {
-      expect(getProductViewTransitionName('SMG/S24U', 'image')).toBe('product-image-SMG-S24U')
+    it('Then it returns a safe view-transition name for the product image', () => {
+      expect(getProductViewTransitionName('SMG/S24U')).toBe('product-image-SMG-S24U')
     })
   })
 

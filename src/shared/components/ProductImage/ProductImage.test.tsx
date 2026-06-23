@@ -22,6 +22,14 @@ describe('Given a ProductImage', () => {
     })
   })
 
+  describe('When fixedProxyWidth is set', () => {
+    it('Then the src uses that width so preloads and hero share one cache key', () => {
+      render(<ProductImage src={SRC} alt={ALT} fixedProxyWidth={828} />)
+      const img = screen.getByRole('img', { name: ALT })
+      expect(img).toHaveAttribute('src', expect.stringContaining('w=828'))
+    })
+  })
+
   describe('When priority is true', () => {
     it('Then the image does not have loading="lazy"', () => {
       render(<ProductImage src={SRC} alt={ALT} priority />)
@@ -42,7 +50,7 @@ describe('Given a ProductImage', () => {
       expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
     })
 
-    it('Then onLoad is called so crossfade completes', () => {
+    it('Then onLoad is called so hero handoff can complete', () => {
       const onLoad = jest.fn()
       render(<ProductImage src={undefined} alt={ALT} onLoad={onLoad} />)
       expect(onLoad).toHaveBeenCalledTimes(1)
@@ -66,7 +74,7 @@ describe('Given a ProductImage', () => {
       expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
     })
 
-    it('Then onLoad is called after the error so crossfade completes', () => {
+    it('Then onLoad is called after the error so hero handoff can complete', () => {
       const onLoad = jest.fn()
       render(<ProductImage src={SRC} alt={ALT} onLoad={onLoad} />)
       const img = screen.getByRole('img', { name: ALT })

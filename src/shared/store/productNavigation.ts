@@ -17,9 +17,9 @@ export function getProductDetailHref(productId: string): string {
   return `${ROUTES.PRODUCT_DETAIL}/${encodeURIComponent(productId)}`
 }
 
-export function getProductViewTransitionName(productId: string, part: 'image' | 'title'): string {
+export function getProductViewTransitionName(productId: string): string {
   const safeId = productId.replace(/[^a-zA-Z0-9_-]/g, '-')
-  return `product-${part}-${safeId}`
+  return `product-image-${safeId}`
 }
 
 export function scrollToProductDetailTop(): void {

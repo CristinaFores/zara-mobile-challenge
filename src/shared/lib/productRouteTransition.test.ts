@@ -13,6 +13,7 @@ import {
 
 jest.mock('@/shared/store/productNavigation', () => ({
   beginProductRouteViewTransition: jest.fn(() => Promise.resolve()),
+  scrollToProductDetailTop: jest.fn(),
   setReturningProductId: jest.fn(),
   resolveProductRouteViewTransition: jest.fn(),
 }))

@@ -39,6 +39,7 @@ test.describe('Feature: Product listing', () => {
 
     await expect(page.locator(PRODUCT_CARD)).toHaveCount(0)
     await expect(page.getByText(/^0 results$/)).toBeVisible()
+    await expect(page.getByText('No smartphones match your search.')).toBeVisible()
   })
 
   test('Given an active search, When clearing it, Then the full grid is restored', async ({

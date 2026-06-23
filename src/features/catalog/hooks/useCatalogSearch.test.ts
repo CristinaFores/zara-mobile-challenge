@@ -4,15 +4,22 @@ import { useCatalogSearch } from '@/features/catalog/hooks/useCatalogSearch'
 import { productListFixture } from '@/test-utils/fixtures/products.fixtures'
 
 const pushMock = jest.fn()
+const replaceMock = jest.fn()
+let searchParamValue = ''
 
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: pushMock }),
+  useRouter: () => ({ push: pushMock, replace: replaceMock }),
+  useSearchParams: () => ({
+    get: (key: string) => (key === 'search' ? searchParamValue : null),
+  }),
 }))
 
 describe('Given useCatalogSearch', () => {
   beforeEach(() => {
     jest.useFakeTimers()
     pushMock.mockClear()
+    replaceMock.mockClear()
+    searchParamValue = ''
   })
   afterEach(() => jest.useRealTimers())
 
@@ -79,25 +86,26 @@ describe('Given useCatalogSearch', () => {
       expect(result.current.resultCount).toBe(productListFixture.length)
     })
 
-    it('Then it pushes the encoded query to the URL after the debounce so the Server Component re-fetches', () => {
+    it('Then it replaces the encoded query in the URL after the debounce so the Server Component re-fetches', () => {
       const { result } = renderHook(() => useCatalogSearch({ products: productListFixture }))
 
       act(() => result.current.onQueryChange('PIXEL'))
       act(() => jest.advanceTimersByTime(300))
 
-      expect(pushMock).toHaveBeenCalledWith('/?search=PIXEL', { scroll: false })
+      expect(replaceMock).toHaveBeenCalledWith('/?search=PIXEL', { scroll: false })
     })
 
-    it('Then it pushes the query to the URL after the url debounce', () => {
+    it('Then it replaces the query in the URL after the url debounce', () => {
       const { result } = renderHook(() => useCatalogSearch({ products: productListFixture }))
 
       act(() => result.current.onQueryChange('apple'))
       act(() => jest.advanceTimersByTime(300))
 
-      expect(pushMock).toHaveBeenCalledWith('/?search=apple', { scroll: false })
+      expect(replaceMock).toHaveBeenCalledWith('/?search=apple', { scroll: false })
     })
 
     it('Then an empty query clears the URL param', () => {
+      searchParamValue = 'apple'
       const { result } = renderHook(() =>
         useCatalogSearch({ products: productListFixture, initialQuery: 'apple' })
       )
@@ -105,7 +113,7 @@ describe('Given useCatalogSearch', () => {
       act(() => result.current.onQueryChange(''))
       act(() => jest.advanceTimersByTime(300))
 
-      expect(pushMock).toHaveBeenCalledWith('/', { scroll: false })
+      expect(replaceMock).toHaveBeenCalledWith('/', { scroll: false })
     })
   })
 })

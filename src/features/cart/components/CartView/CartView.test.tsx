@@ -16,7 +16,6 @@ const baseCart: CartContextValue = {
   addToCart: jest.fn(),
   removeFromCart: mockRemoveFromCart,
   clearCart: jest.fn(),
-  syncPrices: jest.fn(),
 }
 
 jest.mock('@/features/cart/context/CartContext', () => ({

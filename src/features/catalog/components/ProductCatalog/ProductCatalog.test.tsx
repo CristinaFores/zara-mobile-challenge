@@ -5,7 +5,8 @@ import { productListFixture } from '@/test-utils/fixtures/products.fixtures'
 import { ProductCatalog } from './ProductCatalog'
 
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: jest.fn() }),
+  useRouter: () => ({ push: jest.fn(), replace: jest.fn() }),
+  useSearchParams: () => ({ get: () => '' }),
 }))
 
 jest.mock('../ProductCard/ProductCard', () => ({
@@ -37,6 +38,15 @@ describe('Given a ProductCatalog', () => {
       expect(
         screen.getByText(`${appleProducts.length} result${appleProducts.length === 1 ? '' : 's'}`)
       ).toBeInTheDocument()
+    })
+
+    it('Then it shows an empty search message when the server returns no matches', () => {
+      render(<ProductCatalog products={[]} initialSearch="zzzznonexistentphone" />)
+
+      const emptyResults = screen.getByText('No smartphones match your search.')
+      expect(emptyResults).toBeInTheDocument()
+      expect(emptyResults.closest('output')).toHaveAttribute('for', 'product-search')
+      expect(screen.queryByRole('listitem')).not.toBeInTheDocument()
     })
   })
 })

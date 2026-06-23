@@ -1,6 +1,46 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 
 import { ScrollRow } from './ScrollRow'
+
+const mockScrollTo = jest.fn()
+const mockScrollNext = jest.fn()
+const mockScrollPrev = jest.fn()
+let scrollProgress = 0
+let viewportNode: HTMLDivElement | null = null
+let containerNode: HTMLUListElement | null = null
+const emblaListeners = new Map<string, Set<() => void>>()
+
+function emitEmblaEvent(event: string) {
+  emblaListeners.get(event)?.forEach((callback) => callback())
+}
+
+const setViewportRef = (node: HTMLDivElement | null) => {
+  viewportNode = node
+  containerNode = node?.querySelector('ul') ?? null
+}
+
+const emblaApi = {
+  rootNode: () => viewportNode,
+  containerNode: () => containerNode,
+  scrollProgress: () => scrollProgress,
+  scrollTo: mockScrollTo,
+  scrollNext: mockScrollNext,
+  scrollPrev: mockScrollPrev,
+  selectedScrollSnap: () => 0,
+  on: jest.fn((event: string, callback: () => void) => {
+    const listeners = emblaListeners.get(event) ?? new Set()
+    listeners.add(callback)
+    emblaListeners.set(event, listeners)
+  }),
+  off: jest.fn((event: string, callback: () => void) => {
+    emblaListeners.get(event)?.delete(callback)
+  }),
+}
+
+jest.mock('embla-carousel-react', () => ({
+  __esModule: true,
+  default: jest.fn(() => [setViewportRef, emblaApi]),
+}))
 
 function renderOverflowingRow() {
   render(
@@ -14,24 +54,31 @@ function renderOverflowingRow() {
   )
 
   const list = screen.getByRole('list', { name: 'Similar products' })
-  Object.defineProperty(list, 'clientWidth', { configurable: true, value: 300 })
-  Object.defineProperty(list, 'scrollWidth', { configurable: true, value: 900 })
-  Object.defineProperty(list, 'scrollLeft', { configurable: true, writable: true, value: 0 })
+  const viewport = list.parentElement as HTMLDivElement
 
-  const firstItem = list.firstElementChild as HTMLElement
-  Object.defineProperty(firstItem, 'offsetLeft', { configurable: true, value: 0 })
-  Object.defineProperty(firstItem, 'offsetWidth', { configurable: true, value: 300 })
-  list.setPointerCapture = jest.fn()
-  list.releasePointerCapture = jest.fn()
+  Object.defineProperty(viewport, 'clientWidth', { configurable: true, value: 300 })
+  Object.defineProperty(list, 'scrollWidth', { configurable: true, value: 900 })
+  scrollProgress = 0
 
   act(() => {
-    fireEvent.scroll(list)
+    emitEmblaEvent('reInit')
+    emitEmblaEvent('resize')
   })
 
-  return list
+  return { list, viewport }
 }
 
 describe('Given ScrollRow', () => {
+  beforeEach(() => {
+    mockScrollTo.mockClear()
+    mockScrollNext.mockClear()
+    mockScrollPrev.mockClear()
+    scrollProgress = 0
+    viewportNode = null
+    containerNode = null
+    emblaListeners.clear()
+  })
+
   describe('When the content overflows horizontally', () => {
     beforeEach(() => {
       renderOverflowingRow()
@@ -45,19 +92,19 @@ describe('Given ScrollRow', () => {
   })
 
   describe('When the user scrolls vertically over the row', () => {
-    it('Then the row moves horizontally instead', () => {
-      const list = renderOverflowingRow()
+    it('Then embla moves to the next slide', () => {
+      const { viewport } = renderOverflowingRow()
 
       act(() => {
-        list.dispatchEvent(new WheelEvent('wheel', { deltaY: 24, deltaX: 0, bubbles: true }))
+        viewport.dispatchEvent(new WheelEvent('wheel', { deltaY: 24, deltaX: 0, bubbles: true }))
       })
 
-      expect(list.scrollLeft).toBe(24)
+      expect(mockScrollNext).toHaveBeenCalled()
     })
   })
 
   describe('When the row content is reset', () => {
-    it('Then it recenters on the first item', () => {
+    it('Then it scrolls back to the first slide', () => {
       const { rerender } = render(
         <ScrollRow resetKey="first" aria-label="Similar products">
           {[1, 2, 3].map((index) => (
@@ -68,14 +115,7 @@ describe('Given ScrollRow', () => {
         </ScrollRow>
       )
 
-      const list = screen.getByRole('list', { name: 'Similar products' })
-      Object.defineProperty(list, 'clientWidth', { configurable: true, value: 300 })
-      Object.defineProperty(list, 'scrollWidth', { configurable: true, value: 900 })
-      Object.defineProperty(list, 'scrollLeft', { configurable: true, writable: true, value: 120 })
-
-      const firstItem = list.firstElementChild as HTMLElement
-      Object.defineProperty(firstItem, 'offsetLeft', { configurable: true, value: 0 })
-      Object.defineProperty(firstItem, 'offsetWidth', { configurable: true, value: 300 })
+      mockScrollTo.mockClear()
 
       act(() => {
         rerender(
@@ -89,7 +129,7 @@ describe('Given ScrollRow', () => {
         )
       })
 
-      expect(list.scrollLeft).toBe(0)
+      expect(mockScrollTo).toHaveBeenCalledWith(0, true)
     })
   })
 })

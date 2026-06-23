@@ -33,11 +33,12 @@ export const ProductCard = memo(function ProductCard({
     href,
     prefetchFull,
     imageTransitionStyle: forwardImageTransitionStyle,
+    linkTransitionTypes,
     warmRoute,
     activatePointerNavigation,
     navigateWithViewTransition,
     activateNavigation,
-  } = useProductDetailNavigation({ id, brand, name, basePrice, imageUrl }, { priority })
+  } = useProductDetailNavigation({ id, brand, name, basePrice, imageUrl })
   const isBackTransitionTarget = useReturningProductTransitionTarget(id)
 
   useLayoutEffect(() => {
@@ -47,9 +48,7 @@ export const ProductCard = memo(function ProductCard({
 
   const imageTransitionStyle =
     forwardImageTransitionStyle ??
-    (isBackTransitionTarget
-      ? { viewTransitionName: getProductViewTransitionName(id, 'image') }
-      : undefined)
+    (isBackTransitionTarget ? { viewTransitionName: getProductViewTransitionName(id) } : undefined)
 
   return (
     <li
@@ -65,6 +64,7 @@ export const ProductCard = memo(function ProductCard({
         prefetch={prefetchFull || priority ? true : 'auto'}
         imageTransitionStyle={imageTransitionStyle}
         priority={priority}
+        transitionTypes={linkTransitionTypes}
         onMouseEnter={warmRoute}
         onFocus={warmRoute}
         onTouchStart={warmRoute}

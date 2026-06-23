@@ -7,12 +7,13 @@ import { SimilarProductCard } from './SimilarProductCard'
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: jest.fn(), prefetch: jest.fn() }),
+  usePathname: () => '/products/SMG-S24U',
 }))
 
 jest.mock('@/shared/store/productNavigation', () => ({
   beginProductRouteViewTransition: jest.fn(() => Promise.resolve()),
   getProductDetailHref: (id: string) => `/products/${id}`,
-  getProductViewTransitionName: (id: string, part: string) => `product-${part}-${id}`,
+  getProductViewTransitionName: (id: string) => `product-image-${id}`,
   scrollToProductDetailTop: jest.fn(),
   setProductPreview: jest.fn(),
 }))

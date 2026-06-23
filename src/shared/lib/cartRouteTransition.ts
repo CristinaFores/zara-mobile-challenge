@@ -12,7 +12,7 @@ function canUseViewTransition(): boolean {
   return typeof viewTransitionDocument.startViewTransition === 'function' && !prefersReducedMotion()
 }
 
-export function scrollToPageTop(): void {
+function scrollToPageTop(): void {
   scrollToTop()
 }
 

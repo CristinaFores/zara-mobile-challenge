@@ -17,7 +17,8 @@ jest.mock('@/features/product-detail/hooks/useAfterProductRouteTransition', () =
 
 jest.mock('../../hooks/useProductSelection', () => ({
   useProductSelection: () => ({
-    imageUrl: 'https://example.com/image.webp',
+    imageUrl:
+      'https://prueba-tecnica-api-tienda-moviles.onrender.com/images/SMG-S24U-titanium-violet.webp',
     priceLabel: mockCanAddToCart ? '1449 EUR' : '1329 EUR',
     selectedColor: null,
     setSelectedColor: mockSetSelectedColor,
@@ -26,25 +27,6 @@ jest.mock('../../hooks/useProductSelection', () => ({
     canAddToCart: mockCanAddToCart,
     handleAddToCart: mockHandleAddToCart,
   }),
-}))
-
-jest.mock('../../hooks/useImageCrossfade', () => ({
-  useImageCrossfade: () => [
-    {
-      url: 'https://example.com/image.webp',
-      zIndex: 2,
-      opacity: 1,
-      transition: 'none',
-      onLoad: jest.fn(),
-    },
-    {
-      url: 'https://example.com/image.webp',
-      zIndex: 1,
-      opacity: 0,
-      transition: 'none',
-      onLoad: jest.fn(),
-    },
-  ],
 }))
 
 jest.mock('@/shared/hooks/useTextCrossfade', () => ({
@@ -63,7 +45,8 @@ jest.mock('@/features/product-detail/components/StorageSelector/StorageSelector'
 }))
 
 jest.mock('@/shared/components/ProductImage/ProductImage', () => ({
-  ProductImage: ({ alt }: { alt: string }) => <span data-testid="product-image" aria-label={alt} />,
+  ProductImage: ({ alt }: { alt: string }) =>
+    alt ? <span role="img" aria-label={alt} /> : <span aria-hidden="true" />,
 }))
 
 jest.mock('@/shared/components/ui/Button/Button', () => ({
@@ -100,9 +83,13 @@ describe('Given ProductDetailHero', () => {
       expect(screen.getByText('1329 EUR')).toBeInTheDocument()
     })
 
-    it('Then it renders two image slots', () => {
+    it('Then it renders the hero image', () => {
       render(<ProductDetailHero product={productDetailFixture} />)
-      expect(screen.getAllByTestId('product-image')).toHaveLength(2)
+      expect(
+        screen.getByRole('img', {
+          name: `${productDetailFixture.brand} ${productDetailFixture.name}`,
+        })
+      ).toBeInTheDocument()
     })
 
     it('Then it renders the color selector', () => {

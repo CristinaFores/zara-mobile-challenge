@@ -12,6 +12,9 @@ interface ProductImageProps {
   alt: string
   sizes?: string
   priority?: boolean
+  eager?: boolean
+  /** Forces a single `/api/images?w=` so preloads and hero share the browser cache. */
+  fixedProxyWidth?: number
   onLoad?: () => void
 }
 
@@ -44,6 +47,8 @@ export const ProductImage = memo(function ProductImage({
   alt,
   sizes = '(max-width: 834px) 100vw, 43vw',
   priority = false,
+  eager = false,
+  fixedProxyWidth,
   onLoad,
 }: ProductImageProps) {
   const [hasError, setHasError] = useState(false)
@@ -58,13 +63,30 @@ export const ProductImage = memo(function ProductImage({
 
   const showFallback = !src || hasError
 
-  // Signal onLoad even for fallback so crossfade completes normally
+  // Signal onLoad on fallback/error so hero handoff can complete.
   useEffect(() => {
     if (showFallback) onLoad?.()
   }, [showFallback, onLoad])
 
   if (showFallback) {
     return <ImageFallback alt={alt} />
+  }
+
+  if (fixedProxyWidth !== undefined) {
+    return (
+      <Image
+        src={buildProxyUrl(src, fixedProxyWidth)}
+        alt={alt}
+        fill
+        unoptimized
+        sizes={sizes}
+        className={styles['product-image']}
+        priority={priority}
+        loading={priority || eager ? 'eager' : 'lazy'}
+        onLoad={onLoad}
+        onError={() => setHasError(true)}
+      />
+    )
   }
 
   return (
@@ -76,6 +98,7 @@ export const ProductImage = memo(function ProductImage({
       sizes={sizes}
       className={styles['product-image']}
       priority={priority}
+      loading={priority || eager ? 'eager' : 'lazy'}
       onLoad={onLoad}
       onError={() => setHasError(true)}
     />

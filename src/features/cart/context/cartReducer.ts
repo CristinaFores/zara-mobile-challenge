@@ -14,7 +14,6 @@ export type CartAction =
     }
   | { type: 'REMOVE'; payload: string }
   | { type: 'CLEAR' }
-  | { type: 'SYNC_PRICES'; payload: Record<string, number> }
 
 export const initialState: CartState = { cartItems: [], isHydrated: false }
 
@@ -52,14 +51,6 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
 
     case 'CLEAR':
       return { ...state, cartItems: [] }
-
-    case 'SYNC_PRICES': {
-      const updates = action.payload
-      const cartItems = state.cartItems.map((item) =>
-        item.key in updates ? { ...item, price: updates[item.key] } : item
-      )
-      return { ...state, cartItems }
-    }
 
     default:
       return state
