@@ -22,6 +22,12 @@
       margin-bottom 0.55s cubic-bezier(0.33, 1, 0.68, 1) 0.17s;
   }
 
+  // &:not(:last-child) has specificity 0-1-1, which beats &--removing (0-1-0).
+  // This rule restores the intended margin collapse during the remove animation.
+  &--removing:not(:last-child) {
+    margin-bottom: 0;
+  }
+
   @include breakpoint(tablet) {
     grid-template-columns: 12.5rem 1fr;
     gap: 4.0625rem;
