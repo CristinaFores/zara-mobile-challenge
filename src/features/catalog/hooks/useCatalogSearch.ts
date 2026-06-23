@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { SEARCH_DEBOUNCE_MS } from '@/shared/constants'
@@ -24,10 +24,12 @@ export function useCatalogSearch({
   initialQuery = '',
 }: UseCatalogSearchOptions): CatalogSearchResult {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [query, setQuery] = useState(initialQuery)
   const debouncedQuery = useDebounce(query, SEARCH_DEBOUNCE_MS)
   const isFirstRender = useRef(true)
   const previousInitialQueryRef = useRef(initialQuery)
+  const currentSearchQuery = searchParams.get('search') ?? ''
 
   // URL → input: only when searchParams change (back/forward, link). Ignores re-renders
   // where initialQuery is unchanged so typing ahead of the debounced push is not wiped.
@@ -42,9 +44,10 @@ export function useCatalogSearch({
       isFirstRender.current = false
       return
     }
+    if (debouncedQuery === currentSearchQuery) return
     const url = debouncedQuery ? `/?search=${encodeURIComponent(debouncedQuery)}` : '/'
-    router.push(url, { scroll: false })
-  }, [debouncedQuery, router])
+    router.replace(url, { scroll: false })
+  }, [currentSearchQuery, debouncedQuery, router])
 
   const onQueryChange = useCallback((value: string) => setQuery(value), [])
 

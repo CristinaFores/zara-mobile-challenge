@@ -3,7 +3,6 @@
 import { ProductList } from '@/features/catalog/components/ProductList/ProductList'
 import { SearchBar } from '@/features/catalog/components/SearchBar/SearchBar'
 import { useCatalogSearch } from '@/features/catalog/hooks/useCatalogSearch'
-import { EmptyState } from '@/shared/components/ui/EmptyState/EmptyState'
 import { CATALOG_EMPTY_SEARCH_MESSAGE } from '@/shared/constants'
 import { useFlipAnimation } from '@/shared/hooks/useFlipAnimation'
 import type { Product } from '@/shared/types'
@@ -33,7 +32,9 @@ export function ProductCatalog({ products, initialSearch = '' }: ProductCatalogP
       </h1>
       <SearchBar query={query} resultCount={resultCount} onQueryChange={onQueryChange} />
       {showEmptySearchState ? (
-        <EmptyState message={CATALOG_EMPTY_SEARCH_MESSAGE} />
+        <p className={styles['product-catalog__empty-results']} role="status">
+          {CATALOG_EMPTY_SEARCH_MESSAGE}
+        </p>
       ) : (
         <ProductList
           products={displayedProducts}

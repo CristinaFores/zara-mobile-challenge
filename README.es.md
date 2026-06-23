@@ -111,16 +111,15 @@ Todo lo que debe sobrevivir a refresh, atrás/adelante y enlaces compartibles va
 
 ### Actualizaciones
 
-| Acción       | Reducer                                            | Con test               |
-| ------------ | -------------------------------------------------- | ---------------------- |
-| Añadir       | `ADD` — precio de la storage elegida en el momento | `CartContext.test.tsx` |
-| Eliminar     | `REMOVE` por clave de línea                        | ✓                      |
-| Vaciar       | `CLEAR`                                            | ✓                      |
-| Sync precios | `SYNC_PRICES` + `syncPrices(updates)`              | ✓                      |
+| Acción   | Reducer                                            | Con test               |
+| -------- | -------------------------------------------------- | ---------------------- |
+| Añadir   | `ADD` — precio de la storage elegida en el momento | `CartContext.test.tsx` |
+| Eliminar | `REMOVE` por clave de línea                        | ✓                      |
+| Vaciar   | `CLEAR`                                            | ✓                      |
 
-**Reconciliación de precios:** cada línea guarda el precio al añadir. `syncPrices` recibe un mapa clave → precio actual y recalcula `cartTotal`.
+**Comportamiento del precio:** cada línea guarda el precio elegido al añadir y mantiene ese snapshot en el carrito.
 
-**Stock / disponibilidad:** la API del reto no expone inventario. Se infiere por presencia en catálogo, 404 en detalle y sync opcional en carrito.
+**Trabajo futuro (no implementado en este reto):** gestión real de stock/disponibilidad, flujo de checkout e integración de pasarela de pago.
 
 **Tests:** `CartContext.test.tsx`, `cartStorage.test.ts`, `buildKey.test.ts`, `CartView.test.tsx`
 

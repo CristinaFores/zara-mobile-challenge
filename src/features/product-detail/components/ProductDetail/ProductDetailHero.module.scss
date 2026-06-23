@@ -47,6 +47,24 @@ $heading-gap: 0.6875rem;
   &__image {
     position: absolute;
     inset: 0;
+    opacity: 0;
+    z-index: var(--z-base);
+    transition: none;
+
+    &--animating {
+      transition: opacity var(--hero-image-crossfade-duration, 450ms) ease-in-out;
+    }
+
+    &--visible {
+      opacity: 1;
+      z-index: var(--z-card);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__image--animating {
+      transition: none;
+    }
   }
 
   &__route-cover {

@@ -8,4 +8,12 @@
   @include breakpoint(tablet) {
     gap: 4.0625rem;
   }
+
+  &__empty-results {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-thin);
+    line-height: 0.906875rem;
+    color: var(--color-text-secondary);
+  }
 }

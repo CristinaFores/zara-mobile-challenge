@@ -5,7 +5,8 @@ import { productListFixture } from '@/test-utils/fixtures/products.fixtures'
 import { ProductCatalog } from './ProductCatalog'
 
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: jest.fn() }),
+  useRouter: () => ({ push: jest.fn(), replace: jest.fn() }),
+  useSearchParams: () => ({ get: () => '' }),
 }))
 
 jest.mock('../ProductCard/ProductCard', () => ({

@@ -111,16 +111,15 @@ State that must survive refresh, back/forward, and shareable links is encoded in
 
 ### Updates
 
-| Action     | Reducer                                                  | Tested                 |
-| ---------- | -------------------------------------------------------- | ---------------------- |
-| Add        | `ADD` — snapshot price from selected storage at add time | `CartContext.test.tsx` |
-| Remove     | `REMOVE` by line key                                     | ✓                      |
-| Clear      | `CLEAR`                                                  | ✓                      |
-| Price sync | `SYNC_PRICES` + public `syncPrices(updates)`             | ✓                      |
+| Action | Reducer                                                  | Tested                 |
+| ------ | -------------------------------------------------------- | ---------------------- |
+| Add    | `ADD` — snapshot price from selected storage at add time | `CartContext.test.tsx` |
+| Remove | `REMOVE` by line key                                     | ✓                      |
+| Clear  | `CLEAR`                                                  | ✓                      |
 
-**Price reconciliation:** each line stores the price chosen at add-to-cart. `syncPrices` accepts a map of line keys → current prices and recalculates `cartTotal`.
+**Price behavior:** each line stores the price chosen at add-to-cart and keeps that snapshot in the cart.
 
-**Stock / availability:** the challenge API exposes no inventory field. Availability is inferred from catalog presence, detail 404 paths, and optional cart price sync.
+**Future work (not implemented in this challenge):** real stock/availability management, checkout flow, and payment gateway integration.
 
 **Tests:** `CartContext.test.tsx`, `cartStorage.test.ts`, `buildKey.test.ts`, `CartView.test.tsx`
 
