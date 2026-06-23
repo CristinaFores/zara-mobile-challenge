@@ -31,7 +31,10 @@ export async function selectFirstConfiguration(page: Page): Promise<void> {
   // Selections are written to the URL, so wait for each to commit (aria-pressed)
   // before the next click — two rapid router.replace calls would otherwise race
   // and the second would overwrite the first with stale search params.
-  const storage = page.getByRole('group', { name: /storage/i }).getByRole('button').first()
+  const storage = page
+    .getByRole('group', { name: /storage/i })
+    .getByRole('button')
+    .first()
   await storage.click()
   await expect(storage).toHaveAttribute('aria-pressed', 'true')
 

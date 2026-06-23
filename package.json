@@ -63,7 +63,11 @@
     "undici": "^6.27.0"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": [
+    "{src,e2e}/**/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix --max-warnings=0"
+    ],
+    "*.{ts,tsx}": [
       "prettier --write",
       "eslint --fix --max-warnings=0"
     ],

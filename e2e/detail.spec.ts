@@ -23,7 +23,10 @@ test.describe('Feature: Product detail', () => {
   test('Given the detail page, When selecting a storage, Then its option becomes pressed', async ({
     page,
   }) => {
-    const storage = page.getByRole('group', { name: /storage/i }).getByRole('button').first()
+    const storage = page
+      .getByRole('group', { name: /storage/i })
+      .getByRole('button')
+      .first()
     await storage.click()
     await expect(storage).toHaveAttribute('aria-pressed', 'true')
   })
@@ -33,7 +36,11 @@ test.describe('Feature: Product detail', () => {
   }) => {
     await expect(page.getByText(/^From\s\d/).first()).toBeVisible()
 
-    await page.getByRole('group', { name: /storage/i }).getByRole('button').first().click()
+    await page
+      .getByRole('group', { name: /storage/i })
+      .getByRole('button')
+      .first()
+      .click()
 
     await expect(page.getByText(/^\d+(\.\d+)?\sEUR$/).first()).toBeVisible()
   })
@@ -56,7 +63,10 @@ test.describe('Feature: Product detail', () => {
   test('Given two quick selections, When chosen back-to-back, Then neither overwrites the other', async ({
     page,
   }) => {
-    const storage = page.getByRole('group', { name: /storage/i }).getByRole('button').first()
+    const storage = page
+      .getByRole('group', { name: /storage/i })
+      .getByRole('button')
+      .first()
     const color = page.getByRole('group', { name: /color/i }).getByRole('button').first()
 
     await storage.click()
@@ -80,7 +90,10 @@ test.describe('Feature: Product detail', () => {
   test('Given the detail page, When clicking the back control, Then it returns to the previous page', async ({
     page,
   }) => {
-    await page.getByRole('navigation', { name: /breadcrumb/i }).getByRole('button').click()
+    await page
+      .getByRole('navigation', { name: /breadcrumb/i })
+      .getByRole('button')
+      .click()
     await expect(page).toHaveURL('/')
   })
 })
