@@ -1,8 +1,19 @@
 import { render, screen } from '@testing-library/react'
+import type { ReactNode } from 'react'
 
 import { productDetailFixture } from '@/test-utils/fixtures/products.fixtures'
 
 import { SimilarProducts } from './SimilarProducts'
+
+jest.mock('@/shared/components/ui/ScrollRow/ScrollRow', () => ({
+  ScrollRow: ({
+    children,
+    'aria-label': ariaLabel,
+  }: {
+    children: ReactNode
+    'aria-label'?: string
+  }) => <ul aria-label={ariaLabel}>{children}</ul>,
+}))
 
 jest.mock('./SimilarProductCard', () => ({
   SimilarProductCard: ({ name }: { name: string }) => <li>{name}</li>,

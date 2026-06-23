@@ -50,7 +50,7 @@ describe('Given a ProductImage', () => {
       expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
     })
 
-    it('Then onLoad is called so crossfade completes', () => {
+    it('Then onLoad is called so hero handoff can complete', () => {
       const onLoad = jest.fn()
       render(<ProductImage src={undefined} alt={ALT} onLoad={onLoad} />)
       expect(onLoad).toHaveBeenCalledTimes(1)
@@ -74,7 +74,7 @@ describe('Given a ProductImage', () => {
       expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
     })
 
-    it('Then onLoad is called after the error so crossfade completes', () => {
+    it('Then onLoad is called after the error so hero handoff can complete', () => {
       const onLoad = jest.fn()
       render(<ProductImage src={SRC} alt={ALT} onLoad={onLoad} />)
       const img = screen.getByRole('img', { name: ALT })

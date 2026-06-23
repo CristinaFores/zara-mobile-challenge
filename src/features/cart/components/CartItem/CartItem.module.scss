@@ -40,13 +40,6 @@
     aspect-ratio: 1 / 1;
   }
 
-  &__img {
-    width: 8.75rem;
-    height: 8.75rem;
-    object-fit: contain;
-    object-position: left top;
-  }
-
   &__content {
     display: flex;
     flex-direction: column;

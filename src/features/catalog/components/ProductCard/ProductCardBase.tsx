@@ -24,6 +24,7 @@ export interface ProductCardBaseProps extends Pick<
   onClick?: (event: MouseEvent<HTMLAnchorElement>) => void
   onNavigate?: () => void
   headingLevel?: 2 | 3
+  transitionTypes?: readonly string[] | undefined
 }
 
 const DEFAULT_IMAGE_SIZES =
@@ -46,6 +47,7 @@ export function ProductCardBase({
   onClick,
   onNavigate,
   headingLevel = 2,
+  transitionTypes = ['product-detail'],
 }: ProductCardBaseProps) {
   const ProductNameHeading = headingLevel === 3 ? 'h3' : 'h2'
 
@@ -55,7 +57,7 @@ export function ProductCardBase({
       className={styles['product-card__link']}
       aria-label={`${brand} ${name}, ${basePrice} EUR`}
       prefetch={prefetch}
-      transitionTypes={['product-detail']}
+      transitionTypes={transitionTypes ? [...transitionTypes] : undefined}
       onMouseEnter={onMouseEnter}
       onFocus={onFocus}
       onTouchStart={onTouchStart}

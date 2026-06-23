@@ -4,6 +4,7 @@ import { ROUTES } from '@/shared/constants'
 import { hasBrowserHistory, prefersReducedMotion } from '@/shared/lib/browser'
 import {
   beginProductRouteViewTransition,
+  scrollToProductDetailTop,
   setReturningProductId,
 } from '@/shared/store/productNavigation'
 
@@ -34,9 +35,13 @@ export function navigateBackFromProductDetail(
   const navigate = (): void => {
     if (hasBrowserHistory()) {
       router.back()
+      requestAnimationFrame(() => {
+        scrollToProductDetailTop()
+      })
       return
     }
 
+    scrollToProductDetailTop()
     router.push(fallbackHref)
   }
 

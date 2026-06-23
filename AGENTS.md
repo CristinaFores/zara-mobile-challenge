@@ -275,7 +275,7 @@ this file and `DESIGN.md`, they form the documentation package for the technical
 
 - **README** — setup, architecture, quality pipeline, deployment.
 - **AGENTS.md** (this file) — coding conventions, API rules, testing and accessibility contract.
-- **DESIGN.md** — visual contract generated from the challenge Figma via MCP Figma: tokens, typography, layout and copy.
+- **DESIGN.md** — visual contract from the challenge Figma: tokens, typography, layout and copy.
 - **`/entrega`** — reviewer-facing summary with embedded demo and screenshots.
 
 State clearly that Next.js was chosen for image optimization and SEO, that TypeScript is used

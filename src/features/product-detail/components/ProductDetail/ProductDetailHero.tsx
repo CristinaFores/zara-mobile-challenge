@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
 import { ColorSelector } from '@/features/product-detail/components/ColorSelector/ColorSelector'
 import { StorageSelector } from '@/features/product-detail/components/StorageSelector/StorageSelector'
@@ -70,12 +70,20 @@ export function ProductDetailHero({ product }: ProductDetailHeroProps) {
 
   const imageTransitionStyle = useMemo(() => {
     if (routeTransitionDone) return undefined
-    return { viewTransitionName: getProductViewTransitionName(product.id, 'image') }
+    return { viewTransitionName: getProductViewTransitionName(product.id) }
   }, [product.id, routeTransitionDone])
 
   useLayoutEffect(() => {
+    if ('scrollRestoration' in globalThis.history) {
+      globalThis.history.scrollRestoration = 'manual'
+    }
+
     scrollToProductDetailTop()
     resolveProductRouteViewTransition(product.id)
+  }, [product.id])
+
+  useEffect(() => {
+    scrollToProductDetailTop()
   }, [product.id])
 
   return (

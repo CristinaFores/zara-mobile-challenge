@@ -36,7 +36,7 @@ export default function ProductDetailLoading() {
 
   const imageTransitionStyle = productPreview
     ? ({
-        viewTransitionName: getProductViewTransitionName(productPreview.id, 'image'),
+        viewTransitionName: getProductViewTransitionName(productPreview.id),
       } satisfies ViewTransitionStyle)
     : undefined
 

@@ -1,21 +1,16 @@
 'use client'
 
-import Image, { type ImageLoaderProps } from 'next/image'
 import Link from 'next/link'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
+import { ProductImage } from '@/shared/components/ProductImage/ProductImage'
 import { ROUTES } from '@/shared/constants'
 import { cancelScheduledTimeout, scheduleTimeout } from '@/shared/lib/browser'
 import type { CartItem as CartItemType } from '@/shared/types'
-import { buildProxyUrl } from '@/shared/utils/imageProxy'
 
 import styles from './CartItem.module.scss'
 
 const REMOVE_ANIMATION_MS = 720
-
-function cartLoader({ src, width, quality }: ImageLoaderProps) {
-  return buildProxyUrl(src, width, quality)
-}
 
 interface CartItemProps {
   item: CartItemType
@@ -24,7 +19,6 @@ interface CartItemProps {
 
 export function CartItem({ item, onRemove }: CartItemProps) {
   const itemRef = useRef<HTMLLIElement>(null)
-  const [imgError, setImgError] = useState(false)
   const [isRemoving, setIsRemoving] = useState(false)
 
   useLayoutEffect(() => {
@@ -72,15 +66,11 @@ export function CartItem({ item, onRemove }: CartItemProps) {
         className={styles['cart-item__image']}
         aria-label={`${item.brand} ${item.name}`}
       >
-        {item.imageUrl && !imgError && (
-          <Image
-            loader={cartLoader}
+        {item.imageUrl && (
+          <ProductImage
             src={item.imageUrl}
             alt={`${item.brand} ${item.name}`}
-            className={styles['cart-item__img']}
             sizes="(max-width: 767px) 100vw, 8.75rem"
-            onError={() => setImgError(true)}
-            fill
           />
         )}
       </Link>

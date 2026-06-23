@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   useCallback,
   useState,
@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { flushSync } from 'react-dom'
 
+import { ROUTES } from '@/shared/constants'
 import { prefersReducedMotion } from '@/shared/lib/browser'
 import {
   beginProductRouteViewTransition,
@@ -39,9 +40,12 @@ function shouldHandleClientNavigation(event: MouseEvent<HTMLAnchorElement>): boo
 
 export function useProductDetailNavigation(
   product: ProductNavigationSource,
-  { priority = false }: { priority?: boolean } = {}
+  { enableViewTransition = true }: { enableViewTransition?: boolean } = {}
 ) {
   const router = useRouter()
+  const pathname = usePathname()
+  const shouldUseViewTransition =
+    enableViewTransition && !pathname.startsWith(`${ROUTES.PRODUCT_DETAIL}/`)
   const [prefetchFull, setPrefetchFull] = useState(false)
   const [isTransitionSource, setIsTransitionSource] = useState(false)
   const { id, brand, name, basePrice, imageUrl } = product
@@ -59,10 +63,12 @@ export function useProductDetailNavigation(
 
   const activateNavigation = useCallback(() => {
     rememberProduct()
+    if (!shouldUseViewTransition) return
+
     flushSync(() => {
       setIsTransitionSource(true)
     })
-  }, [rememberProduct])
+  }, [rememberProduct, shouldUseViewTransition])
 
   const activatePointerNavigation = useCallback(
     (event: PointerEvent<HTMLAnchorElement>) => {
@@ -75,6 +81,14 @@ export function useProductDetailNavigation(
   const navigateWithViewTransition = useCallback(
     (event: MouseEvent<HTMLAnchorElement>) => {
       if (!shouldHandleClientNavigation(event)) return
+
+      if (!shouldUseViewTransition) {
+        event.preventDefault()
+        warmRoute()
+        scrollToProductDetailTop()
+        router.push(href)
+        return
+      }
 
       const viewTransitionDocument = document as typeof document & {
         readonly startViewTransition?: Document['startViewTransition']
@@ -114,20 +128,23 @@ export function useProductDetailNavigation(
         )
       })
     },
-    [activateNavigation, href, id, router, warmRoute]
+    [activateNavigation, href, id, router, shouldUseViewTransition, warmRoute]
   )
 
-  const imageTransitionStyle = isTransitionSource
-    ? ({
-        viewTransitionName: getProductViewTransitionName(id, 'image'),
-      } satisfies ViewTransitionStyle)
-    : undefined
+  const imageTransitionStyle =
+    shouldUseViewTransition && isTransitionSource
+      ? ({
+          viewTransitionName: getProductViewTransitionName(id),
+        } satisfies ViewTransitionStyle)
+      : undefined
+
+  const linkTransitionTypes = shouldUseViewTransition ? (['product-detail'] as const) : undefined
 
   return {
     href,
     prefetchFull,
-    priority,
     imageTransitionStyle,
+    linkTransitionTypes,
     warmRoute,
     activatePointerNavigation,
     navigateWithViewTransition,

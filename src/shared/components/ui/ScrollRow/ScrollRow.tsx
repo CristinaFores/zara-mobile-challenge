@@ -19,24 +19,22 @@ export function ScrollRow({
   className,
   'aria-label': ariaLabel,
 }: ScrollRowProps) {
-  const { ref, isDragging, handlers, thumb } = useScrollRow<HTMLUListElement>({ resetKey })
+  const { viewportRef, thumb } = useScrollRow({ resetKey })
 
   return (
     <div className={styles['scroll-row-wrapper']}>
-      <ul
-        ref={ref}
-        className={[
-          styles['scroll-row'],
-          isDragging ? styles['scroll-row--dragging'] : '',
-          className,
-        ]
-          .filter(Boolean)
-          .join(' ')}
-        aria-label={ariaLabel}
-        {...handlers}
+      <div
+        ref={viewportRef}
+        className={styles['scroll-row-viewport']}
+        data-carousel-progress={thumb.visible ? thumb.left.toFixed(3) : undefined}
       >
-        {children}
-      </ul>
+        <ul
+          className={[styles['scroll-row'], className].filter(Boolean).join(' ')}
+          aria-label={ariaLabel}
+        >
+          {children}
+        </ul>
+      </div>
 
       {thumb.visible ? (
         <div className={styles['scroll-row__scrollbar']} aria-hidden="true">

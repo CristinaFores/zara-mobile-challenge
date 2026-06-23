@@ -18,7 +18,6 @@ export const PRODUCTS_LIMIT = 20
 export const PRODUCTS_FETCH_LIMIT = 21
 
 export const SEARCH_DEBOUNCE_MS = 300
-export const FILTER_DEBOUNCE_MS = 450
 export const IMAGE_CROSSFADE_MS = 300
 
 /** Shared proxy width for detail hero + color preloads — one URL per source image. */
@@ -28,3 +27,5 @@ export const DETAIL_HERO_IMAGE_WIDTH = 828
 export const DETAIL_HERO_IMAGE_SIZES = '(max-width: 834px) 100vw, 43vw'
 
 export const CART_KEY = 'CART'
+
+export const CATALOG_EMPTY_SEARCH_MESSAGE = 'No smartphones match your search.'

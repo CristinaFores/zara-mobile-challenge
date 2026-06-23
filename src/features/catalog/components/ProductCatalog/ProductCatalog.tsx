@@ -3,6 +3,8 @@
 import { ProductList } from '@/features/catalog/components/ProductList/ProductList'
 import { SearchBar } from '@/features/catalog/components/SearchBar/SearchBar'
 import { useCatalogSearch } from '@/features/catalog/hooks/useCatalogSearch'
+import { EmptyState } from '@/shared/components/ui/EmptyState/EmptyState'
+import { CATALOG_EMPTY_SEARCH_MESSAGE } from '@/shared/constants'
 import { useFlipAnimation } from '@/shared/hooks/useFlipAnimation'
 import type { Product } from '@/shared/types'
 
@@ -22,18 +24,24 @@ export function ProductCatalog({ products, initialSearch = '' }: ProductCatalogP
   const { displayedProducts, exitingCards, animationPhase, cardRef } =
     useFlipAnimation(filteredProducts)
 
+  const showEmptySearchState = filteredProducts.length === 0 && query.trim().length > 0
+
   return (
     <section className={styles['product-catalog']} aria-labelledby="catalog-heading">
       <h1 id="catalog-heading" className="sr-only">
         Product catalog
       </h1>
       <SearchBar query={query} resultCount={resultCount} onQueryChange={onQueryChange} />
-      <ProductList
-        products={displayedProducts}
-        exitingCards={exitingCards}
-        animationPhase={animationPhase}
-        cardRef={cardRef}
-      />
+      {showEmptySearchState ? (
+        <EmptyState message={CATALOG_EMPTY_SEARCH_MESSAGE} />
+      ) : (
+        <ProductList
+          products={displayedProducts}
+          exitingCards={exitingCards}
+          animationPhase={animationPhase}
+          cardRef={cardRef}
+        />
+      )}
     </section>
   )
 }

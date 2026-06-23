@@ -12,11 +12,15 @@ export function SimilarProductCard({ id, brand, name, basePrice, imageUrl }: Pro
     href,
     prefetchFull,
     imageTransitionStyle,
+    linkTransitionTypes,
     warmRoute,
     activatePointerNavigation,
     navigateWithViewTransition,
     activateNavigation,
-  } = useProductDetailNavigation({ id, brand, name, basePrice, imageUrl })
+  } = useProductDetailNavigation(
+    { id, brand, name, basePrice, imageUrl },
+    { enableViewTransition: false }
+  )
 
   return (
     <li className={cardStyles['product-card']}>
@@ -30,6 +34,7 @@ export function SimilarProductCard({ id, brand, name, basePrice, imageUrl }: Pro
         prefetch={prefetchFull ? true : 'auto'}
         imageTransitionStyle={imageTransitionStyle}
         imageSizes={SIMILAR_IMAGE_SIZES}
+        transitionTypes={linkTransitionTypes}
         onMouseEnter={warmRoute}
         onFocus={warmRoute}
         onTouchStart={warmRoute}

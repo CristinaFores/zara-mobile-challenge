@@ -1,87 +1,99 @@
 'use client'
 
+import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react'
 import { useCallback, useEffect, useState } from 'react'
-
-import { useDragScroll } from '@/shared/hooks/useDragScroll'
 
 interface UseScrollRowOptions {
   resetKey?: string
 }
 
-export interface ScrollRowThumb {
+interface ScrollRowThumb {
   readonly width: number
   readonly left: number
   readonly visible: boolean
 }
 
-function computeScrollThumb(row: HTMLElement): ScrollRowThumb {
-  const { clientWidth, scrollLeft, scrollWidth } = row
+type EmblaApi = NonNullable<UseEmblaCarouselType[1]>
 
-  if (scrollWidth <= clientWidth + 1) {
+const SCROLL_ROW_EMBLA_OPTIONS = {
+  align: 'start',
+  containScroll: 'trimSnaps',
+  dragThreshold: 4,
+  duration: 22,
+  loop: false,
+} as const
+
+function clampProgress(value: number) {
+  return Math.min(1, Math.max(0, value))
+}
+
+function getThumbState(emblaApi: EmblaApi): ScrollRowThumb {
+  const viewport = emblaApi.rootNode()
+  const container = emblaApi.containerNode()
+  const viewportWidth = viewport.clientWidth
+  const contentWidth = container.scrollWidth
+
+  if (contentWidth <= viewportWidth + 1) {
     return { width: 100, left: 0, visible: false }
   }
 
-  return {
-    width: (clientWidth / scrollWidth) * 100,
-    left: (scrollLeft / scrollWidth) * 100,
-    visible: true,
-  }
+  const width = (viewportWidth / contentWidth) * 100
+  const left = clampProgress(emblaApi.scrollProgress()) * (100 - width)
+
+  return { width, left, visible: true }
 }
 
-export function useScrollRow<T extends HTMLElement>({ resetKey = '' }: UseScrollRowOptions = {}) {
-  const { ref, isDragging, handlers } = useDragScroll<T>()
+export function useScrollRow({ resetKey = '' }: UseScrollRowOptions = {}) {
+  const [viewportRef, emblaApi] = useEmblaCarousel(SCROLL_ROW_EMBLA_OPTIONS)
   const [thumb, setThumb] = useState<ScrollRowThumb>({ width: 100, left: 0, visible: false })
 
-  const updateThumb = useCallback(() => {
-    const row = ref.current
-    if (!row) return
-    setThumb(computeScrollThumb(row))
-  }, [ref])
+  const updateThumb = useCallback((api: EmblaApi) => {
+    setThumb(getThumbState(api))
+  }, [])
 
   useEffect(() => {
-    const row = ref.current
-    const firstItem = row?.firstElementChild
+    if (!emblaApi) return
 
-    if (!(row && firstItem instanceof HTMLElement)) return
-
-    const centerOffset = firstItem.offsetLeft - (row.clientWidth - firstItem.offsetWidth) / 2
-    row.scrollLeft = Math.max(0, Math.min(centerOffset, row.scrollWidth - row.clientWidth))
-    updateThumb()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resetKey, updateThumb])
-
-  useEffect(() => {
-    const row = ref.current
-    if (!row) return
-
-    updateThumb()
-    row.addEventListener('scroll', updateThumb, { passive: true })
-
-    const observer = new ResizeObserver(updateThumb)
-    observer.observe(row)
+    const update = () => updateThumb(emblaApi)
+    update()
+    emblaApi.on('scroll', update)
+    emblaApi.on('resize', update)
+    emblaApi.on('reInit', update)
+    emblaApi.on('slidesInView', update)
 
     return () => {
-      row.removeEventListener('scroll', updateThumb)
-      observer.disconnect()
+      emblaApi.off('scroll', update)
+      emblaApi.off('resize', update)
+      emblaApi.off('reInit', update)
+      emblaApi.off('slidesInView', update)
     }
-  }, [ref, updateThumb])
+  }, [emblaApi, updateThumb])
 
   useEffect(() => {
-    const row = ref.current
-    if (!row) return
+    if (!emblaApi) return
+
+    emblaApi.scrollTo(0, true)
+  }, [emblaApi, resetKey])
+
+  useEffect(() => {
+    const viewport = emblaApi?.rootNode()
+    if (!viewport || !emblaApi) return
 
     const handleWheel = (event: WheelEvent) => {
       if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return
 
-      row.scrollLeft += event.deltaY
       event.preventDefault()
+      if (event.deltaY > 0) {
+        emblaApi.scrollNext()
+      } else {
+        emblaApi.scrollPrev()
+      }
     }
 
-    row.addEventListener('wheel', handleWheel, { passive: false })
+    viewport.addEventListener('wheel', handleWheel, { passive: false })
 
-    return () => row.removeEventListener('wheel', handleWheel)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    return () => viewport.removeEventListener('wheel', handleWheel)
+  }, [emblaApi])
 
-  return { ref, isDragging, handlers, thumb }
+  return { viewportRef, thumb }
 }

@@ -63,7 +63,7 @@ export const ProductImage = memo(function ProductImage({
 
   const showFallback = !src || hasError
 
-  // Signal onLoad even for fallback so crossfade completes normally
+  // Signal onLoad on fallback/error so hero handoff can complete.
   useEffect(() => {
     if (showFallback) onLoad?.()
   }, [showFallback, onLoad])

@@ -14,12 +14,13 @@ const prefetchMock = jest.fn()
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock, prefetch: prefetchMock }),
+  usePathname: () => '/',
 }))
 
 jest.mock('@/shared/store/productNavigation', () => ({
   beginProductRouteViewTransition: jest.fn(() => Promise.resolve()),
   getProductDetailHref: (id: string) => `/products/${id}`,
-  getProductViewTransitionName: (id: string, part: string) => `product-${part}-${id}`,
+  getProductViewTransitionName: (id: string) => `product-image-${id}`,
   scrollToProductDetailTop: jest.fn(),
   setProductPreview: jest.fn(),
   resolveProductRouteViewTransition: jest.fn(),

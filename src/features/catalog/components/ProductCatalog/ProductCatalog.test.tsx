@@ -38,5 +38,12 @@ describe('Given a ProductCatalog', () => {
         screen.getByText(`${appleProducts.length} result${appleProducts.length === 1 ? '' : 's'}`)
       ).toBeInTheDocument()
     })
+
+    it('Then it shows an empty search message when the server returns no matches', () => {
+      render(<ProductCatalog products={[]} initialSearch="zzzznonexistentphone" />)
+
+      expect(screen.getByText('No smartphones match your search.')).toBeInTheDocument()
+      expect(screen.queryByRole('listitem')).not.toBeInTheDocument()
+    })
   })
 })
