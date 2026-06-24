@@ -15,6 +15,8 @@ interface ProductImageProps {
   eager?: boolean
   /** Forces a single `/api/images?w=` so preloads and hero share the browser cache. */
   fixedProxyWidth?: number
+  /** Catalog cards: phone skeleton + fade-in. Hero/detail: parent owns crossfade. */
+  showLoadingPlaceholder?: boolean
   onLoad?: () => void
 }
 
@@ -63,10 +65,11 @@ export const ProductImage = memo(function ProductImage({
   priority = false,
   eager = false,
   fixedProxyWidth,
+  showLoadingPlaceholder = fixedProxyWidth === undefined,
   onLoad,
 }: ProductImageProps) {
   const [hasError, setHasError] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(!showLoadingPlaceholder)
   const [prevSrc, setPrevSrc] = useState(src)
 
   // Reset error when src changes (e.g. color switch) — setState during render
@@ -74,7 +77,7 @@ export const ProductImage = memo(function ProductImage({
   if (prevSrc !== src) {
     setPrevSrc(src)
     setHasError(false)
-    setIsLoaded(false)
+    setIsLoaded(!showLoadingPlaceholder)
   }
 
   const showFallback = !src || hasError
@@ -88,7 +91,11 @@ export const ProductImage = memo(function ProductImage({
     return <ImageFallback alt={alt} />
   }
 
-  const imageClassName = [styles['product-image'], isLoaded ? styles['product-image--loaded'] : '']
+  const imageClassName = [
+    styles['product-image'],
+    showLoadingPlaceholder ? styles['product-image--with-placeholder'] : '',
+    showLoadingPlaceholder && isLoaded ? styles['product-image--loaded'] : '',
+  ]
     .filter(Boolean)
     .join(' ')
 
@@ -99,7 +106,7 @@ export const ProductImage = memo(function ProductImage({
     priority,
     loading: (priority || eager ? 'eager' : 'lazy') as 'eager' | 'lazy',
     onLoad: () => {
-      setIsLoaded(true)
+      if (showLoadingPlaceholder) setIsLoaded(true)
       onLoad?.()
     },
     onError: () => setHasError(true),
@@ -107,16 +114,16 @@ export const ProductImage = memo(function ProductImage({
 
   return (
     <span className={styles['product-image-root']}>
-      <ImageLoadingPlaceholder isLoaded={isLoaded} />
-      {fixedProxyWidth !== undefined ? (
+      {showLoadingPlaceholder ? <ImageLoadingPlaceholder isLoaded={isLoaded} /> : null}
+      {fixedProxyWidth === undefined ? (
+        <Image alt={alt} {...sharedImageProps} loader={sharpLoader} src={src} />
+      ) : (
         <Image
           alt={alt}
           {...sharedImageProps}
           src={buildProxyUrl(src, fixedProxyWidth)}
           unoptimized
         />
-      ) : (
-        <Image alt={alt} {...sharedImageProps} loader={sharpLoader} src={src} />
       )}
     </span>
   )

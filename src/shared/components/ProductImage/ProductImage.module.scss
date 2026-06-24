@@ -1,5 +1,8 @@
 @use '@/scss/skeleton' as *;
 
+$image-reveal-duration: 0.4s;
+$image-reveal-easing: cubic-bezier(0.65, 0, 0.35, 1);
+
 .product-image-root {
   position: relative;
   display: block;
@@ -16,7 +19,7 @@
   z-index: var(--z-base);
   pointer-events: none;
   opacity: 1;
-  transition: opacity 0.35s ease;
+  transition: opacity $image-reveal-duration $image-reveal-easing;
 
   &--loaded {
     opacity: 0;
@@ -68,16 +71,21 @@
   object-position: center;
   mix-blend-mode: multiply;
   z-index: var(--z-card);
-  opacity: 0;
-  transition: opacity 0.35s ease;
 
-  &--loaded {
-    opacity: 1;
+  &--with-placeholder {
+    opacity: 0;
+    transition: opacity $image-reveal-duration $image-reveal-easing;
+
+    &.product-image--loaded {
+      opacity: 1;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    opacity: 1;
-    transition: none;
+    &--with-placeholder {
+      opacity: 1;
+      transition: none;
+    }
   }
 }
 
