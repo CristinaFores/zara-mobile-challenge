@@ -14,6 +14,22 @@ describe('Given a ProductImage', () => {
       expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
     })
 
+    it('Then it shows a loading placeholder while the image is loading', () => {
+      const { container } = render(<ProductImage src={SRC} alt={ALT} showLoadingPlaceholder />)
+      expect(
+        container.querySelector('[data-testid="product-image-placeholder"]')
+      ).toBeInTheDocument()
+    })
+
+    it('Then it skips the loading placeholder when showLoadingPlaceholder is false', () => {
+      const { container } = render(
+        <ProductImage src={SRC} alt={ALT} fixedProxyWidth={828} showLoadingPlaceholder={false} />
+      )
+      expect(
+        container.querySelector('[data-testid="product-image-placeholder"]')
+      ).not.toBeInTheDocument()
+    })
+
     it('Then the src routes through /api/images with the encoded original url', () => {
       render(<ProductImage src={SRC} alt={ALT} />)
       const img = screen.getByRole('img', { name: ALT })
