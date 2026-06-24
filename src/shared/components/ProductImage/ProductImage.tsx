@@ -42,6 +42,20 @@ function ImageFallback({ alt }: { alt: string }) {
   )
 }
 
+function ImageLoadingPlaceholder({ isLoaded }: { isLoaded: boolean }) {
+  return (
+    <span
+      className={[styles['image-placeholder'], isLoaded ? styles['image-placeholder--loaded'] : '']
+        .filter(Boolean)
+        .join(' ')}
+      data-testid="product-image-placeholder"
+      aria-hidden="true"
+    >
+      <span className={styles['image-placeholder__phone']} />
+    </span>
+  )
+}
+
 export const ProductImage = memo(function ProductImage({
   src,
   alt,
@@ -52,6 +66,7 @@ export const ProductImage = memo(function ProductImage({
   onLoad,
 }: ProductImageProps) {
   const [hasError, setHasError] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
   const [prevSrc, setPrevSrc] = useState(src)
 
   // Reset error when src changes (e.g. color switch) — setState during render
@@ -59,6 +74,7 @@ export const ProductImage = memo(function ProductImage({
   if (prevSrc !== src) {
     setPrevSrc(src)
     setHasError(false)
+    setIsLoaded(false)
   }
 
   const showFallback = !src || hasError
@@ -72,35 +88,36 @@ export const ProductImage = memo(function ProductImage({
     return <ImageFallback alt={alt} />
   }
 
-  if (fixedProxyWidth !== undefined) {
-    return (
-      <Image
-        src={buildProxyUrl(src, fixedProxyWidth)}
-        alt={alt}
-        fill
-        unoptimized
-        sizes={sizes}
-        className={styles['product-image']}
-        priority={priority}
-        loading={priority || eager ? 'eager' : 'lazy'}
-        onLoad={onLoad}
-        onError={() => setHasError(true)}
-      />
-    )
+  const imageClassName = [styles['product-image'], isLoaded ? styles['product-image--loaded'] : '']
+    .filter(Boolean)
+    .join(' ')
+
+  const sharedImageProps = {
+    fill: true as const,
+    sizes,
+    className: imageClassName,
+    priority,
+    loading: (priority || eager ? 'eager' : 'lazy') as 'eager' | 'lazy',
+    onLoad: () => {
+      setIsLoaded(true)
+      onLoad?.()
+    },
+    onError: () => setHasError(true),
   }
 
   return (
-    <Image
-      loader={sharpLoader}
-      src={src}
-      alt={alt}
-      fill
-      sizes={sizes}
-      className={styles['product-image']}
-      priority={priority}
-      loading={priority || eager ? 'eager' : 'lazy'}
-      onLoad={onLoad}
-      onError={() => setHasError(true)}
-    />
+    <span className={styles['product-image-root']}>
+      <ImageLoadingPlaceholder isLoaded={isLoaded} />
+      {fixedProxyWidth !== undefined ? (
+        <Image
+          alt={alt}
+          {...sharedImageProps}
+          src={buildProxyUrl(src, fixedProxyWidth)}
+          unoptimized
+        />
+      ) : (
+        <Image alt={alt} {...sharedImageProps} loader={sharpLoader} src={src} />
+      )}
+    </span>
   )
 })

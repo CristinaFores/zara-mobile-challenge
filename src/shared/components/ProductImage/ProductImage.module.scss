@@ -1,8 +1,84 @@
+@use '@/scss/skeleton' as *;
+
+.product-image-root {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.image-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: var(--z-base);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+
+  &--loaded {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  &__phone {
+    position: relative;
+    height: 78%;
+    width: auto;
+    max-height: 100%;
+    max-width: 52%;
+    aspect-ratio: 10 / 19.5;
+    @include skeleton-pulse-surface(12px);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      width: 24%;
+      height: 2px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: var(--color-bg-primary);
+      opacity: 0.7;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 4%;
+      left: 50%;
+      width: 16%;
+      height: 2px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: var(--color-text-disabled);
+      opacity: 0.45;
+    }
+  }
+}
+
 .product-image {
   object-fit: contain;
   object-position: center;
   mix-blend-mode: multiply;
   z-index: var(--z-card);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+
+  &--loaded {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1;
+    transition: none;
+  }
 }
 
 .image-fallback {

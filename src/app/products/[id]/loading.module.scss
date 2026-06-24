@@ -1,37 +1,19 @@
 @use '@/scss/_mixins' as *;
+@use '@/scss/skeleton' as *;
 
-@keyframes skeletonPulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.55;
-  }
-}
-
-$skeleton-bg: var(--color-bg-secondary, #f3f2f2);
 $skeleton-radius: 4px;
 
-// Sizing comes from the reused hero gallery class; this module only adds the
-// empty-state skeleton background (direct loads with no preview from a card)
-// and the skeleton primitives for the info/specs columns.
 .detail-loading {
   &__media[data-has-preview='false'] {
-    background: $skeleton-bg;
-    border-radius: $skeleton-radius;
-    animation: skeletonPulse 1.2s ease-in-out infinite;
+    @include skeleton-pulse-surface($skeleton-radius);
   }
 
-  // Mirrors the hero heading hgroup (name + price) tight spacing
   &__heading {
     display: flex;
     flex-direction: column;
     gap: 0.6875rem;
   }
 
-  // Mirrors hero selectors stack gap
   &__selectors {
     display: flex;
     flex-direction: column;
@@ -48,13 +30,11 @@ $skeleton-radius: 4px;
     gap: 1.375rem;
   }
 
-  // Storage chips sit edge-to-edge with overlapping borders
   &__chips {
     display: flex;
     flex-wrap: wrap;
   }
 
-  // Color swatches row
   &__row {
     display: flex;
     flex-wrap: wrap;
@@ -65,9 +45,7 @@ $skeleton-radius: 4px;
     display: block;
     height: 0.875rem;
     width: 100%;
-    background: $skeleton-bg;
-    border-radius: $skeleton-radius;
-    animation: skeletonPulse 1.2s ease-in-out infinite;
+    @include skeleton-pulse-surface($skeleton-radius);
 
     &[data-variant='title'] {
       height: 1.5rem;
@@ -99,44 +77,24 @@ $skeleton-radius: 4px;
     }
   }
 
-  // Matches storage chip footprint (min-width 95px, ~1rem block padding)
   &__chip {
     display: block;
     height: 3.25rem;
     width: 95px;
     margin-right: -1px;
-    background: $skeleton-bg;
-    border-radius: $skeleton-radius;
-    animation: skeletonPulse 1.2s ease-in-out infinite;
+    @include skeleton-pulse-surface($skeleton-radius);
   }
 
-  // Matches color swatch size (1.5rem square)
   &__swatch {
     display: block;
     height: 1.5rem;
     width: 1.5rem;
-    background: $skeleton-bg;
-    border-radius: $skeleton-radius;
-    animation: skeletonPulse 1.2s ease-in-out infinite;
+    @include skeleton-pulse-surface($skeleton-radius);
   }
 
   &__button {
     height: 2.75rem;
     width: 100%;
-    background: $skeleton-bg;
-    border-radius: $skeleton-radius;
-    animation: skeletonPulse 1.2s ease-in-out infinite;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .detail-loading {
-    &__media[data-has-preview='false'],
-    &__line,
-    &__chip,
-    &__swatch,
-    &__button {
-      animation: none;
-    }
+    @include skeleton-pulse-surface($skeleton-radius);
   }
 }

@@ -14,6 +14,13 @@ describe('Given a ProductImage', () => {
       expect(screen.getByRole('img', { name: ALT })).toBeInTheDocument()
     })
 
+    it('Then it shows a loading placeholder while the image is loading', () => {
+      const { container } = render(<ProductImage src={SRC} alt={ALT} />)
+      expect(
+        container.querySelector('[data-testid="product-image-placeholder"]')
+      ).toBeInTheDocument()
+    })
+
     it('Then the src routes through /api/images with the encoded original url', () => {
       render(<ProductImage src={SRC} alt={ALT} />)
       const img = screen.getByRole('img', { name: ALT })
