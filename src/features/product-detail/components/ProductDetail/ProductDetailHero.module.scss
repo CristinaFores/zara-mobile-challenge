@@ -10,7 +10,7 @@ $heading-gap: 0.6875rem;
 .product-detail-hero {
   display: grid;
   align-items: center;
-
+  gap: 0.5rem;
   min-height: calc(100vh - 2.75rem - 5.3125rem - 3.5rem);
 
   @include breakpoint(tablet) {
