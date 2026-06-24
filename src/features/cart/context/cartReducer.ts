@@ -1,5 +1,5 @@
+import { createCartLineId } from '@/features/cart/lib/createCartLineId'
 import type { CartItem, ColorOption, Product, StorageOption } from '@/shared/types'
-import { buildKey } from '@/shared/utils/buildKey'
 
 export interface CartState {
   cartItems: CartItem[]
@@ -24,12 +24,10 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
 
     case 'ADD': {
       const { product, selectedColor, selectedStorage } = action.payload
-      const key = buildKey(product.id, selectedColor.name, selectedStorage.capacity)
-      if (state.cartItems.some((item) => item.key === key)) return state
       const cartItems: CartItem[] = [
         ...state.cartItems,
         {
-          key,
+          key: createCartLineId(product.id),
           id: product.id,
           brand: product.brand,
           name: product.name,

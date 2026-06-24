@@ -110,7 +110,7 @@ State that must survive refresh, back/forward, and shareable links is encoded in
 
 ### Persistence and identity
 
-- Items keyed by **product id + color + storage** (`buildKey`) — same phone, two configs = two lines.
+- Items use a unique line id per add — same phone + same config can appear as multiple rows; different configs stay separate too.
 - `localStorage` via `cartStorage` (SSR-safe, JSON validated on read, graceful fallback on quota/private mode).
 - Hydration after mount; no storage access during server render.
 

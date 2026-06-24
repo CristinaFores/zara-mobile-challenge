@@ -1,6 +1,6 @@
 /**
- * Builds the unique key that identifies a cart line:
- * the same product in two colour/storage combinations becomes two separate lines.
+ * Builds the configuration fingerprint for a cart line (product + colour + storage).
+ * Used in tests; cart lines use unique ids per add, not this key.
  */
 export const buildKey = (id: string, colorName: string, capacity: string): string =>
   `${id}::${colorName}::${capacity}`

@@ -110,7 +110,7 @@ Todo lo que debe sobrevivir a refresh, atrás/adelante y enlaces compartibles va
 
 ### Persistencia e identidad
 
-- Clave por **id + color + almacenamiento** (`buildKey`) — mismo móvil, dos configs = dos líneas.
+- Cada línea tiene un id único — el mismo móvil + misma config puede repetirse en varias filas; configs distintas también son filas separadas.
 - `localStorage` vía `cartStorage` (seguro en SSR, JSON validado al leer, fallback si quota/modo privado).
 - Hidratación tras mount; cero acceso a storage en render servidor.
 

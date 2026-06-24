@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { addFirstProductToCart } from './helpers'
+import { addFirstProductToCart, addSameConfigTwice } from './helpers'
 
 test.describe('Feature: Cart — empty state', () => {
   test.beforeEach(async ({ page }) => {
@@ -64,6 +64,59 @@ test.describe('Feature: Cart — with items', () => {
 
     await expect(page.getByRole('listitem')).toHaveCount(1)
     await expect(page.getByRole('link', { name: /^cart,\s1\sitem$/i })).toBeVisible()
+  })
+})
+
+test.describe('Feature: Cart — duplicate lines', () => {
+  test('Given the same product config is added twice, When viewing the cart, Then two lines are shown', async ({
+    page,
+  }) => {
+    await addSameConfigTwice(page)
+
+    await expect(page.getByRole('link', { name: /^cart,\s2\sitems$/i })).toBeVisible()
+    await expect(page.getByRole('listitem')).toHaveCount(2)
+  })
+
+  test('Given two identical lines, When removing one, Then one line remains', async ({ page }) => {
+    await addSameConfigTwice(page)
+
+    await page
+      .getByRole('button', { name: /remove .+ from cart/i })
+      .first()
+      .click()
+
+    await expect(page.getByRole('listitem')).toHaveCount(1)
+    await expect(page.getByRole('link', { name: /^cart,\s1\sitem$/i })).toBeVisible()
+  })
+
+  test('Given two identical lines, When reloading, Then both persist', async ({ page }) => {
+    await addSameConfigTwice(page)
+
+    await page.reload()
+
+    await expect(page.getByRole('listitem')).toHaveCount(2)
+    await expect(page.getByRole('link', { name: /^cart,\s2\sitems$/i })).toBeVisible()
+  })
+
+  test('Given two identical lines, When viewing the footer, Then the total doubles', async ({
+    page,
+  }) => {
+    await addSameConfigTwice(page)
+
+    const unitPriceText = await page
+      .getByRole('listitem')
+      .first()
+      .getByText(/\d+(\.\d+)?\sEUR/)
+      .textContent()
+    const unitPrice = Number.parseFloat(unitPriceText?.replace(/[^\d.]/g, '') ?? '0')
+
+    const totalText = await page
+      .locator('footer')
+      .getByText(/\d+(\.\d+)?\sEUR/)
+      .textContent()
+    const total = Number.parseFloat(totalText?.replace(/[^\d.]/g, '') ?? '0')
+
+    expect(total).toBeCloseTo(unitPrice * 2, 2)
   })
 })
 
