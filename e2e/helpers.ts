@@ -55,3 +55,21 @@ export async function addFirstProductToCart(page: Page): Promise<void> {
   await page.getByRole('button', { name: /add .+ to cart/i }).click()
   await expect(page).toHaveURL('/cart')
 }
+
+/**
+ * Adds the same product configuration twice so the cart shows two separate lines.
+ */
+export async function addSameConfigTwice(page: Page): Promise<void> {
+  await openFirstProductDetail(page)
+  await selectFirstConfiguration(page)
+  const configuredUrl = page.url()
+
+  await page.getByRole('button', { name: /add .+ to cart/i }).click()
+  await expect(page).toHaveURL('/cart')
+
+  await page.goto(configuredUrl)
+  await expect(page.getByRole('button', { name: /add .+ to cart/i })).toBeEnabled()
+  await page.getByRole('button', { name: /add .+ to cart/i }).click()
+  await expect(page).toHaveURL('/cart')
+  await expect(page.getByRole('listitem')).toHaveCount(2)
+}

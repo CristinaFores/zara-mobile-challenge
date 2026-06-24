@@ -59,6 +59,22 @@ describe('Given cartStorage.read', () => {
       expect(cartStorage.read()).toEqual([validCartItem])
     })
   })
+
+  describe('When localStorage holds duplicate lines with different keys', () => {
+    it('Then it restores both entries', () => {
+      const duplicate = {
+        ...validCartItem,
+        key: `${PRODUCT.id}-line-a`,
+      }
+      const twin = {
+        ...validCartItem,
+        key: `${PRODUCT.id}-line-b`,
+      }
+      localStorage.setItem(CART_KEY, JSON.stringify([duplicate, twin]))
+
+      expect(cartStorage.read()).toEqual([duplicate, twin])
+    })
+  })
 })
 
 describe('Given cartStorage.write', () => {

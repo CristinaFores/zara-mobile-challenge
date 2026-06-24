@@ -132,32 +132,56 @@ describe('Given CartView', () => {
     })
   })
 
-  describe('When the cart has an item with quantity > 1', () => {
-    it('Then the heading reflects the total count', () => {
+  describe('When the cart has two identical line items', () => {
+    const duplicateItem = {
+      key: 'smg-s24-ultra::line-a',
+      id: 'smg-s24-ultra',
+      brand: 'Samsung',
+      name: 'Galaxy S24 Ultra',
+      imageUrl: 'https://example.com/image.webp',
+      selectedColor: {
+        name: 'Titanium Violet',
+        hexCode: '#7d6b99',
+        imageUrl: 'https://example.com/image.webp',
+      },
+      selectedStorage: { capacity: '256GB', price: 1329 },
+      price: 1329,
+      quantity: 1,
+    }
+
+    beforeEach(() => {
       mockCartValue = {
         ...baseCart,
         cartTotal: 2658,
         cartCount: 2,
-        cartItems: [
-          {
-            key: 'smg-s24-ultra::titanium-violet::256GB',
-            id: 'smg-s24-ultra',
-            brand: 'Samsung',
-            name: 'Galaxy S24 Ultra',
-            imageUrl: 'https://example.com/image.webp',
-            selectedColor: {
-              name: 'Titanium Violet',
-              hexCode: '#7d6b99',
-              imageUrl: 'https://example.com/image.webp',
-            },
-            selectedStorage: { capacity: '256GB', price: 1329 },
-            price: 1329,
-            quantity: 2,
-          },
-        ],
+        cartItems: [duplicateItem, { ...duplicateItem, key: 'smg-s24-ultra::line-b' }],
       }
+    })
+
+    it('Then the heading reflects the total line count', () => {
       render(<CartView />)
       expect(screen.getByRole('heading', { name: /cart \(2\)/i })).toBeInTheDocument()
+      expect(screen.getAllByRole('listitem')).toHaveLength(2)
+    })
+
+    it('Then both rows show the same configuration copy', () => {
+      render(<CartView />)
+      expect(screen.getAllByText('256GB | Titanium Violet')).toHaveLength(2)
+    })
+
+    it('Then removing one row keeps the total for a single unit', async () => {
+      jest.useFakeTimers()
+      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime })
+
+      render(<CartView />)
+      await user.click(
+        screen.getAllByRole('button', { name: /remove samsung galaxy s24 ultra from cart/i })[0]
+      )
+
+      jest.advanceTimersByTime(720)
+
+      expect(mockRemoveFromCart).toHaveBeenCalledWith('smg-s24-ultra::line-a')
+      jest.useRealTimers()
     })
   })
 })

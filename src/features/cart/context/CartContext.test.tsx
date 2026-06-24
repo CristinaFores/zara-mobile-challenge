@@ -106,27 +106,122 @@ describe('Given the cart is empty', () => {
 
 describe('Given the same product, color, and storage combination is already in the cart', () => {
   describe('When addToCart is called again with the identical combination', () => {
-    it('Then the second call is a no-op — one item per unique combination', async () => {
+    it('Then a second line item is added — duplicate adds are not merged', async () => {
       const result = await renderCart()
 
       act(() => {
         result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
         result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+      })
+
+      expect(result.current.cartItems).toHaveLength(2)
+      expect(result.current.cartItems[0].quantity).toBe(1)
+      expect(result.current.cartItems[1].quantity).toBe(1)
+    })
+
+    it('And the total reflects both unit prices', async () => {
+      const result = await renderCart()
+
+      act(() => {
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+      })
+
+      expect(result.current.cartTotal).toBe(STORAGE_256.price * 2)
+      expect(result.current.cartCount).toBe(2)
+    })
+
+    it('And each duplicate line keeps a unique key', async () => {
+      const result = await renderCart()
+
+      act(() => {
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+      })
+
+      const [first, second] = result.current.cartItems
+      expect(first.key).not.toBe(second.key)
+    })
+  })
+})
+
+describe('Given two identical lines are in the cart', () => {
+  describe('When removeFromCart is called for one of them', () => {
+    it('Then the other duplicate line remains with the same total as one unit', async () => {
+      const result = await renderCart()
+
+      act(() => {
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+      })
+      const keyToRemove = result.current.cartItems[0].key
+
+      act(() => {
+        result.current.removeFromCart(keyToRemove)
       })
 
       expect(result.current.cartItems).toHaveLength(1)
-      expect(result.current.cartItems[0].quantity).toBe(1)
+      expect(result.current.cartTotal).toBe(STORAGE_256.price)
+      expect(result.current.cartCount).toBe(1)
     })
+  })
 
-    it('And the total reflects only one unit price', async () => {
+  describe('When addToCart is called again after a removal', () => {
+    it('Then a new duplicate line is appended', async () => {
       const result = await renderCart()
 
       act(() => {
         result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
         result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
       })
+      const keyToRemove = result.current.cartItems[0].key
 
-      expect(result.current.cartTotal).toBe(STORAGE_256.price)
+      act(() => {
+        result.current.removeFromCart(keyToRemove)
+        result.current.addToCart(PRODUCT, COLOR_VIOLET, STORAGE_256)
+      })
+
+      expect(result.current.cartItems).toHaveLength(2)
+      expect(result.current.cartTotal).toBe(STORAGE_256.price * 2)
+    })
+  })
+})
+
+describe('Given localStorage contains two duplicate lines from a previous session', () => {
+  describe('When CartProvider mounts', () => {
+    it('Then both lines are restored with independent keys', async () => {
+      const savedItems: CartItem[] = [
+        {
+          key: `${PRODUCT.id}-session-a`,
+          id: PRODUCT.id,
+          brand: PRODUCT.brand,
+          name: PRODUCT.name,
+          imageUrl: COLOR_VIOLET.imageUrl,
+          selectedColor: COLOR_VIOLET,
+          selectedStorage: STORAGE_256,
+          price: STORAGE_256.price,
+          quantity: 1,
+        },
+        {
+          key: `${PRODUCT.id}-session-b`,
+          id: PRODUCT.id,
+          brand: PRODUCT.brand,
+          name: PRODUCT.name,
+          imageUrl: COLOR_VIOLET.imageUrl,
+          selectedColor: COLOR_VIOLET,
+          selectedStorage: STORAGE_256,
+          price: STORAGE_256.price,
+          quantity: 1,
+        },
+      ]
+      localStorage.setItem(CART_KEY, JSON.stringify(savedItems))
+
+      const result = await renderCart()
+
+      expect(result.current.cartItems).toHaveLength(2)
+      expect(result.current.cartCount).toBe(2)
+      expect(result.current.cartTotal).toBe(STORAGE_256.price * 2)
+      expect(result.current.cartItems[0].key).not.toBe(result.current.cartItems[1].key)
     })
   })
 })

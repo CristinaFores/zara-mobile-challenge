@@ -1,8 +1,8 @@
 import type { ColorOption, StorageOption } from './product'
 
 /**
- * A line in the cart, uniquely identified by `key` (product + colour + storage),
- * so the same product in two configurations stays as two separate lines.
+ * A line in the cart. `key` is a unique line id; the same product + config can appear
+ * more than once as separate rows (no quantity control in the Figma cart).
  */
 export interface CartItem {
   key: string
